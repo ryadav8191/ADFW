@@ -1,0 +1,170 @@
+//
+//  HomeViewController.swift
+//  ADFW
+//
+//  Created by MultiTV on 16/05/25.
+//
+
+import UIKit
+import SideMenu
+
+class HomeViewController: UIViewController {
+    
+    @IBOutlet weak var tableview: UITableView!
+    @IBOutlet weak var notificationBell: UIButton!
+    
+    var banner = [BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: ""),BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: "")]
+    var sideMenu: SideMenuNavigationController?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
+        // Instantiate menu view controller from storyboard
+        let menuVC = storyboard?.instantiateViewController(identifier: "MenuViewController") as! MenuViewController
+              sideMenu = SideMenuNavigationController(rootViewController: menuVC)
+              sideMenu?.leftSide = true
+              sideMenu?.setNavigationBarHidden(true, animated: false)
+              sideMenu?.presentationStyle = .menuSlideIn
+              sideMenu?.presentationStyle.backgroundColor = .black
+              sideMenu?.presentationStyle.presentingEndAlpha = 0.5
+              SideMenuManager.default.leftMenuNavigationController = sideMenu
+              SideMenuManager.default.addPanGestureToPresent(toView: self.view)
+        registerCell()
+      
+            self.tableview.reloadData()
+       
+   
+    }
+    
+    func registerCell() {
+        tableview.delegate = self
+        tableview.dataSource = self
+        tableview.register(UINib(nibName: "BannerTableViewCell", bundle: nil), forCellReuseIdentifier: "BannerTableViewCell")  //
+        tableview.register(UINib(nibName: "HomeSessionTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeSessionTableViewCell")  //AboutAGDMTableViewCell
+        
+        tableview.register(UINib(nibName: "AboutAGDMTableViewCell", bundle: nil), forCellReuseIdentifier: "AboutAGDMTableViewCell") //ExploreTableViewCell
+        
+        tableview.register(UINib(nibName: "ExploreTableViewCell", bundle: nil), forCellReuseIdentifier: "ExploreTableViewCell")
+        tableview.register(UINib(nibName: "EntertainmentTableViewCell", bundle: nil), forCellReuseIdentifier: "EntertainmentTableViewCell") ///ParterTableViewCell
+        ///
+        tableview.register(UINib(nibName: "ParterTableViewCell", bundle: nil), forCellReuseIdentifier: "ParterTableViewCell")   ///
+        
+        tableview.register(UINib(nibName: "HomeSpeakerTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeSpeakerTableViewCell")  //
+        
+        tableview.register(UINib(nibName: "ADFWMapTableViewCell", bundle: nil), forCellReuseIdentifier: "ADFWMapTableViewCell")
+    }
+    
+    
+    @IBAction func sideMenu(_ sender: Any) {
+        if let menu = SideMenuManager.default.leftMenuNavigationController {
+                present(menu, animated: true, completion: nil)
+            }
+    }
+    
+    @IBAction func notificationAction(_ sender: Any) {
+        let vc = storyboard?.instantiateViewController(identifier: "NotificationViewController") as! NotificationViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+
+}
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 9
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BannerTableViewCell") as! BannerTableViewCell
+            cell.banner = self.banner
+            //  cell.delegate = self
+            return cell
+            
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSessionTableViewCell") as! HomeSessionTableViewCell
+          
+            cell.configure(with: [], type: .session) // or .session
+
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSessionTableViewCell") as! HomeSessionTableViewCell  //AboutAGDMTableViewCell
+            cell.delegate = self
+            cell.configure(with: [], type: .event) // or .session
+
+        
+            return cell
+            
+        case 4:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ADFWMapTableViewCell") as! ADFWMapTableViewCell
+            return cell
+            
+        case 8:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AboutAGDMTableViewCell") as! AboutAGDMTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
+           // cell.bgColor.isHidden  = false
+            
+            return cell
+            
+            
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSpeakerTableViewCell") as! HomeSpeakerTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
+           // cell.bgColor.isHidden  = false
+            cell.delegate = self
+            return cell
+            
+        case 5:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ParterTableViewCell") as! ParterTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
+           // cell.bgColor.isHidden  = false
+            
+            return cell
+            
+        case 7:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "EntertainmentTableViewCell") as! EntertainmentTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
+           // cell.bgColor.isHidden  = false
+            
+            return cell
+        case 6:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ExploreTableViewCell") as! ExploreTableViewCell  //AboutAGDMTableViewCell //ADFWMapTableViewCell
+           // cell.bgColor.isHidden  = false
+            
+            return cell
+            
+        default:
+            return UITableViewCell()
+        }
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 220
+        case 3:
+            return 350
+        case 4:
+            return 375
+        default: return UITableView.automaticDimension
+        }
+    }
+    
+    
+    
+}
+
+
+extension HomeViewController: HomeSessionTableViewCellDelegate {
+    func homeSessionCellDidUpdateHeight() {
+        DispatchQueue.main.async {
+            self.tableview.beginUpdates()
+            self.tableview.endUpdates()
+        }
+    }
+}

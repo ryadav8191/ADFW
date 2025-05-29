@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DateCollectionViewCell" id="gTV-IL-0wX" customClass="DateCollectionViewCell" customModule="ADFW" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="160" height="85"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="160" height="85"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lnW-vr-1Ka">
+                        <rect key="frame" x="0.0" y="0.0" width="160" height="85"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7CB-eF-v6n">
+                                <rect key="frame" x="0.0" y="0.0" width="160" height="85"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="7CB-eF-v6n" secondAttribute="trailing" id="59Q-ha-7lr"/>
+                            <constraint firstItem="7CB-eF-v6n" firstAttribute="leading" secondItem="lnW-vr-1Ka" secondAttribute="leading" id="O9b-aP-rib"/>
+                            <constraint firstItem="7CB-eF-v6n" firstAttribute="top" secondItem="lnW-vr-1Ka" secondAttribute="top" id="PEa-XD-RCX"/>
+                            <constraint firstAttribute="bottom" secondItem="7CB-eF-v6n" secondAttribute="bottom" id="atE-dT-cec"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="lnW-vr-1Ka" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="3H7-WG-gqE"/>
+                <constraint firstAttribute="bottom" secondItem="lnW-vr-1Ka" secondAttribute="bottom" id="BjX-wE-SEc"/>
+                <constraint firstAttribute="trailing" secondItem="lnW-vr-1Ka" secondAttribute="trailing" id="Xvr-vF-X6Y"/>
+                <constraint firstItem="lnW-vr-1Ka" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="d6G-oa-hmp"/>
+            </constraints>
+            <size key="customSize" width="160" height="85"/>
+            <connections>
+                <outlet property="dateButton" destination="7CB-eF-v6n" id="MZR-Jo-6N1"/>
+            </connections>
+            <point key="canvasLocation" x="138.93129770992365" y="32.04225352112676"/>
+        </collectionViewCell>
+    </objects>
+</document>

@@ -1,0 +1,20 @@
+PODS:
+  - CollectionViewPagingLayout (1.1.0)
+  - SideMenu (6.5.0)
+
+DEPENDENCIES:
+  - CollectionViewPagingLayout
+  - SideMenu
+
+SPEC REPOS:
+  trunk:
+    - CollectionViewPagingLayout
+    - SideMenu
+
+SPEC CHECKSUMS:
+  CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
+
+PODFILE CHECKSUM: b5e5aae5e21a6cb4ed492cada3d604e461cbd549
+
+COCOAPODS: 1.16.2
