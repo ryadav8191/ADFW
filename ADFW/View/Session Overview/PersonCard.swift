@@ -15,18 +15,17 @@ struct PersonCard: View {
         HStack(spacing: 12) {
             Image(person.imageName)
                 .resizable()
-                .frame(width: 60, height: 60)
+                .frame(width: 72, height: 72)
                
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(person.name)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .font(Font(FontManager.font(weight: .semiBold, size: 14)))
                 Text(person.title)
-                    .font(.caption)
+                    .font(Font(FontManager.font(weight: .medium, size: 13)))
                     .foregroundColor(.gray)
                 Text(person.organization)
-                    .font(.caption2)
+                    .font(Font(FontManager.font(weight: .medium, size: 13)))
                     .foregroundColor(.gray)
             }
 
@@ -34,7 +33,7 @@ struct PersonCard: View {
         }
         .padding()
         .background(
-            Color(UIColor(hex: "#F0F2F5"))
+            Color.white
                 .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
         )
     }

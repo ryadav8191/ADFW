@@ -13,6 +13,7 @@ class EntertainmentTableViewCell: UITableViewCell {
     @IBOutlet weak var entertainbodyLabel: UILabel!
     @IBOutlet weak var bgImageView: UIImageView!
     
+    var onClickViewAll: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,7 +29,7 @@ class EntertainmentTableViewCell: UITableViewCell {
     }
     
     @IBAction func viewAllButton(_ sender: Any) {
-        
+        onClickViewAll?()
     }
     
 }

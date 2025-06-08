@@ -33,6 +33,8 @@ class HomeSessionTableViewCell: UITableViewCell {
     private var items: [String] = []
     var selectedCell: SelectedCell = .session
     weak var delegate: HomeSessionTableViewCellDelegate?
+    
+    var onClickViewAll: (() -> Void)?
 
 
     override func awakeFromNib() {
@@ -60,6 +62,7 @@ class HomeSessionTableViewCell: UITableViewCell {
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = (selectedCell == .session) ? .horizontal : .vertical
         }
+        
         collectionView.isScrollEnabled = (selectedCell == .session)
         switch selectedCell {
         case .session:
@@ -81,10 +84,18 @@ class HomeSessionTableViewCell: UITableViewCell {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
-     //   collectionView.isPagingEnabled = true
+       collectionView.isPagingEnabled = true
 
         collectionView.register(UINib(nibName: "HomeSessionCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "HomeSessionCollectionViewCell")
         collectionView.register(UINib(nibName: "FeatureEventCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "FeatureEventCollectionViewCell")
+        
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+        }
+
+        
+        
     }
     
     override func layoutSubviews() {
@@ -109,9 +120,16 @@ class HomeSessionTableViewCell: UITableViewCell {
         pageControlSquare.padding = 6
         pageControlSquare.tintColor = UIColor.systemBlue.withAlphaComponent(0.3)
         pageControlSquare.currentPageTintColor = UIColor.blueColor
-        pageControlSquare.elementWidth = 8
-        pageControlSquare.elementHeight = 8
+        pageControlSquare.elementWidth = 7
+        pageControlSquare.elementHeight = 7
     }
+    
+    
+    @IBAction func viewAllAction(_ sender: Any) {
+        onClickViewAll?()
+    }
+    
+    
 }
 
 
@@ -139,12 +157,17 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch selectedCell {
         case .session:
-            return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
+            return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+
         case .event:
-            let spacing: CGFloat = 12
-                    let totalSpacing = spacing * 3 // 2 between items + 1 for section inset
-                    let width = (collectionView.bounds.width - totalSpacing) / 3
-                    return CGSize(width: width, height: 110)
+          
+//            let spacing: CGFloat = 12
+//            let insets: CGFloat = 8 * 2
+//            let totalSpacing = spacing * 2 + insets
+            let width = (collectionView.bounds.width) / 3
+            print("+=++++=+++================================",width)
+            return CGSize(width: width, height: width)
+
         }
     }
     
@@ -157,9 +180,9 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
 //        case .event:
 //            return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
 //        }
-       
+//       
 //    }
-    
+//    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
         pageControlSquare.set(progress: page, animated: true)

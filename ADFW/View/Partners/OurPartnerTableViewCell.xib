@@ -28,34 +28,30 @@
                                         <rect key="frame" x="0.0" y="0.0" width="173" height="178"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="La6-oc-NFN">
-                                                <rect key="frame" x="36.666666666666657" y="69" width="100" height="40"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="7br-5B-kEd"/>
-                                                    <constraint firstAttribute="width" constant="100" id="Yeq-V9-Fxl"/>
-                                                </constraints>
+                                                <rect key="frame" x="0.0" y="0.0" width="173" height="178"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstItem="La6-oc-NFN" firstAttribute="centerX" secondItem="kVF-Gs-TdO" secondAttribute="centerX" id="Dyb-aW-kSi"/>
-                                            <constraint firstItem="La6-oc-NFN" firstAttribute="centerY" secondItem="kVF-Gs-TdO" secondAttribute="centerY" id="g6T-bB-mLo"/>
+                                            <constraint firstItem="La6-oc-NFN" firstAttribute="top" secondItem="kVF-Gs-TdO" secondAttribute="top" id="59c-eX-pVP"/>
+                                            <constraint firstAttribute="bottom" secondItem="La6-oc-NFN" secondAttribute="bottom" id="5PB-EQ-yj5"/>
+                                            <constraint firstItem="La6-oc-NFN" firstAttribute="leading" secondItem="kVF-Gs-TdO" secondAttribute="leading" id="DYG-jx-uY1"/>
+                                            <constraint firstAttribute="trailing" secondItem="La6-oc-NFN" secondAttribute="trailing" id="YOd-QC-1TR"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8f5-8l-Fnz">
                                         <rect key="frame" x="189" y="0.0" width="173" height="178"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jLr-Wl-Tow">
-                                                <rect key="frame" x="11.666666666666657" y="64" width="150" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="150" id="MrM-uB-I6e"/>
-                                                    <constraint firstAttribute="height" constant="50" id="z4C-3f-vux"/>
-                                                </constraints>
+                                                <rect key="frame" x="0.0" y="0.0" width="173" height="178"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstItem="jLr-Wl-Tow" firstAttribute="centerX" secondItem="8f5-8l-Fnz" secondAttribute="centerX" id="Iyg-ah-CPb"/>
-                                            <constraint firstItem="jLr-Wl-Tow" firstAttribute="centerY" secondItem="8f5-8l-Fnz" secondAttribute="centerY" id="Mmv-Hi-VNW"/>
+                                            <constraint firstItem="jLr-Wl-Tow" firstAttribute="top" secondItem="8f5-8l-Fnz" secondAttribute="top" id="V6U-sD-6XL"/>
+                                            <constraint firstAttribute="trailing" secondItem="jLr-Wl-Tow" secondAttribute="trailing" id="X6x-kw-HwA"/>
+                                            <constraint firstItem="jLr-Wl-Tow" firstAttribute="leading" secondItem="8f5-8l-Fnz" secondAttribute="leading" id="XZE-1u-ipW"/>
+                                            <constraint firstAttribute="bottom" secondItem="jLr-Wl-Tow" secondAttribute="bottom" id="vXG-i1-wxc"/>
                                         </constraints>
                                     </view>
                                 </subviews>

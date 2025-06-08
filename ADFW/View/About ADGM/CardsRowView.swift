@@ -30,14 +30,16 @@ struct CardsRowView: View {
                             .fixedSize(horizontal: false, vertical: true)  //#0088FF
                             .foregroundColor(Color(UIColor(hex: "#0088FF")))
                             .font(Font(FontManager.font(weight: .semiBold, size: 15)))
+                            .lineLimit(1)
                             
                         
                         Text(card.description)
                             .foregroundColor(Color(UIColor.black))
                             .font(Font(FontManager.font(weight: .regular, size: 13)))
                             .fixedSize(horizontal: false, vertical: true)
+                            .lineLimit(3)
                         
-                        HStack(spacing: 4) {
+                        HStack(alignment: .bottom, spacing: 4) {
                             Text("Read more")
                                 .foregroundColor(Color(UIColor(hex: "#0088FF")))
                                 .font(Font(FontManager.font(weight: .medium, size: 13)))
@@ -45,7 +47,8 @@ struct CardsRowView: View {
                             Image(systemName: "arrow.up.right")
                                 .resizable()
                                  .foregroundColor(Color(UIColor(hex: "#0088FF")))
-                                 .frame(width: 12, height: 12)
+                                 .frame(width: 7, height: 7)
+                                 .padding(.bottom,2)
                             
                         }
                         
@@ -59,4 +62,8 @@ struct CardsRowView: View {
         .background(Color(UIColor(hex: "#E5F0F0")))
         .padding(.bottom,30)
     }
+}
+
+#Preview {
+    CardsRowView(cards: [])
 }

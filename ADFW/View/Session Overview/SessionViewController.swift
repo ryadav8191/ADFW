@@ -14,7 +14,15 @@ class SessionViewController: UIViewController {
         super.viewDidLoad()
 
         // Embed SwiftUI View
-        let swiftUIView = SessionOverviewView()
+        let swiftUIView = SessionOverviewView(onBack: { [weak self] in
+            guard let self = self else { return }
+
+            
+            self.navigationController?.popViewController(animated: true)
+            
+            
+            
+        })
         let hostingController = UIHostingController(rootView: swiftUIView)
 
         addChild(hostingController)

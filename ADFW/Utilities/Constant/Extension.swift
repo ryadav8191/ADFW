@@ -52,14 +52,6 @@ extension UIImageView {
                self.image = placeholder
            }
 
-//           // Check if the image is already cached
-//           if let cachedImage = UIImageView.imageCache.object(forKey: url.absoluteString as NSString) {
-//               DispatchQueue.main.async {
-//                   self.image = cachedImage
-//               }
-//               return
-//           }
-
            // Download image from URL
            URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
                guard let self = self, error == nil,

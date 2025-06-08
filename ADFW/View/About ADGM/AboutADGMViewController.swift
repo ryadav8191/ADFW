@@ -16,10 +16,8 @@ class AboutADGMViewController: UIViewController {
         let swiftUIView = MainView(onBack: { [weak self] in
             guard let self = self else { return }
 
-          //  self.navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: true)
 
-            // Or if it's presented modally:
-             self.dismiss(animated: true)
         })
         
         let hostingController = UIHostingController(rootView: swiftUIView)

@@ -23,32 +23,46 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lN4-9K-yqA">
                                 <rect key="frame" x="16" y="20" width="420" height="50"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="epJ-ay-cih">
-                                        <rect key="frame" x="8" y="12.666666666666664" width="2" height="25"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="epJ-ay-cih">
+                                        <rect key="frame" x="0.0" y="12.666666666666664" width="2" height="25"/>
                                         <color key="backgroundColor" red="0.10588235294117647" green="0.41568627450980389" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="LGa-eD-21B"/>
+                                            <constraint firstAttribute="width" constant="2" id="leE-Aa-5GI"/>
+                                        </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Our Speakers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bde-ZN-wth">
-                                        <rect key="frame" x="18" y="14.666666666666664" width="294" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Our Speakers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bde-ZN-wth">
+                                        <rect key="frame" x="10" y="14.666666666666664" width="302" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csM-5H-hnw">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csM-5H-hnw">
                                         <rect key="frame" x="320" y="12" width="100" height="26"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="oge-k5-JeJ"/>
+                                        </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="viewAll"/>
+                                        <connections>
+                                            <action selector="viewAllAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ACP-l8-YPT"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="csM-5H-hnw" firstAttribute="centerY" secondItem="Bde-ZN-wth" secondAttribute="centerY" id="Okr-rR-sXE"/>
+                                    <constraint firstItem="epJ-ay-cih" firstAttribute="centerY" secondItem="lN4-9K-yqA" secondAttribute="centerY" id="TEz-c9-DRN"/>
                                     <constraint firstAttribute="height" constant="50" id="ib8-DZ-dre"/>
+                                    <constraint firstAttribute="trailing" secondItem="csM-5H-hnw" secondAttribute="trailing" id="kqu-dG-c98"/>
+                                    <constraint firstItem="Bde-ZN-wth" firstAttribute="centerY" secondItem="epJ-ay-cih" secondAttribute="centerY" id="uY3-hr-ei8"/>
+                                    <constraint firstItem="Bde-ZN-wth" firstAttribute="leading" secondItem="epJ-ay-cih" secondAttribute="trailing" constant="8" id="unI-F7-kea"/>
+                                    <constraint firstItem="csM-5H-hnw" firstAttribute="leading" secondItem="Bde-ZN-wth" secondAttribute="trailing" constant="8" id="vhv-IJ-lm5"/>
+                                    <constraint firstItem="epJ-ay-cih" firstAttribute="leading" secondItem="lN4-9K-yqA" secondAttribute="leading" id="yHV-ce-cAX"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="GhU-PN-WN5">
-                                <rect key="frame" x="0.0" y="70" width="436" height="309"/>
+                                <rect key="frame" x="0.0" y="70" width="452" height="309"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="KcX-iR-5SE">
                                     <size key="itemSize" width="128" height="128"/>
@@ -60,7 +74,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="GhU-PN-WN5" secondAttribute="trailing" constant="16" id="LIe-cm-6Cu"/>
+                            <constraint firstAttribute="trailing" secondItem="GhU-PN-WN5" secondAttribute="trailing" id="LIe-cm-6Cu"/>
                             <constraint firstAttribute="bottom" secondItem="GhU-PN-WN5" secondAttribute="bottom" constant="20" id="Mff-V1-Tf6"/>
                             <constraint firstItem="GhU-PN-WN5" firstAttribute="leading" secondItem="y7Z-Ou-dOW" secondAttribute="leading" id="Q7F-0t-5jj"/>
                             <constraint firstAttribute="trailing" secondItem="lN4-9K-yqA" secondAttribute="trailing" constant="16" id="d2I-i0-nTA"/>

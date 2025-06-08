@@ -15,7 +15,7 @@ struct SocialCardView: View {
         VStack(alignment: .leading, spacing: 12) {
             Image(post.imageName)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .aspectRatio(contentMode: .fill)
                 .cornerRadius(4)
 
 //            Text(post.title)

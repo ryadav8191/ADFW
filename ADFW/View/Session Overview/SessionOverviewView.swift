@@ -12,6 +12,7 @@ import SwiftUI
 struct SessionOverviewView: View {
     @StateObject private var viewModel = SessionViewModel()
     @State private var isFavorite = false
+    let onBack: () -> Void
 
     var body: some View {
         
@@ -19,6 +20,7 @@ struct SessionOverviewView: View {
             Button(action: {
                 // Handle back action
                 
+                onBack()
                 
             }) {
                 Image("back")
@@ -28,10 +30,10 @@ struct SessionOverviewView: View {
             }
            
             Text("Session ") ///Session overview
-                .font(Font(FontManager.font(weight: .semiBold, size: 24)))
+                .font(Font(FontManager.font(weight: .semiBold, size: 19)))
             + Text("Overview")
                 .foregroundColor(.blue)
-                .font(Font(FontManager.font(weight: .bold, size: 24)))
+                .font(Font(FontManager.font(weight: .bold, size: 19)))
                 .foregroundColor(Color(UIColor.blueColor))
             Spacer()
 
@@ -45,11 +47,23 @@ struct SessionOverviewView: View {
                     VStack(alignment: .leading, spacing: 16) {
 
                         // Date and Favorite
-                        HStack {
-                            Text(session.date)
-                                .font(Font(FontManager.font(weight: .bold, size: 18)))
-                                .foregroundColor(Color(UIColor.blueColor))
-                            Spacer()
+                        VStack {
+                            HStack {
+                                Text(session.date)
+                                    .font(Font(FontManager.font(weight: .bold, size: 18)))
+                                    .foregroundColor(Color(UIColor.blueColor))
+                                Spacer()
+                            }
+                            
+                            HStack {
+                                Text("2026")
+                                    .font(Font(FontManager.font(weight: .semiBold, size: 16)))
+                                    .foregroundColor(Color.black)
+                                Rectangle()
+                                    .background(Color.black)
+                                    .frame(height: 1)
+                            }
+                            
                         }
                         
                         HStack {
@@ -132,7 +146,7 @@ struct SessionOverviewView: View {
                         if !session.speakers.isEmpty {
                             Text("Session ") ///Session overview
                                 .font(Font(FontManager.font(weight: .semiBold, size: 19)))
-                            + Text("Overview")
+                            + Text("Speaker")
                                 
                                 .font(Font(FontManager.font(weight: .semiBold, size: 19)))
                                 .foregroundColor(Color(UIColor.blueColor))
@@ -167,5 +181,5 @@ struct SessionOverviewView: View {
 
 
 #Preview {
-    SessionOverviewView()
+    SessionOverviewView(onBack: {})
 }

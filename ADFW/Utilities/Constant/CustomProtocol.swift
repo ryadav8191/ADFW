@@ -36,3 +36,8 @@ protocol FilterSelectionDelegate: AnyObject {
 protocol HomeSessionTableViewCellDelegate: AnyObject {
     func homeSessionCellDidUpdateHeight()
 }
+
+
+protocol MenuSelectionDelegate: AnyObject {
+    func didSelectMenuItem(_ item: String)
+}

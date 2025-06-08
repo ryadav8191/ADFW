@@ -7,6 +7,8 @@
 
 import UIKit
 import IQKeyboardManagerSwift
+import FirebaseCore
+import FirebaseMessaging
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,8 +21,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         IQKeyboardManager.shared.isEnabled = true
         IQKeyboardManager.shared.enableAutoToolbar = true
+        FirebaseApp.configure()
         
-       
+        UNUserNotificationCenter.current().delegate = self
+        Messaging.messaging().delegate = self
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            }
+        }
         return true
     }
 
@@ -41,10 +53,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return orientationLock
     }
+    
+    func application(
+            _ application: UIApplication,
+            didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+        ) {
+            Messaging.messaging().apnsToken = deviceToken
+        }
 
 
 
 }
+
+
+extension AppDelegate: UNUserNotificationCenterDelegate, MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("FCM Token: \(fcmToken ?? "")")
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound, .badge])
+    }
+    
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        print("User tapped notification: \(userInfo)")
+        completionHandler()
+    }
+}
+
 
 
 struct AppUtility {

@@ -31,10 +31,10 @@ struct SocialMediaActivityView: View {
                 }
                
                 Text("Social Media ") ///Session overview  social media activity
-                    .font(Font(FontManager.font(weight: .semiBold, size: 24)))
+                    .font(Font(FontManager.font(weight: .semiBold, size: 19)))
                 + Text("Activity")
                     .foregroundColor(.blue)
-                    .font(Font(FontManager.font(weight: .bold, size: 24)))
+                    .font(Font(FontManager.font(weight: .bold, size: 19)))
                     .foregroundColor(Color(UIColor.blueColor))
                 Spacer()
 

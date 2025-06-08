@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E1975622-D676-4B41-98DD-5108C36C1801"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ADFW/View/Home/Cell/BannerTableViewCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "collectionView(_:cellForItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "45B60A7C-84B1-402E-83EA-523025C6AAFD"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -39,16 +23,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "8FC20E2E-D34E-4862-8131-C800B12DFB9A"
+            uuid = "F9245881-454B-402B-8C58-5F9D07D1D170"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ADFW/View/Event /Cell/MajorEventTableViewCell.swift"
+            filePath = "ADFW/View/Partners/OurPartnerViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "transformToPartnerViewModels(from:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "58A256F9-0571-48FD-BB1C-3217EE56B8E4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ADFW/ViewModel/PartnerViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "fetchPartnerData(page:pageSize:in:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

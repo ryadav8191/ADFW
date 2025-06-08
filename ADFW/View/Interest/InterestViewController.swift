@@ -27,6 +27,7 @@ class InterestViewController: UIViewController {
     @IBOutlet weak var `switch`: UISwitch!
     @IBOutlet weak var collectionHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var scrollView: UIScrollView!
     
     private var categories: [Category] = [
             .init(title: "Regulation", isSelected: false),
@@ -48,6 +49,7 @@ class InterestViewController: UIViewController {
         super.viewDidLoad()
       
         configureUI()
+        scrollView.contentInsetAdjustmentBehavior = .never
 
     }
     
@@ -100,6 +102,9 @@ class InterestViewController: UIViewController {
         
     }
 
+    @IBAction func backButton(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
     
     
     

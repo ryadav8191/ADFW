@@ -15,25 +15,25 @@ struct NotificationCardView: View {
         HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading) {
                 Text(item.date)
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                    .font(Font(FontManager.font(weight: .medium, size: 12)))
+                    .foregroundColor(Color(UIColor.lightBlue))
                 Text(item.time)
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                    .font(Font(FontManager.font(weight: .medium, size: 12)))
+                    .foregroundColor(Color(UIColor.lightBlue))
                 Image(item.iconName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 36, height: 24)
                     
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.title)
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .font(Font(FontManager.font(weight: .semiBold, size: 14)))
+                    .foregroundColor(Color(UIColor.lightBlue))
                 Text(item.description)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .font(Font(FontManager.font(weight: .regular, size: 12)))
+                    .foregroundColor(Color(UIColor.lightBlue))
             }
             Spacer()
 

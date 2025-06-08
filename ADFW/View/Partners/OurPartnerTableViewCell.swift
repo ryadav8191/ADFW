@@ -22,7 +22,7 @@ class OurPartnerTableViewCell: UITableViewCell {
         
         setupShadow(for: leftView)
         setupShadow(for: rightView)
-        setupShadow(for: stackView)
+        //setupShadow(for: stackView)
         leftImageView.contentMode = .scaleAspectFit
                rightImageView.contentMode = .scaleAspectFit
         
@@ -34,33 +34,67 @@ class OurPartnerTableViewCell: UITableViewCell {
         
     }
     
+//    
+//    func configure(leftImage: UIImage?, rightImage: UIImage?) {
+//            if let left = leftImage, let right = rightImage {
+//                leftImageView.image = left
+//                rightImageView.image = right
+//                leftView.isHidden = false
+//                rightView.isHidden = false
+//                stackView.alignment = .fill
+//                stackView.distribution = .fillEqually
+//            } else if let onlyImage = leftImage ?? rightImage {
+//                leftView.isHidden = false
+//                rightView.isHidden = true
+//                leftImageView.image = onlyImage
+//                stackView.alignment = .center
+//                stackView.distribution = .fill
+//                setupShadow(for: stackView)
+//            }
+//        }
+//    
     
-    func configure(leftImage: UIImage?, rightImage: UIImage?) {
-            if let left = leftImage, let right = rightImage {
-                leftImageView.image = left
-                rightImageView.image = right
-                leftView.isHidden = false
-                rightView.isHidden = false
-                stackView.alignment = .fill
-                stackView.distribution = .fillEqually
-            } else if let onlyImage = leftImage ?? rightImage {
-                leftView.isHidden = false
-                rightView.isHidden = true
-                leftImageView.image = onlyImage
-                stackView.alignment = .center
-                stackView.distribution = .fill
-            }
+    
+    func configure(leftImageURL: String?, rightImageURL: String?) {
+        if let leftURLString = leftImageURL, let rightURLString = rightImageURL,
+           let leftURL = URL(string: leftURLString), let rightURL = URL(string: rightURLString) {
+
+            leftImageView.kf.setImage(with: leftURL, placeholder: UIImage(named: "placeholder"))
+            rightImageView.kf.setImage(with: rightURL, placeholder: UIImage(named: "placeholder"))
+
+            leftView.isHidden = false
+            rightView.isHidden = false
+            stackView.alignment = .fill
+            stackView.distribution = .fillEqually
+
+        } else if let onlyURLString = leftImageURL ?? rightImageURL,
+                  let url = URL(string: onlyURLString) {
+
+            leftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+            leftView.isHidden = false
+            rightView.isHidden = true
+            stackView.alignment = .center
+            stackView.distribution = .fill
+            setupShadow(for: leftView)
+            
+        } else {
+            // Both URLs are invalid or nil
+            leftImageView.image = UIImage(named: "person1")
+            rightImageView.image = nil
+            leftView.isHidden = false
+            rightView.isHidden = true
         }
-    
+    }
+
     
     private func setupShadow(for view: UIView) {
-        view.layer.shadowColor = UIColor(red: 0/255, green: 20/255, blue: 52/255, alpha: 0.08).cgColor
+        view.layer.shadowColor = UIColor(red: 0/255, green: 20/255, blue: 52/255, alpha: 0.1).cgColor
         view.layer.shadowOffset = CGSize(width: 1, height: 1)
         view.layer.shadowRadius = 10
         view.layer.shadowOpacity = 1
         view.layer.masksToBounds = false
-      //  view.layer.cornerRadius = 8
-        view.backgroundColor = .white 
+        view.layer.cornerRadius = 2
+        view.backgroundColor = .white
     }
     
     

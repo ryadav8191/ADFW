@@ -10,6 +10,14 @@ import UIKit
 class FoodTableViewCell: UITableViewCell {
     @IBOutlet weak var containerView: UIView!
     
+    
+    @IBOutlet weak var foodLabel: UILabel!
+    @IBOutlet weak var foodViewImageView: UIImageView!
+    
+    @IBOutlet weak var viewAllLabel: UILabel!
+    
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -30,6 +38,18 @@ class FoodTableViewCell: UITableViewCell {
         containerView.layer.shadowRadius = 20
         containerView.layer.masksToBounds = false
 
+        foodLabel.font = FontManager.font(weight: .medium, size: 14)
+        
+        viewAllLabel.font = FontManager.font(weight: .medium, size: 14)
+        
+        foodLabel.textColor = .lightBlue
     }
+    
+    
+    @IBAction func viewAllAction(_ sender: Any) {
+        
+    }
+    
+    
     
 }

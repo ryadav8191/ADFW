@@ -38,58 +38,85 @@ struct MenuView: View {
     ]
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Image("foodBanner") // Replace with your image name
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                      //  .frame(height: 180)
+ //       if #available(iOS 16.0, *) {
+ //           NavigationStack {
+        VStack (spacing:0){
+                
+                HStack {
+                    Button(action: {
+                       // onBack()
+                    }) {
+                        Image("back")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 18, height: 18)
+                    }
+                    .frame(width: 50,height: 50)
+                   // .background(.red)
 
-                    ForEach(sections) { section in
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(section.title)
-                                .font(Font(FontManager.font(weight: .semiBold, size: 22)))
-                                .foregroundColor(Color(UIColor.blueColor))
-                                .padding(.horizontal)
-                            
-                            ForEach(section.items) { item in
-                                VStack(spacing: 4) {
-                                    HStack(alignment: .top) {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text(item.name)
-                                                .font(Font(FontManager.font(weight: .medium, size: 14.5)))
-                                                .foregroundColor(Color(UIColor.lightBlue))
-                                            if !item.description.isEmpty {
-                                                Text(item.description)
-                                                    .font(Font(FontManager.font(weight: .medium, size: 12)))
-                                                    .foregroundColor(Color(UIColor.lightGray))
+                    Text("Al Meylas")
+                        .font(Font(FontManager.font(weight: .semiBold, size: 19)))
+                        .foregroundColor(.primary)
+
+                    Spacer()
+                }
+             
+                Divider()
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Image("foodBanner") // Replace with your image name
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                        //  .frame(height: 180)
+                        
+                        ForEach(sections) { section in
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(section.title)
+                                    .font(Font(FontManager.font(weight: .semiBold, size: 22)))
+                                    .foregroundColor(Color(UIColor.blueColor))
+                                    .padding(.horizontal)
+                                
+                                ForEach(section.items) { item in
+                                    VStack(spacing: 4) {
+                                        HStack(alignment: .top) {
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(item.name)
+                                                    .font(Font(FontManager.font(weight: .medium, size: 14.5)))
+                                                    .foregroundColor(Color(UIColor.lightBlue))
+                                                if !item.description.isEmpty {
+                                                    Text(item.description)
+                                                        .font(Font(FontManager.font(weight: .medium, size: 12)))
+                                                        .foregroundColor(Color(UIColor.lightGray))
+                                                }
                                             }
+                                            Spacer()
+                                            Text(item.price)
+                                                .font(Font(FontManager.font(weight: .semiBold, size: 14.5)))
+                                                .foregroundColor(Color(UIColor.lightBlue))
                                         }
-                                        Spacer()
-                                        Text(item.price)
-                                            .font(Font(FontManager.font(weight: .semiBold, size: 14.5)))
-                                            .foregroundColor(Color(UIColor.lightBlue))
+                                        
+                                        Divider()
+                                            .frame(height: 1)
+                                            .background(Color(UIColor(hex: "#D4D6D9")))
+                                            .padding(.vertical, 16)
+                                        
                                     }
-                                   
-                                    Divider()
-                                        .frame(height: 1)
-                                        .background(Color(UIColor(hex: "#D4D6D9")))
-                                        .padding(.vertical, 16)
-
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 8)
+                                    .background(Color.white)
                                 }
-                                .padding(.horizontal)
-                                .padding(.vertical, 8)
-                                .background(Color.white)
+                                
+                                
                             }
-
-                           
                         }
                     }
                 }
+//                .navigationBarTitle("Al Meylas", displayMode: .inline)
             }
-            .navigationBarTitle("Al Meylas", displayMode: .inline)
-        }
+//        } else {
+//            // Fallback on earlier versions
+//        }
     }
 }
 

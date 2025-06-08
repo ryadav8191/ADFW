@@ -9,152 +9,159 @@
 import SwiftUI
 
 struct TicketView: View {
-    @State private var expandedDays: Set<Int> = []
-    
+    @State private var expandedDayID: Int? = nil
     let onBack: () -> Void
 
     var body: some View {
-        
-        HStack(spacing: 16) {
-            Button(action: {
-                // Handle back action
-                onBack()
-                
-            }) {
-                Image("back")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 18, height: 18)
-            }
-           
-            Text("My ")
-                .font(Font(FontManager.font(weight: .semiBold, size: 24)))
-            + Text("Tickets")
-                .foregroundColor(.blue)
-                .font(Font(FontManager.font(weight: .bold, size: 24)))
-                .foregroundColor(.primary)
-            Spacer()
-
-        }
-        .padding()
-        .background(Color.white)
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 4)
-        ScrollView {
-            VStack(spacing: 16) {
-                // Ticket Card
-                VStack(spacing: 12) {
-                    Image("qr_logo") // Replace with real QR image
+        VStack(spacing: 0) {
+            // Top Bar
+            HStack(alignment: .center, spacing: 16) {
+                Button(action: {
+                    onBack()
+                }) {
+                    Image("back")
                         .resizable()
-                        .frame(width: 150, height: 65)
-                        .padding()
-                    
-                    VStack(spacing: 0.0) {
-                        Image("qr") // Replace with real QR image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: 200, maxHeight: 200)
-                            .padding()
-                        Text("RBQXCW")
-                            .font(Font(FontManager.font(weight: .regular, size: 20)))
-                    }
-                    .padding(12.0)
-                    .background(Color.white)
-                   // .cornerRadius(12)
-                   
-                    
-                    Text("SINGLE DAY PASS:")
-                        .font(Font(FontManager.font(weight: .semiBold, size: 26)))
-                        .foregroundColor(.blue)
-                    
-                    Text("RESOLVE")
-                        .font(Font(FontManager.font(weight: .semiBold, size: 36)))
-                        .foregroundColor(.blue)
-                       
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 18, height: 18)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(UIColor(hex: "#1B6AD5").withAlphaComponent(0.1)))
-              //  .cornerRadius(12)
-                .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
-                .padding(.horizontal, 16.0)
                 
-                HStack(alignment: .top, spacing: 8) {
-                    Rectangle()
-                        .fill(Color.blue)
-                        .frame(width: 2, height: 24) // Adjust height to match text
 
-                    Button(action: {
-                        // Handle tap on Ticket Benefits
-                    }) {
-                        HStack(spacing: 0) {
-                            Text("Ticket ")
-                                .foregroundColor(.primary)
-                            Text("Benefits")
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.leading, 4.0)
-                        .font(Font(FontManager.font(weight: .semiBold, size: 20)))
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    Spacer()
-                }
-                .padding(.leading, 16.0)
-            
-                // Expandable Event Sections
-                VStack(spacing: 10) {
-                    ForEach(eventDays) { day in
-                        VStack(spacing: 0) {
-                            Button(action: {
-                                withAnimation {
-                                    if expandedDays.contains(day.id) {
-                                        expandedDays.remove(day.id)
-                                    } else {
-                                        expandedDays.insert(day.id)
-                                    }
-                                }
-                            }) {
-                                HStack {
-                                    Text("Day \(day.id) - \(day.date)")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                    Spacer()
-                                    Image(systemName: expandedDays.contains(day.id) ? "chevron.up" : "chevron.down")
-                                        .foregroundColor(.white)
-                                }
-                                .padding()
-                                .background(Color.blue)
-                               // .cornerRadius(10)
-                            }
+                Text("My ")
+                    .foregroundColor(Color.black)
+                    .font(Font(FontManager.font(weight: .semiBold, size: 19)))
+                + Text("Tickets")
+                    .foregroundColor(Color(UIColor.blueColor))
+                    .font(Font(FontManager.font(weight: .bold, size: 19)))
+                   
 
-                            if expandedDays.contains(day.id) {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    ForEach(day.events, id: \.self) { event in
-                                        HStack(alignment: .top, spacing: 8) {
-                                            Image(systemName: "mappin.and.ellipse")
-                                                .foregroundColor(.blue)
-                                            VStack(alignment: .leading) {
-                                                Text(event.name)
-                                                    .font(.subheadline)
-                                                Text(event.location)
-                                                    .font(.caption)
-                                                    .foregroundColor(.gray)
-                                            }
-                                        }
-                                        .padding(.leading, -50.0)
-                                    }
-                                }
-                                .padding(.top, 8)
-                            }
-                        }
-                    }
-
-                }
-                .padding(.horizontal, 16.0)
+                Spacer()
             }
-            .padding(.vertical)
+            .padding()
+            .background(Color.white)
+            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 4)
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Ticket Info Card
+                    VStack(spacing: 12) {
+                        Image("qr_logo")
+                            .resizable()
+                            .frame(width: 150, height: 65)
+                            .padding()
+
+                        VStack(spacing: 0) {
+                            Image("qr")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 200, maxHeight: 200)
+                                .padding()
+                            Text("RBQXCW")
+                                .font(Font(FontManager.font(weight: .regular, size: 20)))
+                        }
+                        .padding(12)
+                        .background(Color.white)
+
+                        Text("SINGLE DAY PASS:")
+                            .font(Font(FontManager.font(weight: .semiBold, size: 26)))
+                            .foregroundColor(Color(UIColor.blueColor))
+
+                        Text("RESOLVE")
+                            .font(Font(FontManager.font(weight: .semiBold, size: 36)))
+                            .foregroundColor(Color(UIColor.blueColor))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(UIColor.blueColor.withAlphaComponent(0.1)))
+                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
+                    .padding(.horizontal, 16)
+
+                    // Ticket Benefits Button
+                    HStack(alignment: .top, spacing: 8) {
+                        Rectangle()
+                            .foregroundColor(Color(UIColor.blueColor))
+                            .frame(width: 2, height: 24)
+
+                        Button(action: {
+                            // Ticket Benefits tapped
+                        }) {
+                            HStack(spacing: 0) {
+                                Text("Ticket ")
+                                    .foregroundColor(.primary)
+                                Text("Benefits")
+                                    .foregroundColor(Color(UIColor.blueColor))
+                            }
+                            .padding(.leading, 4)
+                            .font(Font(FontManager.font(weight: .semiBold, size: 20)))
+                        }
+                        .buttonStyle(PlainButtonStyle())
+
+                        Spacer()
+                    }
+                    .padding(.leading, 16)
+
+                    // Expandable Event Sections
+                    VStack(spacing: 10) {
+                        ForEach(eventDays) { day in
+                            VStack(alignment: .leading, spacing: 0) {
+                                // Day Header
+                                Button(action: {
+                                    withAnimation {
+                                        expandedDayID = (expandedDayID == day.id) ? nil : day.id
+                                    }
+                                }) {
+                                    HStack {
+                                        Text("Day \(day.id) - \(day.date)")
+                                            .font(Font(FontManager.font(weight: .semiBold, size: 16)))
+                                            .foregroundColor(.white)
+                                        Spacer()
+                                        Image(expandedDayID == day.id ? "downArrowWhite" : "upArrowWhite") //
+                                            .foregroundColor(.white)
+                                            
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(UIColor.blueColor))
+                                    .cornerRadius(3)
+                                }
+
+                                // Event List
+                                if expandedDayID == day.id {
+                                    VStack(alignment: .leading, spacing: 16) {
+                                        ForEach(day.events, id: \.self) { event in
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(event.name)
+                                                    .font(Font(FontManager.font(weight: .semiBold, size: 15)))
+                                                    .foregroundColor(.black)
+
+                                                HStack(spacing: 4) {
+                                                    Image("geo-alt")
+                                                        .foregroundColor(.blue)
+                                                    Text(event.location)
+                                                        .font(Font(FontManager.font(weight: .medium, size: 15)))
+                                                        .foregroundColor(Color(UIColor.lightBlue))
+                                                }
+                                            }
+                                            .padding(.vertical, 8)
+                                            .padding(.horizontal)
+                                           // .background(Color.white)
+                                        }
+                                    }
+                                    //.padding(.horizontal)
+                                    .padding(.top, 8)
+                                }
+                            }
+                           // .background(Color(UIColor.systemGray6))
+                           // .cornerRadius(8)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+                .padding(.vertical)
+            }
         }
     }
 }
+
 
 // MARK: - Mock Data
 

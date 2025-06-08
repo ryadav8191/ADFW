@@ -6,14 +6,40 @@
 //
 
 
-import SwiftUI
 
 
+
 import SwiftUI
+
+import SwiftUI
+import Kingfisher
+import WebKit
 
 struct SpeakerProfileView: View {
-    let profile: SpeakerProfile
+    let profile: Speakers
     var onClose: (() -> Void)? = nil
+    @State private var size: CGSize = .zero
+
+    var htmlFormattedBio: String {
+        """
+        <html>
+        <head>
+            <style>
+                body {
+                    margin: 0;
+                    padding: 0;
+                       font-family: 'IsidoraSans-Regular';
+                    font-size: 14px;
+                    color: #0D0D0D;
+                }
+            </style>
+        </head>
+        <body>
+        \(profile.bio ?? "")
+        </body>
+        </html>
+        """
+    }
 
     var body: some View {
         ScrollView {
@@ -32,42 +58,25 @@ struct SpeakerProfileView: View {
 
                 // Profile image and name/title
                 HStack(alignment: .center, spacing: 12) {
-                    Image(profile.imageName)
+                    KFImage(URL(string: profile.photoURL ?? ""))
                         .resizable()
                         .frame(width: 105, height: 115)
                         .clipShape(RoundedRectangle(cornerRadius: 0))
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(profile.name)
+                        Text((profile.firstName ?? "") + " " + (profile.lastName ?? ""))
                             .font(Font(FontManager.font(weight: .bold, size: 18)))
                             .foregroundColor(Color(UIColor.lightBlue))
 
-                        Text(profile.title)
+                        Text(profile.designation ?? "")
                             .font(Font(FontManager.font(weight: .regular, size: 12)))
                             .foregroundColor(Color(UIColor(hex: "#555555")))
                     }
                 }
 
-                // Descriptions
-                Text(profile.descriptionShort)
-                    .font(Font(FontManager.font(weight: .regular, size: 14)))
-                    .foregroundColor(Color(UIColor(hex: "#0D0D0D")))
-
-                Text(profile.descriptionLong)
-                    .font(Font(FontManager.font(weight: .regular, size: 12)))
-                    .foregroundColor(Color(UIColor(hex: "#0D0D0D")))
-
-                // Wrapped tags using FlowLayout
-                if #available(iOS 17.0, *) {
-                    AnyLayout(FlowLayout(spacing: 8)) {
-                        ForEach(profile.tags) { tag in
-                            TagView(text: tag.title, color: Color(tag.color))
-                        }
-                    }
-                    .padding(.top, 8)
-                }
-
-               
+                // Bio with dynamic HTML height
+                AttributedText(htmlContent: htmlFormattedBio, size: $size)
+                    .frame(height: size.height)
 
                 Spacer()
             }
@@ -75,7 +84,7 @@ struct SpeakerProfileView: View {
         }
         .background(Color.white)
         .cornerRadius(0)
-        .padding()
+        .padding(.horizontal)
     }
 }
 
@@ -105,24 +114,10 @@ struct TagView: View {
     }
 }
 
-#Preview {
-    SpeakerProfileView(profile: SpeakerProfile(
-        name: "H.E. Ahmed Jasim Al Zaabi",
-        title: "Chairman, ADGM & Abu Dhabi Dept. Of Economic Development",
-        descriptionShort: "His Excellency Ahmed Jasim Al Zaabi is member of the Abu Dhabi Executive Council and Chairman of the Abu Dhabi Department of Economic Development (ADDED), the catalyst for economic growth in the emirate. In this role, H.E. is spearheading strategies and initiatives to further enhance the soaring, diversified, smart, and sustainable “Falcon Economy”.A seasoned leader with a proven track record in delivering results, H.E. Al Zaabi has long-standing experience in the finance and investments sector, wherein he has managed and executed multi-billion-dollar investment transactions and led numerous restructurings and turnarounds across a multitude of sectors. H.E. is also the Chairman of Abu Dhabi Global Market (ADGM), the international financial centre located in the UAE capital and cementing Abu Dhabi’s status as a leading financial hub and “Capital of Capital”. At the helm of ADGM, H.E. has been",
-        descriptionLong: "A seasoned leader with a proven track record in delivering results...",
-        imageName: "person1", // Your image asset
-        tags: [
-            Tag(title: "Abu Dhabi Economic Forum", color: .blue),
-            Tag(title: "Asset Abu dhabi", color: .cyan),
-            Tag(title: "Fintech Abu dhabi", color: .blue),
-            Tag(title: "R.A.C.E. Sustainability Summit", color: .black)
-        ]
-    ))
-}
 
 
 import SwiftUI
+import Kingfisher
 
 func layout(sizes: [CGSize],
             spacing: CGFloat = 8,

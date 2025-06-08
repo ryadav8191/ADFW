@@ -34,15 +34,17 @@ class AgandaViewController: UIViewController {
                 AgendaSession(
                     time: "9:30 - 10:30",
                     title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
+                    type: "Panel" ,
+                    location: " Alan Howard eys To Managing Money & Risk: In Conve",
                     tags: ["D", "M", "2"],
                     speakers: [
                         Speaker(name: "Speaker 1", image: UIImage.person1),
                         Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 3", image: UIImage.person3),
-                        Speaker(name: "Speaker 4", image: UIImage.person1),
-                        Speaker(name: "Speaker 5", image: UIImage.person3)
+                        Speaker(name: "Speaker 2", image: UIImage.person2),
+                        Speaker(name: "Speaker 2", image: UIImage.person2), Speaker(name: "Speaker 2", image: UIImage.person2), Speaker(name: "Speaker 2", image: UIImage.person2), Speaker(name: "Speaker 2", image: UIImage.person2),
+                        Speaker(name: "Speaker 2", image: UIImage.person2),
+                        Speaker(name: "Speaker 2", image: UIImage.person2),
+                        Speaker(name: "Speaker 5", image: UIImage.person3), Speaker(name: "Speaker 5", image: UIImage.person3), Speaker(name: "Speaker 5", image: UIImage.person3), Speaker(name: "Speaker 5", image: UIImage.person3)
                     ]
                 ),
                 AgendaSession(
@@ -166,9 +168,6 @@ class AgandaViewController: UIViewController {
 
         pageTitle.attributedText = attributedString
 
-
-        
-        
         searchBarView.layer.borderColor = UIColor(hex: "#A3A6A7").cgColor
         searchBarView.layer.borderWidth = 1
         navigationView.layer.shadowColor = UIColor(hex: "#0000000D").cgColor

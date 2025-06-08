@@ -35,6 +35,7 @@ class AgendaTableViewCell: UITableViewCell {
         containerView.layer.shadowOpacity = 0.4
         containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
         containerView.layer.shadowRadius = 4
+        containerView.layer.cornerRadius = 3
         containerView.layer.masksToBounds = false
         selectionStyle = .none
     }

@@ -68,12 +68,14 @@ class CustomTabBarController: UITabBarController,UITabBarControllerDelegate {
         let conferenceNav = createNavController(vc: agandaVC, title: "Agenda", icon: UIImage.agenda)
         
         let ticketVC = storyboard.instantiateViewController(withIdentifier: "TicketViewController") as! TicketViewController
+        ticketVC.pageType = .push
         let travelNav = createNavController(vc: ticketVC, title: "Ticket", icon: UIImage.ticket)
         
-        let chatVC = storyboard.instantiateViewController(withIdentifier: "SpeakerViewController") as! SpeakerViewController
+        let chatVC = storyboard.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
         let interactionNav = createNavController(vc: chatVC, title: "Chat", icon: UIImage.chat)
         
         let exploreVC = storyboard.instantiateViewController(withIdentifier: "ExploreViewController") as! ExploreViewController
+        
         let exploreNav = createNavController(vc: exploreVC, title: "Explore", icon: UIImage.explore)
 
         viewControllers = [homeVC, conferenceNav, travelNav, interactionNav,exploreNav]

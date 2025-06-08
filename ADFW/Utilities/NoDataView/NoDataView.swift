@@ -13,7 +13,7 @@ class NoDataView: UIView {
         let label = UILabel()
         label.text = "No Data Available"
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = .blueColor
         label.font = FontManager.font(weight: .bold, size: 18)
         label.isHidden = false
         return label

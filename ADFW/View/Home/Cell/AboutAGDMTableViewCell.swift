@@ -15,6 +15,8 @@ class AboutAGDMTableViewCell: UITableViewCell {
     @IBOutlet weak var bodyLabel: UILabel!
     @IBOutlet weak var viewDetailButton: UIButton!
     
+    var onClickViewAll: (() -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
@@ -33,7 +35,7 @@ class AboutAGDMTableViewCell: UITableViewCell {
     
     
     @IBAction func viewDeatilAction(_ sender: Any) {
-        
+        onClickViewAll?()
     }
     
     

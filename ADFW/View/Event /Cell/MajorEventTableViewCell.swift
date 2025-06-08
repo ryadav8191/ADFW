@@ -11,34 +11,35 @@ struct EventTagModel {
     let iconName: String?    // e.g., "calendar", "clock", "location"
     let title: String
     let isButton: Bool       // for special styling (e.g., "Invite Only")
+    let color: String
 }
 
 
 class MajorEventTableViewCell: UITableViewCell {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var bannerimageView: UIImageView!
+    @IBOutlet weak var bannerimageView: ScaledHeightImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var descrtion: UILabel!
     @IBOutlet weak var ViewAgendaButton: UIButton!
     @IBOutlet weak var ViewDetailButton: UIButton!
-    
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
     
+    @IBOutlet weak var viewDetailsCons: NSLayoutConstraint!
     
-    var tags: [EventTagModel] = [
-           .init(iconName: "calendar", title: "09–12 DEC", isButton: false),
-           .init(iconName: "clock", title: "8:30 - 17:00", isButton: false),
-           .init(iconName: "mappin.and.ellipse", title: "Four Seasons Hotel", isButton: false),
-           .init(iconName: nil, title: "Invite Only", isButton: true)
-       ]
+    @IBOutlet weak var viewAgandaCons: NSLayoutConstraint!
+    
+    weak var delegate: HomeSessionTableViewCellDelegate?
+
+    
+    var tags: [EventTagModel] = []
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        
+        collectionView.isScrollEnabled = false
         collectionView.dataSource = self
         collectionView.delegate = self
         let layout = LeftAlignedCollectionViewFlowLayout1()
@@ -48,8 +49,7 @@ class MajorEventTableViewCell: UITableViewCell {
         collectionView.collectionViewLayout = layout
         collectionView.register(UINib(nibName: "MajorEventCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MajorEventCollectionViewCell")
         configureUI()
-        
-       
+    
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -64,16 +64,113 @@ class MajorEventTableViewCell: UITableViewCell {
         containerView.layer.shadowRadius = 20
         containerView.layer.shadowOpacity = 1
         containerView.layer.masksToBounds = false
-
         descriptionLabel.font = FontManager.font(weight: .medium, size: 13)
+        
+        DispatchQueue.main.async {
+                self.updateCollectionViewHeight()
+            }
     }
     
-    func configure(with item: AgendaSession) {
+    func updateCollectionViewHeight() {
+        self.collectionView.layoutIfNeeded()
+        self.collectionViewHeightConstraint.constant = self.collectionView.contentSize.height
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.layoutIfNeeded()
+
+        let newHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
+        if collectionViewHeightConstraint.constant != newHeight {
+            collectionViewHeightConstraint.constant = newHeight
+            delegate?.homeSessionCellDidUpdateHeight()
+        }
+    }
+    
+
+    
+    func configure(with item: Agendas?) {
+        
+        if let data = item {
+            descrtion.text = data.description
+            bannerimageView.image = nil
+            if let urlString = data.image, let url = URL(string: urlString) {
+                bannerimageView.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(named: "placeholder")
+                )
+            } else {
+                bannerimageView.image = UIImage(named: "")
+            }
+            
+            if data.viewAgenda ?? false {
+                ViewAgendaButton.isHidden = false
+                //viewAgandaCons.constant = 32
+            } else {
+                ViewAgendaButton.isHidden = true
+                //viewAgandaCons.constant = 0
+            }
+            
+            if data.viewDetails ?? false {
+                ViewDetailButton.isHidden = false
+               // viewDetailsCons.constant = 32
+            } else {
+                ViewDetailButton.isHidden = true
+                //viewDetailsCons.constant = 0
+            }
+            
+            
+            ViewAgendaButton.tintColor = UIColor.white
+            ViewAgendaButton.backgroundColor = UIColor(hex: data.color ?? "")
+            ViewDetailButton.tintColor = UIColor(hex: data.color ?? "")
+            ViewDetailButton.layer.borderColor = UIColor(hex: data.color ?? "").cgColor
+            ViewDetailButton.layer.borderWidth = 1
+            
+            setButtonTitle(ViewDetailButton, title: "VIEW DETAILS")
+            setButtonTitle(ViewAgendaButton, title: "VIEW AGENDA")
+
+           
+            self.tags = [
+                .init(iconName: "calendarIcon", title: formatToDayMonth(from: data.date ?? "") ?? "", isButton: false, color:  data.color ?? ""),
+                .init(iconName: "clock", title: data.time ?? "", isButton: false, color:  data.color ?? ""),
+                .init(iconName: "calendar", title: data.location?.name ?? "", isButton: false, color:  data.color ?? ""),
+                .init(iconName: nil, title: data.agendaType?.name ?? "", isButton: true, color:  data.color ?? "")
+            ]
+            
+            
+            collectionView.reloadData()
+            
+        }
      
-        descrtion.text = item.title
-        collectionView.reloadData()
+       
     }
     
+    func formatToDayMonth(from isoString: String) -> String? {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        guard let date = isoFormatter.date(from: isoString) else {
+            return nil
+        }
+
+        let displayFormatter = DateFormatter()
+        displayFormatter.dateFormat = "d MMM"
+        return displayFormatter.string(from: date)
+    }
+
+    
+    
+    func setButtonTitle(_ button: UIButton, title: String) {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.font(weight: .semiBold, size: 10)
+        ]
+        let attributedTitle = NSAttributedString(string: title, attributes: attributes)
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.setAttributedTitle(attributedTitle, for: .selected)
+    }
+
 }
 
 
@@ -87,7 +184,7 @@ extension MajorEventTableViewCell: UICollectionViewDataSource, UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MajorEventCollectionViewCell", for: indexPath) as! MajorEventCollectionViewCell
         cell.configure(with: model)
         
-
+    
         return cell
     }
     

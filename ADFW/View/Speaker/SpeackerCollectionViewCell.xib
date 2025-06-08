@@ -20,39 +20,60 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ijB-4c-ai3">
                         <rect key="frame" x="0.0" y="0.0" width="218" height="299"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="women1" translatesAutoresizingMaskIntoConstraints="NO" id="UuY-bF-NdP">
-                                <rect key="frame" x="0.0" y="16" width="218" height="164"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mq0-8R-8vn">
+                                <rect key="frame" x="29" y="8" width="160" height="160"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person4" translatesAutoresizingMaskIntoConstraints="NO" id="UuY-bF-NdP">
+                                        <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qlK-sI-UPm" customClass="ColorTagView" customModule="ADFW" customModuleProvider="target">
+                                        <rect key="frame" x="102" y="8" width="50" height="15"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="15" id="8vC-NP-bfn"/>
+                                            <constraint firstAttribute="width" constant="50" id="VYl-Dy-ZK0"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="164" id="sJ3-lg-VLK"/>
+                                    <constraint firstItem="qlK-sI-UPm" firstAttribute="top" secondItem="Mq0-8R-8vn" secondAttribute="top" constant="8" id="94p-ja-XDH"/>
+                                    <constraint firstItem="UuY-bF-NdP" firstAttribute="top" secondItem="Mq0-8R-8vn" secondAttribute="top" id="AIa-vo-OBB"/>
+                                    <constraint firstAttribute="bottom" secondItem="UuY-bF-NdP" secondAttribute="bottom" id="U3d-fA-wSb"/>
+                                    <constraint firstAttribute="trailing" secondItem="UuY-bF-NdP" secondAttribute="trailing" id="dmy-V9-fBa"/>
+                                    <constraint firstAttribute="height" constant="160" id="gId-Oj-b0X"/>
+                                    <constraint firstAttribute="width" constant="160" id="jjf-Kr-tTs"/>
+                                    <constraint firstAttribute="trailing" secondItem="qlK-sI-UPm" secondAttribute="trailing" constant="8" id="tOV-pn-D0r"/>
+                                    <constraint firstItem="UuY-bF-NdP" firstAttribute="leading" secondItem="Mq0-8R-8vn" secondAttribute="leading" id="veT-oL-ccu"/>
                                 </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEo-hq-CAJ">
-                                <rect key="frame" x="0.0" y="188" width="218" height="61"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEo-hq-CAJ">
+                                <rect key="frame" x="4" y="176" width="210" height="61"/>
                                 <string key="text">H.H. Sheikha Shamma
 bint Sultan bin Khalifa
 Al Nahyan</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="President &amp; CEO, UICCA" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4mP-XY-NNL">
-                                <rect key="frame" x="0.0" y="257" width="218" height="20.333333333333314"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="President &amp; CEO, UICCA" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4mP-XY-NNL">
+                                <rect key="frame" x="4" y="245" width="210" height="20.333333333333314"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="4mP-XY-NNL" secondAttribute="trailing" id="8ao-Bf-geo"/>
-                            <constraint firstItem="sEo-hq-CAJ" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" id="99Q-Yy-Pkf"/>
+                            <constraint firstAttribute="bottom" secondItem="4mP-XY-NNL" secondAttribute="bottom" constant="8" id="0uC-f4-TMy"/>
+                            <constraint firstAttribute="trailing" secondItem="4mP-XY-NNL" secondAttribute="trailing" constant="4" id="8ao-Bf-geo"/>
+                            <constraint firstItem="sEo-hq-CAJ" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" constant="4" id="99Q-Yy-Pkf"/>
                             <constraint firstItem="4mP-XY-NNL" firstAttribute="top" secondItem="sEo-hq-CAJ" secondAttribute="bottom" constant="8" id="Cia-i7-EIY"/>
-                            <constraint firstAttribute="trailing" secondItem="UuY-bF-NdP" secondAttribute="trailing" id="GAJ-ZQ-4Qb"/>
-                            <constraint firstItem="4mP-XY-NNL" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" id="GD5-Yc-7cE"/>
-                            <constraint firstItem="UuY-bF-NdP" firstAttribute="top" secondItem="ijB-4c-ai3" secondAttribute="top" constant="16" id="LyT-5x-HGo"/>
-                            <constraint firstAttribute="trailing" secondItem="sEo-hq-CAJ" secondAttribute="trailing" id="OK4-Q4-dU2"/>
-                            <constraint firstItem="UuY-bF-NdP" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" id="XTq-gd-TGk"/>
-                            <constraint firstItem="sEo-hq-CAJ" firstAttribute="top" secondItem="UuY-bF-NdP" secondAttribute="bottom" constant="8" id="d1j-F9-zUB"/>
+                            <constraint firstItem="4mP-XY-NNL" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" constant="4" id="GD5-Yc-7cE"/>
+                            <constraint firstAttribute="trailing" secondItem="sEo-hq-CAJ" secondAttribute="trailing" constant="4" id="OK4-Q4-dU2"/>
+                            <constraint firstItem="Mq0-8R-8vn" firstAttribute="centerX" secondItem="ijB-4c-ai3" secondAttribute="centerX" id="nvW-e9-kLo"/>
+                            <constraint firstItem="sEo-hq-CAJ" firstAttribute="top" secondItem="Mq0-8R-8vn" secondAttribute="bottom" constant="8" id="rXu-Kp-h3e"/>
+                            <constraint firstItem="Mq0-8R-8vn" firstAttribute="top" secondItem="ijB-4c-ai3" secondAttribute="top" constant="8" id="uhc-bo-I69"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -70,11 +91,12 @@ Al Nahyan</string>
                 <outlet property="desigationLabel" destination="4mP-XY-NNL" id="Te3-MQ-4zC"/>
                 <outlet property="nameLabel" destination="sEo-hq-CAJ" id="a5N-iU-zdC"/>
                 <outlet property="speakerImageView" destination="UuY-bF-NdP" id="JJR-4u-dz9"/>
+                <outlet property="tagView" destination="qlK-sI-UPm" id="XWG-F4-YNx"/>
             </connections>
             <point key="canvasLocation" x="238.1679389312977" y="61.619718309859159"/>
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="women1" width="158" height="165"/>
+        <image name="person4" width="496" height="518"/>
     </resources>
 </document>

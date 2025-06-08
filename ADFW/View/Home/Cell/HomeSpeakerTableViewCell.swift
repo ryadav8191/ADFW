@@ -12,17 +12,20 @@ class HomeSpeakerTableViewCell: UITableViewCell {
     
     @IBOutlet weak var collectionview: UICollectionView!
     @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var viewAll: UIButton!
     
     
+  
     
+    
+    var onClickViewAll: (() -> Void)?
     weak var delegate: HomeSessionTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         configureUI()
+        selectionStyle = .none
         if let layout = collectionview.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.estimatedItemSize = .zero
         }
@@ -47,6 +50,8 @@ class HomeSpeakerTableViewCell: UITableViewCell {
 //        }
     }
     
+    
+    
     func configureUI() {
         collectionview.delegate = self
         collectionview.dataSource = self
@@ -55,6 +60,11 @@ class HomeSpeakerTableViewCell: UITableViewCell {
         titleLabel.setStyledTextWithLastWordColor(fullText: "Our Speakers", lastWordColor: .blueColor)
         
     }
+    
+    @IBAction func viewAllAction(_ sender: Any) {
+        onClickViewAll?()
+    }
+    
     
 }
 
@@ -84,7 +94,7 @@ extension HomeSpeakerTableViewCell: UICollectionViewDataSource,UICollectionViewD
     }
     
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-                return UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 0)
+                return UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 16)
            
         }
         

@@ -40,23 +40,23 @@ struct FAQSectionView: View {
                     }) {
                         HStack {
                             Text(item.question)
-                                .foregroundColor(.black)
-                                .font(.system(size: 16, weight: .semibold))
+                                .font(Font(FontManager.font(weight: .semiBold, size: 15)))
+                                .foregroundColor(Color(UIColor.lightBlue))
                             Spacer()
                             Image(expandedIndex == item.id ? "upArrow" : "downArrow")  //
                                 .foregroundColor(.blue)
                         }
                         .padding()
-                        .background(Color(UIColor.systemGray6))
+                        .background(Color(UIColor(hex: "#F0F2F5")))
                        
                     }
 
                     if expandedIndex == item.id {
                         Text(item.answer)
-                            .font(.body)
-                            .foregroundColor(.gray)
+                            .font(Font(FontManager.font(weight: .medium, size: 14)))
+                            .foregroundColor(Color(UIColor.lightBlue))
                             .padding()
-                            .background(Color(UIColor.systemGray5))
+                           // .background(Color(UIColor.systemGray5))
                            
                             .transition(.opacity)
                     }

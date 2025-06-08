@@ -8,7 +8,14 @@
 import UIKit
 import SwiftUI
 
+enum PageType {
+    case present
+    case push
+}
+
 class TicketViewController: UIViewController {
+    
+    var pageType:PageType = .present
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,8 +23,9 @@ class TicketViewController: UIViewController {
         let swiftUIView = TicketView(onBack: { [weak self] in
             guard let self = self else { return }
 
-             // Or if it's presented modally:
-             self.dismiss(animated: true)
+           
+                self.tabBarController?.selectedIndex = 0            
+             
         })
         let hostingController = UIHostingController(rootView: swiftUIView)
 

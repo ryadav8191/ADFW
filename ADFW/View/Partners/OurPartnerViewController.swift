@@ -7,6 +7,14 @@
 
 import UIKit
 
+
+struct PartnerViewModels {
+      let title: String
+      let logos: [String]
+  }
+
+
+
 class OurPartnerViewController: UIViewController {
     
     
@@ -15,16 +23,15 @@ class OurPartnerViewController: UIViewController {
     @IBOutlet weak var pageTitle: UILabel!
     
     
-    struct PartnerViewModel {
-          let title: String
-          let logos: [String]
-      }
+    var viewModel = PartnerViewModel()
+    
+    var partnerSections: [PartnerViewModels] = []
 
-      var partnerSections: [PartnerViewModel] = [
-          PartnerViewModel(title: "Headline Partner", logos: ["ADQ"]),
-          PartnerViewModel(title: "Strategic Partners", logos: ["ADCB", "Abu Dhabi", "Etihad", "Etoro", "HSBC", "HUB71"]),
-          PartnerViewModel(title: "Official Partners", logos: ["ADIB", "ADNOC", "Circle", "Further", "IOTA", "Mubadala","Mubadala"]),
-      ]
+    var currentPage = 1
+    var isLoading = false
+    var isLastPage = false
+
+  
     
     
     
@@ -37,6 +44,9 @@ class OurPartnerViewController: UIViewController {
         
         
         configureUI()
+        
+        getPartnerData(page: 1)
+
     }
     
     
@@ -46,19 +56,13 @@ class OurPartnerViewController: UIViewController {
         navigationView.layer.shadowOffset = CGSize(width: 0, height: 3) // bottom only
         navigationView.layer.shadowRadius = 1
         navigationView.layer.masksToBounds = false
+        pageTitle.setStyledTextWithLastWordColor(fullText: "Our Partners", lastWordColor: .blueColor,fontSize: 19)
     }
     
     
     @IBAction func buttonAction(_ sender: Any) {
-        self.dismiss(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
-    
-    
-    
-    
-
-   
-
 }
 
 
@@ -102,6 +106,9 @@ extension OurPartnerViewController: UITableViewDelegate, UITableViewDataSource {
         return headerView
     }
 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -109,17 +116,12 @@ extension OurPartnerViewController: UITableViewDelegate, UITableViewDataSource {
 
            let section = partnerSections[indexPath.section]
            let logos = section.logos
-        print("indexPath",indexPath.row)
-        debugPrint(indexPath.row)
            let index = indexPath.row * 2
-        print("index",index)
-           let leftImageName = index < logos.count ? logos[index] : nil
-           let rightImageName = (index + 1) < logos.count ? logos[index + 1] : nil
+        let leftImageURL = index < logos.count ? logos[index] : nil
+        let rightImageURL = (index + 1) < logos.count ? logos[index + 1] : nil
 
-           let leftImage = leftImageName != nil ? UIImage.parter: nil
-          let rightImage = rightImageName != nil ? UIImage.parter: nil
+        cell.configure(leftImageURL: leftImageURL, rightImageURL: rightImageURL)
 
-           cell.configure(leftImage: leftImage, rightImage: rightImage)
            return cell
        }
     
@@ -129,3 +131,84 @@ extension OurPartnerViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
 }
+
+
+extension OurPartnerViewController: UIScrollViewDelegate {
+    
+    func getPartnerData(page: Int) {
+        guard !isLoading, !isLastPage else { return }
+        isLoading = true
+        
+        viewModel.fetchPartnerData(page: page, in: self.view) { result in
+            self.isLoading = false
+            switch result {
+            case .success(let response):
+                if let partners = response.data, !partners.isEmpty {
+                    let newSections = self.transformToPartnerViewModels(from: partners)
+                    if page == 1 {
+                        self.partnerSections = newSections
+                    } else {
+                        self.partnerSections.append(contentsOf: newSections)
+                    }
+
+                    self.currentPage = page
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    self.isLastPage = true
+                    if page == 1 {
+                        MessageHelper.showToast(message: "No partner data available.", in: self.view)
+                    }
+                }
+            case .failure(let error):
+                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+            }
+        }
+    }
+
+
+    func transformToPartnerViewModels(from partners: [Partner]) -> [PartnerViewModels] {
+        // Dictionary to group logos by category label
+        var categoryDict: [String: [String]] = [:]
+
+        for partner in partners {
+            // Safely unwrap category label and websiteImage
+            guard let label = partner.categories?.label,
+                  let image = partner.websiteImage,
+                  !image.isEmpty else {
+                continue
+            }
+
+            // Append the image to the correct category
+            categoryDict[label, default: []].append(image)
+        }
+
+        // Map the dictionary into PartnerViewModels
+        let viewModels = categoryDict.map { (label, images) in
+            PartnerViewModels(title: label, logos: images)
+        }
+
+        // Optionally sort by label or any other criteria
+//        return viewModels.sorted { $0.title < $1.title }
+        return viewModels
+    }
+
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let position = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let scrollViewHeight = scrollView.frame.size.height
+        
+        if position > contentHeight - scrollViewHeight - 100 {
+            getPartnerData(page: currentPage + 1)
+        }
+    }
+
+    
+    
+}
+
+
+

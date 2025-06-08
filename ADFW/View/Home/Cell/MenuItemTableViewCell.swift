@@ -13,6 +13,8 @@ class MenuItemTableViewCell: UITableViewCell {
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var badgeView: UIView!
+    @IBOutlet weak var topBorder: UIView!
+    @IBOutlet weak var bottomBorder: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

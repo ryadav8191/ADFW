@@ -42,7 +42,7 @@ class SocialMediaActivityViewController: UIViewController {
         // Embed SwiftUI View
         let swiftUIView = SocialMediaActivityView(posts: samplePosts, onBack: { [weak self] in
             guard let self = self else { return }
-            self.dismiss(animated: true)
+            self.navigationController?.popViewController(animated: true)
         })
         let hostingController = UIHostingController(rootView: swiftUIView)
 

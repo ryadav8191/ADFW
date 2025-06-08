@@ -10,11 +10,12 @@ import UIKit
 class MenuViewController: UIViewController {
     
     @IBOutlet weak var profileImageView: UIImageView!
-       @IBOutlet weak var nameLabel: UILabel!
-       @IBOutlet weak var companyLabel: UILabel!
-       @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var companyLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     
     var menuItems: [MenuItem] = []
+    weak var delegate: MenuSelectionDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,7 @@ class MenuViewController: UIViewController {
         
         companyLabel.font = FontManager.font(weight: .semiBold, size: 13)
         companyLabel.textColor = UIColor.grayColor
+        tableView.showsVerticalScrollIndicator = false
       }
     
     func setupMenuItems() {
@@ -105,6 +107,14 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "MenuItemTableViewCell", for: indexPath) as? MenuItemTableViewCell else {
                     return UITableViewCell()
                 }
+                
+                if indexPath.row == menuItems.count - 1 {
+                    cell.topBorder.isHidden = false
+                    cell.bottomBorder.isHidden = false
+                } else {
+                    cell.topBorder.isHidden = true
+                    cell.bottomBorder.isHidden = true
+                }
 
                 let item = menuItems[indexPath.row]
                 cell.titleLabel.text = item.title
@@ -123,25 +133,34 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == menuItems.count {
             return 200 // Footer cell height
+        } else  if indexPath.row == menuItems.count - 1 {
+            return 86
         } else {
-            return 50  // Regular menu item cell height
+            return 50
         }
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
+      
            dismiss(animated: true) {
                // handle navigation
                switch indexPath.row {
-               case 0: self.navigateTo("OurPartnerViewController") 
-               case 1: self.navigateTo("TicketViewController")
-               case 2: self.navigateTo("MajorEventViewController")
-               case 3: self.navigateTo("SocialMediaActivityViewController")
-              case 4: self.navigateTo("AboutADGMViewController")
-//               case 5: self.navigateTo("SpeakerViewController")
-               case 6: self.navigateTo("InterestViewController")
-//              case 7: self.navigateTo("")
-//               case 8: self.logoutUser()
+               case 0:
+                   self.delegate?.didSelectMenuItem("ProfileViewController")
+               case 1:
+                   self.delegate?.didSelectMenuItem("TicketViewController")
+               case 2:
+                   self.delegate?.didSelectMenuItem("AgandaViewController")
+               case 3: 
+                   self.delegate?.didSelectMenuItem("SocialMediaActivityViewController")
+            case 4:
+                   self.delegate?.didSelectMenuItem("MapViewController")
+               case 6:
+                   self.delegate?.didSelectMenuItem("InterestViewController")
+               case 7: self.showSuccessPopupAndNavigate()
                default: break
                }
            }
@@ -151,8 +170,6 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: id)
         vc.modalPresentationStyle = .fullScreen
-
-        // Optional: present from top view controller safely
         if let rootVC = UIApplication.shared.windows.first?.rootViewController {
             rootVC.present(vc, animated: true, completion: nil)
         }
@@ -162,6 +179,50 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
     func logoutUser() {
             print("Logging out...")
         }
+
+    
+    func showSuccessPopupAndNavigate() {
+        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
+
+        // 1. Add Blur View
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.alpha = 0
+        blurView.frame = rootVC.view.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        rootVC.view.addSubview(blurView)
+
+        // 2. Add Popup
+        let popup = SuccessPopupView()
+        popup.translatesAutoresizingMaskIntoConstraints = false
+        rootVC.view.addSubview(popup)
+
+        NSLayoutConstraint.activate([
+            popup.centerXAnchor.constraint(equalTo: rootVC.view.centerXAnchor),
+            popup.centerYAnchor.constraint(equalTo: rootVC.view.centerYAnchor),
+            popup.widthAnchor.constraint(equalToConstant: 300),
+            popup.heightAnchor.constraint(greaterThanOrEqualToConstant: 100)
+        ])
+
+        // 3. Animate blur + popup
+        UIView.animate(withDuration: 0.3) {
+            blurView.alpha = 1
+            popup.alpha = 1
+        }
+
+        // 4. Dismiss after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+                blurView.alpha = 0
+                popup.alpha = 0
+            }) { _ in
+                blurView.removeFromSuperview()
+                popup.removeFromSuperview()
+              /*  self.navigateTo("HomeLandingViewController")*/ // Replace with your actual ID
+            }
+        }
+    }
+
 
 
     

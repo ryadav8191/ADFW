@@ -34,10 +34,18 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var customNavigationView: UIView!
     @IBOutlet weak var mySwitch: UISwitch!
     @IBOutlet weak var openToNetWork: UILabel!
+    @IBOutlet weak var loginbuttonArrowImageView: UIImageView!
+    @IBOutlet weak var updateStatusLabel: UILabel!
+    @IBOutlet weak var updateStatusView: UIView!
+    
+    
+    @IBOutlet weak var updateProfileViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var saveButton: UIButton!
     
     var isSwitchOn = false
     var isChecked: Bool = false
-    var isEditingEnabled = true
+    var isEditingEnabled = false
 
     //MARK: -- viewDidLoad
     override func viewDidLoad() {
@@ -45,6 +53,7 @@ class ProfileViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         configureUI()
         submitButtonTapped()
+        updateStatusView.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,6 +64,8 @@ class ProfileViewController: UIViewController {
     func configureUI() {
         firstNameLabel.font = FontManager.font(weight: .medium, size: 14)
         firstNameLabel.textColor = UIColor.grayColor
+        
+        updateStatusLabel.font = FontManager.font(weight: .medium, size: 15)
         
         lastNameLabel.font = FontManager.font(weight: .medium, size: 14)
         lastNameLabel.textColor = UIColor.grayColor
@@ -71,22 +82,22 @@ class ProfileViewController: UIViewController {
         phoneNumberLabel.font = FontManager.font(weight: .regular, size: 14)
         phoneNumberLabel.textColor = UIColor.grayColor
         
-        firstNameTextField.font = FontManager.font(weight: .regular, size: 14)
+        firstNameTextField.font = FontManager.font(weight: .medium, size: 14)
         firstNameTextField.textColor = UIColor.blueColor
         
-        lastNameTextField.font = FontManager.font(weight: .regular, size: 14)
+        lastNameTextField.font = FontManager.font(weight: .medium, size: 14)
         lastNameTextField.textColor = UIColor.blueColor
         
-        designationTextField.font = FontManager.font(weight: .regular, size: 14)
+        designationTextField.font = FontManager.font(weight: .medium, size: 14)
         designationTextField.textColor = UIColor.blueColor
         
-        emailTextField.font = FontManager.font(weight: .regular, size: 14)
+        emailTextField.font = FontManager.font(weight: .medium, size: 14)
         emailTextField.textColor = UIColor.blueColor
         
-        phoneNumberTextField.font = FontManager.font(weight: .regular, size: 14)
+        phoneNumberTextField.font = FontManager.font(weight: .medium, size: 14)
         phoneNumberTextField.textColor = UIColor.blueColor
         
-        companyTextField.font = FontManager.font(weight: .regular, size: 14)
+        companyTextField.font = FontManager.font(weight: .medium, size: 14)
         companyTextField.textColor = UIColor.blueColor
         
         MyProfileLabel.font = FontManager.font(weight: .semiBold, size: 18)
@@ -122,6 +133,49 @@ class ProfileViewController: UIViewController {
     }
     
     
+    func validateFields() -> Bool {
+        // Trim whitespace and check if fields are empty
+        guard let firstName = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !firstName.isEmpty else {
+            MessageHelper.showAlert(message: "Please enter your first name.", on: self)
+            return false
+        }
+        
+        guard let lastName = lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !lastName.isEmpty else {
+            MessageHelper.showAlert(message: "Please enter your last name.", on: self)
+            return false
+        }
+
+        guard let company = companyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !company.isEmpty else {
+            MessageHelper.showAlert(message: "Please enter your company name.", on: self)
+            return false
+        }
+
+        guard let designation = designationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !designation.isEmpty else {
+            MessageHelper.showAlert(message: "Please enter your designation.", on: self)
+            return false
+        }
+
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), isValidEmail(email) else {
+            MessageHelper.showAlert(message: "Please enter a valid email address.", on: self)
+            return false
+        }
+
+        guard let phone = phoneNumberTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !phone.isEmpty, phone.count == 10 else {
+            MessageHelper.showAlert(message: "Please enter a valid 10-digit phone number.", on: self)
+            return false
+        }
+
+        return true
+    }
+
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPred = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+
+    
+    
     func updateCheckboxImage() {
         let imageName = isChecked ?  UIImage.checkbox: UIImage.unchecked
         checkBoxButton.setImage(imageName, for: .normal)
@@ -129,42 +183,54 @@ class ProfileViewController: UIViewController {
     
     @objc func submitButtonTapped() {
         isEditingEnabled.toggle()
+        if isEditingEnabled {
+                isEditingEnabled = true
 
-        // Toggle all editable fields
-        firstNameTextField.isEnabled = isEditingEnabled
-        lastNameTextField.isEnabled = isEditingEnabled
-        companyTextField.isEnabled = isEditingEnabled
-        designationTextField.isEnabled = isEditingEnabled
-        emailTextField.isEnabled = isEditingEnabled
-        phoneNumberTextField.isEnabled = isEditingEnabled
-        checkBoxButton.isEnabled = isEditingEnabled
-        mySwitch.isEnabled = isEditingEnabled
+                // Disable fields after saving
+                firstNameTextField.isEnabled = false
+                lastNameTextField.isEnabled = false
+                companyTextField.isEnabled = false
+                designationTextField.isEnabled = false
+                emailTextField.isEnabled = false
+                phoneNumberTextField.isEnabled = false
+                checkBoxButton.isEnabled = false
+                mySwitch.isEnabled = false
 
-        // Optionally: Update the submit button label to reflect state
-        submitButtonLabel.text = isEditingEnabled ? "SAVE" : "UPDATE PROFILE"
+        } else {
+
+            firstNameTextField.isEnabled = false
+            lastNameTextField.isEnabled = false
+            companyTextField.isEnabled = false
+            designationTextField.isEnabled = false
+            emailTextField.isEnabled = false
+            phoneNumberTextField.isEnabled = false
+            checkBoxButton.isEnabled = false
+            mySwitch.isEnabled = false
+
+            
+            
+            submitButtonLabel.text = "UPDATE PROFILE"
+            submitButtonView.backgroundColor = UIColor.clear
+            submitButtonLabel.textColor = UIColor.gray
+            loginbuttonArrowImageView.tintColor = UIColor.gray
+        }
     }
+
 
     
     
 
     //MARK: -- Button Action
     @IBAction func backButton(_ sender: Any) {
-        self.dismiss(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
     
     
-    
-    @IBAction func switchoffButton(_ sender: Any) {
-        isSwitchOn.toggle()
-          let newImage = isSwitchOn ? UIImage.switchOn : UIImage.switchOff
-          UIView.transition(with: switchButton,
-                            duration: 0.3,
-                            options: .transitionCrossDissolve,
-                            animations: {
-                                self.switchButton.setImage(newImage, for: .normal)
-                            },
-                            completion: nil)
+    @IBAction func saveButton(_ sender: Any) {
+        
+        
     }
+    
     
     
     @IBAction func switchValueChanged(_ sender: UISwitch) {

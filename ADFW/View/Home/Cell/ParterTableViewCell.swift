@@ -15,6 +15,8 @@ class ParterTableViewCell: UITableViewCell {
     
     @IBOutlet weak var headLineLabel: UILabel!
     
+    var onClickViewAll: (() -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
@@ -29,5 +31,12 @@ class ParterTableViewCell: UITableViewCell {
 
       
     }
+    
+    @IBAction func viewAllAction(_ sender: Any) {
+        onClickViewAll?()
+    }
+    
+    
+    
     
 }

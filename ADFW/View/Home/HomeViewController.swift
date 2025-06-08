@@ -14,27 +14,31 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var notificationBell: UIButton!
     
     var banner = [BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: ""),BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: "")]
+    
     var sideMenu: SideMenuNavigationController?
-
+    private var pendingHeightUpdate: DispatchWorkItem?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
         // Instantiate menu view controller from storyboard
         let menuVC = storyboard?.instantiateViewController(identifier: "MenuViewController") as! MenuViewController
-              sideMenu = SideMenuNavigationController(rootViewController: menuVC)
-              sideMenu?.leftSide = true
-              sideMenu?.setNavigationBarHidden(true, animated: false)
-              sideMenu?.presentationStyle = .menuSlideIn
-              sideMenu?.presentationStyle.backgroundColor = .black
-              sideMenu?.presentationStyle.presentingEndAlpha = 0.5
-              SideMenuManager.default.leftMenuNavigationController = sideMenu
-              SideMenuManager.default.addPanGestureToPresent(toView: self.view)
+        menuVC.delegate = self
+        sideMenu = SideMenuNavigationController(rootViewController: menuVC)
+        sideMenu?.leftSide = true
+        sideMenu?.setNavigationBarHidden(true, animated: false)
+        sideMenu?.presentationStyle = .menuSlideIn
+        sideMenu?.presentationStyle.backgroundColor = .black
+        sideMenu?.presentationStyle.presentingEndAlpha = 0.5
+        SideMenuManager.default.leftMenuNavigationController = sideMenu
+        SideMenuManager.default.addPanGestureToPresent(toView: self.view)
         registerCell()
-      
-            self.tableview.reloadData()
-       
-   
+        
+        self.tableview.reloadData()
+        tableview.showsVerticalScrollIndicator = false
     }
+    
+  
     
     func registerCell() {
         tableview.delegate = self
@@ -57,8 +61,8 @@ class HomeViewController: UIViewController {
     
     @IBAction func sideMenu(_ sender: Any) {
         if let menu = SideMenuManager.default.leftMenuNavigationController {
-                present(menu, animated: true, completion: nil)
-            }
+            present(menu, animated: true, completion: nil)
+        }
     }
     
     @IBAction func notificationAction(_ sender: Any) {
@@ -66,7 +70,7 @@ class HomeViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
         
     }
-
+    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -90,49 +94,81 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSessionTableViewCell") as! HomeSessionTableViewCell
-          
+            
             cell.configure(with: [], type: .session) // or .session
-
+            cell.onClickViewAll = {
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc  = story.instantiateViewController(identifier: "MajorEventViewController") as! MajorEventViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSessionTableViewCell") as! HomeSessionTableViewCell  //AboutAGDMTableViewCell
             cell.delegate = self
+            cell.onClickViewAll = {
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc  = story.instantiateViewController(identifier: "MajorEventViewController") as! MajorEventViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             cell.configure(with: [], type: .event) // or .session
-
-        
+            
+            
             return cell
             
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ADFWMapTableViewCell") as! ADFWMapTableViewCell
-            return cell
-            
-        case 8:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "AboutAGDMTableViewCell") as! AboutAGDMTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
-           // cell.bgColor.isHidden  = false
             
             return cell
+            
             
             
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSpeakerTableViewCell") as! HomeSpeakerTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
-           // cell.bgColor.isHidden  = false
+            
+            cell.onClickViewAll = {
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc  = story.instantiateViewController(identifier: "SpeakerViewController") as! SpeakerViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            
             cell.delegate = self
             return cell
             
         case 5:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ParterTableViewCell") as! ParterTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
-           // cell.bgColor.isHidden  = false
+            
+            
+            cell.onClickViewAll = {
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc  = story.instantiateViewController(identifier: "OurPartnerViewController") as! OurPartnerViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             
             return cell
             
         case 7:
             let cell = tableView.dequeueReusableCell(withIdentifier: "EntertainmentTableViewCell") as! EntertainmentTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
-           // cell.bgColor.isHidden  = false
+            
+            cell.onClickViewAll = {
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc  = story.instantiateViewController(identifier: "EnterntainmentViewController") as! EnterntainmentViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             
             return cell
         case 6:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ExploreTableViewCell") as! ExploreTableViewCell  //AboutAGDMTableViewCell //ADFWMapTableViewCell
-           // cell.bgColor.isHidden  = false
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ExploreTableViewCell") as! ExploreTableViewCell
+            
+            return cell
+            
+        case 8:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AboutAGDMTableViewCell") as! AboutAGDMTableViewCell
+            
+            cell.onClickViewAll = {
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc  = story.instantiateViewController(identifier: "AboutADGMViewController") as! AboutADGMViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             
             return cell
             
@@ -146,7 +182,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return 220
+            return self.view.frame.height / 3
         case 3:
             return 350
         case 4:
@@ -161,10 +197,44 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 extension HomeViewController: HomeSessionTableViewCellDelegate {
+    
+ 
+    func scheduleTableViewHeightUpdate() {
+            pendingHeightUpdate?.cancel()
+            let update = DispatchWorkItem { [weak self] in
+                guard let self = self else { return }
+                self.tableview.beginUpdates()
+                self.tableview.endUpdates()
+            }
+            pendingHeightUpdate = update
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: update)
+        }
+    
     func homeSessionCellDidUpdateHeight() {
-        DispatchQueue.main.async {
-            self.tableview.beginUpdates()
-            self.tableview.endUpdates()
+        scheduleTableViewHeightUpdate()
+    }
+}
+
+
+extension HomeViewController: MenuSelectionDelegate {
+    
+    
+    func didSelectMenuItem(_ item: String) {
+       
+        if item == "AgandaViewController" {
+            tabBarController?.selectedIndex = 1
+        } else if item == "TicketViewController" {
+            tabBarController?.selectedIndex = 2
+        } else {
+            navigateTo(item)
         }
     }
+    
+    
+    func navigateTo(_ id: String) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: id)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }

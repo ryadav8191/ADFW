@@ -30,7 +30,7 @@ class MenuFooterTableViewCell: UITableViewCell {
         followUsLabel.font = FontManager.font(weight: .medium, size: 14)
         
         emailLabel.isUserInteractionEnabled = true
-        emailLabel.textColor = .blue
+        emailLabel.textColor = .blueColor
         let tap = UITapGestureRecognizer(target: self, action: #selector(emailTapped))
         emailLabel.addGestureRecognizer(tap)
         

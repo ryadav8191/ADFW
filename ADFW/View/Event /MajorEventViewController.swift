@@ -19,87 +19,13 @@ class MajorEventViewController: UIViewController {
     
     weak var delegate: FilterSelectionDelegate?
 
-    let dates = ["Full Week", "09 DEC", "10 DEC", "11 DEC", "12 DEC"]
+  
     var selectedIndex = 0
+    var viewModel = MajorEventAgandaViewModel()
     
-    let sampleAgenda: [AgendaSection] = [
-        AgendaSection(
-            date: "09 December 2024",
-            bannerImage: UIImage.eventBanner, year: "2025",
-            sessions: [
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: ["D", "M", "2"],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage.person1),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 3", image: UIImage.person3),
-                        Speaker(name: "Speaker 4", image: UIImage.person1),
-                        Speaker(name: "Speaker 5", image: UIImage.person3)
-                    ]
-                ),
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: ["D", "M", "2"],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage.person1),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 3", image: UIImage.person3),
-                        Speaker(name: "Speaker 4", image: UIImage.person1),
-                        Speaker(name: "Speaker 5", image: UIImage.person3)
-                    ]
-                )
-            ]
-        ),
-        AgendaSection(
-            date: "10 December 2024",
-            bannerImage: UIImage.loginBackground, year: "2025",
-            sessions: [
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: [],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage(named: "speaker1")),
-                        Speaker(name: "Speaker 2", image: UIImage(named: "speaker2"))
-                    ]
-                ),
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: [],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage(named: "speaker1")),
-                        Speaker(name: "Speaker 2", image: UIImage(named: "speaker2"))
-                    ]
-                ),
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: [],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage(named: "speaker1")),
-                        Speaker(name: "Speaker 2", image: UIImage(named: "speaker2"))
-                    ]
-                )
-
-                
-            ]
-        ),
-        
-    ]
+    var agendas = [Agendas]()
+    var data = [MajorEventAgandaData]()
+    var arrDate = [MajorEventAgandaData]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,6 +38,7 @@ class MajorEventViewController: UIViewController {
         self.delegate = self
         registerCell()
         configureUI()
+        getMajorEventData(date: "")
     }
     
 
@@ -131,7 +58,7 @@ class MajorEventViewController: UIViewController {
     }
     
     func configureUI() {
-        let fullText = "Event Agenda"
+        let fullText = "What’s Happening in ADFW 2024"
         let attributedString = NSMutableAttributedString(string: fullText)
 
         // Split text into words
@@ -184,7 +111,7 @@ class MajorEventViewController: UIViewController {
     }
     
     @IBAction func backAction(_ sender: Any) {
-        self.tabBarController?.selectedIndex = 0
+        self.navigationController?.popViewController(animated: true)
     }
     
 
@@ -194,18 +121,20 @@ class MajorEventViewController: UIViewController {
 extension MajorEventViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-           return dates.count
+        return arrDate.count
        }
 
        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DateCollectionViewCell", for: indexPath) as! DateCollectionViewCell
            let isSelected = indexPath.item == selectedIndex
-           cell.configure(with: dates[indexPath.item], isSelected: isSelected)
+           let date = arrDate[indexPath.row]
+           cell.configure(with: date.date ?? "", isSelected: isSelected)
            return cell
        }
 
        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
            selectedIndex = indexPath.item
+           getMajorEventData(date: arrDate[indexPath.row].date ?? "")
            collectionView.reloadData()
            // Update agenda table based on selected date
        }
@@ -243,23 +172,23 @@ extension MajorEventViewController: UICollectionViewDelegateFlowLayout {
 extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sampleAgenda.count
+        return data.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       
-        return sampleAgenda[section].sessions.count
+        return data[section].agendas?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = sampleAgenda[indexPath.section].sessions[indexPath.row]
+        let item = data[indexPath.section].agendas?[indexPath.row]
 
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "MajorEventTableViewCell", for: indexPath) as! MajorEventTableViewCell
-//        cell.configure(with: item)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MajorEventTableViewCell", for: indexPath) as! MajorEventTableViewCell
+        cell.configure(with: item)
+        cell.delegate = self
         
-        
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CalenderTableViewCell", for: indexPath) as! CalenderTableViewCell
+//        
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "CalenderTableViewCell", for: indexPath) as! CalenderTableViewCell
         
         return cell
     }
@@ -269,8 +198,8 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
             return nil
         }
 
-        let sectionData = sampleAgenda[section] // Assuming section contains the date info
-        header.configure(dateText: sectionData.date, yearText: sectionData.year,bannerImage: nil, hide: false)
+        let sectionData = data[section] 
+        header.configure(dateText: sectionData.date ?? "", yearText: "sectionData.year",bannerImage: nil, hide: false)
 
         return header
     }
@@ -299,4 +228,63 @@ extension MajorEventViewController: FilterSelectionDelegate {
        
     }
 }
+
+
+extension MajorEventViewController: HomeSessionTableViewCellDelegate {
+    func homeSessionCellDidUpdateHeight() {
+        DispatchQueue.main.async {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
+    }
+}
+
+
+
+extension MajorEventViewController {
+    
+    
+    func getMajorEventData(date:String) {
+        viewModel.fetchMajorAgandaData(date: date, page: 1, in: self.view) { result in
+            switch result {
+            case .success(let response):
+                print("data:", response)
+    
+                    
+                    if date == "" {
+                        self.data = response
+                        self.arrDate = response
+                        
+                    } else {
+                        self.data = response
+                        
+                    }
+                    
+                    
+                    
+                self.tableView.reloadData()
+                self.collectionView.reloadData()
+                    
+                  
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.tableView.reloadData()
+                    self.collectionView.reloadData()
+                }
+            
+                
+            case .failure(let error):
+                // self.showNoDataView(true)
+                print(error.localizedDescription)
+                MessageHelper.showToast(message: error.localizedDescription, in: self.view)
+            }
+        }
+    }
+
+}
+
+
+
+
+
 
