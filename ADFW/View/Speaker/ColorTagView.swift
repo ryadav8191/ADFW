@@ -13,7 +13,7 @@ class ColorTagView: UIView {
     private let circleSize: CGFloat = 15
     private let overlapSpacing: CGFloat = 5
 
-    var colors: [UIColor] = [] {
+    var colors: [String] = [] {
         didSet {
             setupCircles()
         }
@@ -51,7 +51,7 @@ class ColorTagView: UIView {
 
         for color in colors {
             let circleView = UIView(frame: CGRect(x: xOffset, y: 0, width: circleSize, height: circleSize))
-            circleView.backgroundColor = color
+            circleView.backgroundColor = UIColor(hex: color)
             circleView.layer.cornerRadius = circleSize / 2
             circleView.clipsToBounds = true
             addSubview(circleView)

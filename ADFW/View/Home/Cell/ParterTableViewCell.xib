@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="384" height="291"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uKH-YY-QyQ">
-                                <rect key="frame" x="0.0" y="16" width="368" height="50"/>
+                                <rect key="frame" x="0.0" y="16" width="379" height="50"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YjO-hZ-Wg0">
                                         <rect key="frame" x="18" y="12.666666666666668" width="2" height="25.000000000000004"/>
@@ -33,13 +33,13 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GQV-mu-PKN">
-                                        <rect key="frame" x="28" y="25" width="232" height="0.0"/>
+                                        <rect key="frame" x="28" y="25" width="243" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uw4-ZD-GZA">
-                                        <rect key="frame" x="268" y="12" width="100" height="26"/>
+                                        <rect key="frame" x="279" y="12" width="100" height="26"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="eds-ee-rOI"/>
                                         </constraints>
@@ -98,7 +98,7 @@
                             <constraint firstItem="uKH-YY-QyQ" firstAttribute="leading" secondItem="Pjc-2h-ddD" secondAttribute="leading" id="pnK-TL-1XV"/>
                             <constraint firstItem="uKH-YY-QyQ" firstAttribute="top" secondItem="Pjc-2h-ddD" secondAttribute="top" constant="16" id="r2M-dc-IIF"/>
                             <constraint firstItem="3i5-kG-0rb" firstAttribute="leading" secondItem="Pjc-2h-ddD" secondAttribute="leading" id="wfD-af-5CC"/>
-                            <constraint firstAttribute="trailing" secondItem="uKH-YY-QyQ" secondAttribute="trailing" constant="16" id="zCF-oQ-8Q5"/>
+                            <constraint firstAttribute="trailing" secondItem="uKH-YY-QyQ" secondAttribute="trailing" constant="5" id="zCF-oQ-8Q5"/>
                         </constraints>
                     </view>
                 </subviews>

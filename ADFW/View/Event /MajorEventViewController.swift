@@ -10,6 +10,7 @@ import UIKit
 class MajorEventViewController: UIViewController {
     
     
+    @IBOutlet weak var listViewButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageTitle: UILabel!
     @IBOutlet weak var backButton: UIButton!
@@ -26,7 +27,8 @@ class MajorEventViewController: UIViewController {
     var agendas = [Agendas]()
     var data = [MajorEventAgandaData]()
     var arrDate = [MajorEventAgandaData]()
-
+    var isList = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,6 +41,7 @@ class MajorEventViewController: UIViewController {
         registerCell()
         configureUI()
         getMajorEventData(date: "")
+        listViewButton.setImage(UIImage.calendarToList, for: .normal)
     }
     
 
@@ -64,9 +67,9 @@ class MajorEventViewController: UIViewController {
         // Split text into words
         let words = fullText.components(separatedBy: " ")
 
-        if words.count == 2,
-           let firstRange = fullText.range(of: words[0]),
-           let secondRange = fullText.range(of: words[1]) {
+        if words.count > 2,
+           let firstRange = fullText.range(of: "What’s Happening in"),
+           let secondRange = fullText.range(of: "ADFW 2024") {
 
             let nsFirst = NSRange(firstRange, in: fullText)
             let nsSecond = NSRange(secondRange, in: fullText)
@@ -85,10 +88,6 @@ class MajorEventViewController: UIViewController {
         }
 
         pageTitle.attributedText = attributedString
-
-
-        
-        
         searchBarView.layer.borderColor = UIColor(hex: "#A3A6A7").cgColor
         searchBarView.layer.borderWidth = 1
         navigationView.layer.shadowColor = UIColor(hex: "#0000000D").cgColor
@@ -110,6 +109,21 @@ class MajorEventViewController: UIViewController {
            }
     }
     
+    @IBAction func showListViewDataAction(_ sender: Any) {
+        isList.toggle()
+        
+        if isList {
+            listViewButton.setImage(UIImage.calendarToggleIcon, for: .normal)
+            
+        } else {
+            listViewButton.setImage(UIImage.calendarToList, for: .normal)
+            
+        }
+        tableView.reloadData()
+        
+    }
+    
+    
     @IBAction func backAction(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -121,20 +135,34 @@ class MajorEventViewController: UIViewController {
 extension MajorEventViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrDate.count
+        return arrDate.count + 1
        }
 
        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+           
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DateCollectionViewCell", for: indexPath) as! DateCollectionViewCell
+           
            let isSelected = indexPath.item == selectedIndex
-           let date = arrDate[indexPath.row]
-           cell.configure(with: date.date ?? "", isSelected: isSelected)
+           
+           if indexPath.row == 0 {
+               cell.configure(with: "Full Week", isSelected: isSelected)
+           } else {
+               
+               let date = arrDate[indexPath.row - 1]
+               cell.configure(with: Helper.formatToDayMonth(from: date.date ?? "") ?? "", isSelected: isSelected)
+           }
+           
            return cell
        }
 
        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
            selectedIndex = indexPath.item
-           getMajorEventData(date: arrDate[indexPath.row].date ?? "")
+           if indexPath.row == 0 {
+               getMajorEventData(date: "")
+           } else {
+               getMajorEventData(date: arrDate[indexPath.row - 1].date ?? "")
+           }
+        
            collectionView.reloadData()
            // Update agenda table based on selected date
        }
@@ -183,14 +211,33 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = data[indexPath.section].agendas?[indexPath.row]
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MajorEventTableViewCell", for: indexPath) as! MajorEventTableViewCell
-        cell.configure(with: item)
-        cell.delegate = self
+        if !isList {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MajorEventTableViewCell", for: indexPath) as! MajorEventTableViewCell
+            cell.configure(with: item)
+            cell.delegate = self
+            
+            cell.viewAganda = {
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "AgandaViewController") as? AgandaViewController {
+                    vc.id = item?.id
+                    vc.date = item?.date
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+            
+            return cell
+            
+        } else {
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CalenderTableViewCell", for: indexPath) as! CalenderTableViewCell
+            
+            cell.configureData(with: item)
+            return cell
+        }
+       
         
-//        
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "CalenderTableViewCell", for: indexPath) as! CalenderTableViewCell
+     
         
-        return cell
+        
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -199,7 +246,7 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         let sectionData = data[section] 
-        header.configure(dateText: sectionData.date ?? "", yearText: "sectionData.year",bannerImage: nil, hide: false)
+        header.configure(dateText: Helper.formatToDayFullMonth(from: sectionData.date ?? "" ) ?? "", yearText: Helper.extractYear(from: sectionData.date ?? "") ?? "",bannerImage: nil, hide: false)
 
         return header
     }
@@ -214,11 +261,12 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "SessionViewController") as? SessionViewController {
-            navigationController?.pushViewController(vc, animated: true)
-        }
+
 
     }
+    
+   
+
 }
 
 
@@ -254,14 +302,12 @@ extension MajorEventViewController {
                     if date == "" {
                         self.data = response
                         self.arrDate = response
-                        
+                    
                     } else {
                         self.data = response
                         
                     }
-                    
-                    
-                    
+    
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
                     

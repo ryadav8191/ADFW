@@ -64,7 +64,7 @@ class CustomTabBarController: UITabBarController,UITabBarControllerDelegate {
         
         let homeVC = createNavController(vc: storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController, title: "Home", icon: UIImage.home)
         
-        let agandaVC = storyboard.instantiateViewController(withIdentifier: "AgandaViewController") as! AgandaViewController
+        let agandaVC = storyboard.instantiateViewController(withIdentifier: "MajorEventViewController") as! MajorEventViewController
         let conferenceNav = createNavController(vc: agandaVC, title: "Agenda", icon: UIImage.agenda)
         
         let ticketVC = storyboard.instantiateViewController(withIdentifier: "TicketViewController") as! TicketViewController

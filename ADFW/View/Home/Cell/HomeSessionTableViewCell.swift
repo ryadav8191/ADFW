@@ -29,8 +29,9 @@ class HomeSessionTableViewCell: UITableViewCell {
     
     @IBOutlet weak var verticalView: UIView!
     
+    
 
-    private var items: [String] = []
+    private var items: [UpcomingSessionsData] = []
     var selectedCell: SelectedCell = .session
     weak var delegate: HomeSessionTableViewCellDelegate?
     
@@ -49,7 +50,7 @@ class HomeSessionTableViewCell: UITableViewCell {
     }
 
    
-    func configure(with items: [String], type: SelectedCell) {
+    func configure(with items: [UpcomingSessionsData], type: SelectedCell) {
         self.items = items
         self.selectedCell = type
         bgColor.isHidden = selectedCell == .event ? false : true
@@ -136,7 +137,7 @@ class HomeSessionTableViewCell: UITableViewCell {
 extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return items.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -145,11 +146,17 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeSessionCollectionViewCell", for: indexPath) as? HomeSessionCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            
+            cell.configure(with: items[indexPath.row].attributes)
+            
+            
             return cell
         case .event:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeatureEventCollectionViewCell", for: indexPath) as? FeatureEventCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            
+            
             return cell
         }
     }
@@ -171,17 +178,7 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
         }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        
-//        switch selectedCell {
-//            
-//        case .session:
-//            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        case .event:
-//            return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
-//        }
-//       
-//    }
+
 //    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)

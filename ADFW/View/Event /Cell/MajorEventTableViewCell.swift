@@ -35,7 +35,8 @@ class MajorEventTableViewCell: UITableViewCell {
 
     
     var tags: [EventTagModel] = []
-    
+    var viewAganda: (() -> Void)?
+    var viewDetail: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -170,6 +171,26 @@ class MajorEventTableViewCell: UITableViewCell {
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.setAttributedTitle(attributedTitle, for: .selected)
     }
+    
+    
+    
+    
+    
+    
+    @IBAction func viewAganda(_ sender: Any) {
+        viewAganda?()
+    }
+    
+    
+    
+    @IBAction func viewDetail(_ sender: Any) {
+        viewDetail?()
+    }
+    
+    
+    
+    
+    
 
 }
 

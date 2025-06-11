@@ -20,6 +20,7 @@ class AgendaTableViewCell: UITableViewCell {
     @IBOutlet weak var viewAllLabel: UILabel!
     
     var onPlayVideo: (() -> Void)?
+    
 
     
     override func awakeFromNib() {
@@ -48,24 +49,32 @@ class AgendaTableViewCell: UITableViewCell {
     
     
     
-    func configure(with item: AgendaSession) {
-        timeLabel.text = item.time
+    func configure(with item: Agenda_sessions,location: String) {
+        timeLabel.text = "\(item.fromTime ?? "") - \(item.toTime ?? "")"
         titleLabel.text = item.title
-        typeLabel.text = item.type
-        locationLabel.text = item.location
+        typeLabel.text = item.sessionType?.name
+        locationLabel.text = location
         
         // Clear old speaker images
         speakerStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        for image in item.speakers {
-            let imageView = UIImageView(image: image.image)
-            imageView.contentMode = .scaleAspectFit
-            imageView.clipsToBounds = true
-           // imageView.layer.cornerRadius = 16
-            imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-            imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
-            speakerStackView.addArrangedSubview(imageView)
+        if let speakers = item.speakers {
+            for speaker in speakers {
+                let imageView = UIImageView()
+                imageView.contentMode = .scaleAspectFit
+                imageView.clipsToBounds = true
+                // imageView.layer.cornerRadius = 16
+                imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+                imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+                // Load image from URL using Kingfisher
+                if let urlString = speaker.photoUrl, let url = URL(string: urlString) {
+                    imageView.kf.setImage(with: url)
+                }
+
+                speakerStackView.addArrangedSubview(imageView)
+            }
         }
+
+        
     }
     
     
@@ -83,6 +92,10 @@ class AgendaTableViewCell: UITableViewCell {
         onPlayVideo?()
         
     }
+    
+    
+    
+    
     
 }
 

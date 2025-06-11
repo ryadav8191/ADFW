@@ -14,7 +14,7 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     private let cardView = UIView()
     private var collectionView: UICollectionView!
 
-    private let tags = [
+     var tags = [
         "OPENING CEREMONY", "VENTURE STAGE", "ASSET ABU DHABI", "WOMEN IN FINANCE",
         "T.R.I SUMMIT", "FINTECH ABU DHABI", "R.A.C.E SUSTAINABILITY SUMMIT",
         "ABU DHABI ECONOMIC FORUM", "GLOBAL FINANCE REGULATORS SUMMIT",

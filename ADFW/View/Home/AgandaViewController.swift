@@ -25,87 +25,10 @@ class AgandaViewController: UIViewController {
 
     let dates = ["Full Week", "09 DEC", "10 DEC", "11 DEC", "12 DEC"]
     var selectedIndex = 0
-  
-    let sampleAgenda: [AgendaSection] = [
-        AgendaSection(
-            date: "09 December 2024",
-            bannerImage: UIImage.eventBanner, year: "2025",
-            sessions: [
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel" ,
-                    location: " Alan Howard eys To Managing Money & Risk: In Conve",
-                    tags: ["D", "M", "2"],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage.person1),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 2", image: UIImage.person2), Speaker(name: "Speaker 2", image: UIImage.person2), Speaker(name: "Speaker 2", image: UIImage.person2), Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 5", image: UIImage.person3), Speaker(name: "Speaker 5", image: UIImage.person3), Speaker(name: "Speaker 5", image: UIImage.person3), Speaker(name: "Speaker 5", image: UIImage.person3)
-                    ]
-                ),
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: ["D", "M", "2"],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage.person1),
-                        Speaker(name: "Speaker 2", image: UIImage.person2),
-                        Speaker(name: "Speaker 3", image: UIImage.person3),
-                        Speaker(name: "Speaker 4", image: UIImage.person1),
-                        Speaker(name: "Speaker 5", image: UIImage.person3)
-                    ]
-                )
-            ]
-        ),
-        AgendaSection(
-            date: "10 December 2024",
-            bannerImage: UIImage.loginBackground, year: "2025",
-            sessions: [
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: [],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage(named: "speaker1")),
-                        Speaker(name: "Speaker 2", image: UIImage(named: "speaker2"))
-                    ]
-                ),
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: [],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage(named: "speaker1")),
-                        Speaker(name: "Speaker 2", image: UIImage(named: "speaker2"))
-                    ]
-                ),
-                AgendaSession(
-                    time: "9:30 - 10:30",
-                    title: "The Keys To Managing Money & Risk: In Conversation with Alan Howard",
-                    type: "Panel",
-                    location: "ADFW Arena",
-                    tags: [],
-                    speakers: [
-                        Speaker(name: "Speaker 1", image: UIImage(named: "speaker1")),
-                        Speaker(name: "Speaker 2", image: UIImage(named: "speaker2"))
-                    ]
-                )
-
-                
-            ]
-        ),
-        
-    ]
+    var viewModel = EventAgandaViewModel()
+    var id:Int?
+    var data = [EventAgandaData]()
+    var date:String?
 
     
 
@@ -119,6 +42,7 @@ class AgandaViewController: UIViewController {
         self.delegate = self
         registerCell()
         configureUI()
+        getEventData()
     }
     
     
@@ -259,16 +183,16 @@ extension AgandaViewController: UICollectionViewDelegateFlowLayout {
 extension AgandaViewController: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sampleAgenda.count
+        return data.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       
-        return sampleAgenda[section].sessions.count
+        return data[section].agendas?.first?.agenda_sessions?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = sampleAgenda[indexPath.section].sessions[indexPath.row]
+        let item = data[indexPath.section].agendas?.first?.agenda_sessions?[indexPath.row]
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "AgendaTableViewCell", for: indexPath) as! AgendaTableViewCell
         cell.onPlayVideo = { [weak self] in
@@ -276,12 +200,17 @@ extension AgandaViewController: UITableViewDelegate, UITableViewDataSource {
 
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let videoVC = storyboard.instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController {
-                videoVC.videoURL = URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+               // videoVC.videoURL = URL(string: item?.video ?? "")
                 videoVC.modalPresentationStyle = .fullScreen
                 self.present(videoVC, animated: true)
             }
            }
-        cell.configure(with: item)
+        
+        
+        if let sess = item {
+            cell.configure(with: sess, location: data[indexPath.section].agendas?.first?.location?.name ?? "")
+        }
+       
         return cell
     }
 
@@ -289,15 +218,16 @@ extension AgandaViewController: UITableViewDelegate, UITableViewDataSource {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AgendaHeaderView") as? AgendaHeaderView else {
             return nil
         }
-
-        let sectionData = sampleAgenda[section] // Assuming section contains the date info
-        header.configure(dateText: sectionData.date, yearText: sectionData.year, bannerImage:sectionData.bannerImage, hide: true)
+        
+        let image = data[section].agendas?.first?.image
+        let sectionData = data[section]
+        header.configure(dateText: Helper.formatToDayFullMonth(from: sectionData.date ?? "") ?? "", yearText: "wwreewfdwefdv", bannerImage: image, hide: true)
 
         return header
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 150 // Adjust based on your XIB design
+        return UITableView.automaticDimension
     }
 
 
@@ -319,4 +249,34 @@ extension AgandaViewController: FilterSelectionDelegate {
         print("Selected Tags:", tags)
        
     }
+}
+
+ //MARK: API Calling
+extension AgandaViewController {
+    
+    func getEventData() {
+        viewModel.agandaData(date: self.date ?? "", page: 1, id: self.id ?? 0, in: self.view) { result in
+            switch result {
+            case .success(let response):
+                print("data:", response)
+    
+               
+                self.data = response
+             
+        
+                self.tableView.reloadData()
+                self.collectionView.reloadData()
+        
+            case .failure(let error):
+                // self.showNoDataView(true)
+                print(error.localizedDescription)
+                MessageHelper.showToast(message: error.localizedDescription, in: self.view)
+            }
+        }
+    }
+
+    
+    
+    
+    
 }

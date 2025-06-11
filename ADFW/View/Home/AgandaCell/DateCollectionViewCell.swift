@@ -38,7 +38,7 @@ class DateCollectionViewCell: UICollectionViewCell {
         let attributedTitle = NSAttributedString(string: title, attributes: attributes)
         dateButton.setAttributedTitle(attributedTitle, for: .normal)
 
-        dateButton.backgroundColor = isSelected ? .systemBlue : .systemGray5
+        dateButton.backgroundColor = isSelected ? .blueColor : .systemGray5
     }
 
 

@@ -1821,36 +1821,6 @@ CAPITAL OF CAPITAL</string>
             </objects>
             <point key="canvasLocation" x="844" y="1420"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="ocj-tU-dt6">
-            <objects>
-                <viewController id="b2M-2O-xXH" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="puO-wA-gHl">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="7Qb-0u-B5D"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T3V-zC-ggn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-360" y="2648"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="Lw9-7j-32Z">
-            <objects>
-                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="4vi-UM-JkD" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fyo-dK-wKr">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="oCa-g6-Eei"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7aj-kw-ggq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="480" y="2125"/>
-        </scene>
         <!--Major Event View Controller-->
         <scene sceneID="TGO-K2-GlS">
             <objects>
@@ -1882,16 +1852,16 @@ CAPITAL OF CAPITAL</string>
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What’s Happening in ADFW 2024" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="13R-BE-3eB">
-                                                        <rect key="frame" x="50" y="14.999999999999998" width="277" height="20.333333333333329"/>
+                                                        <rect key="frame" x="50" y="14.999999999999998" width="327" height="20.333333333333329"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dw0-va-e3b">
-                                                        <rect key="frame" x="335" y="0.0" width="50" height="50"/>
+                                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dw0-va-e3b">
+                                                        <rect key="frame" x="385" y="0.0" width="0.0" height="50"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="UxT-F6-LSw"/>
-                                                            <constraint firstAttribute="width" constant="50" id="eho-OW-CJc"/>
+                                                            <constraint firstAttribute="width" id="eho-OW-CJc"/>
                                                         </constraints>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                         <state key="normal" image="favouriteHeart"/>
@@ -1990,8 +1960,7 @@ CAPITAL OF CAPITAL</string>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" image="calendarToggleIcon"/>
                                                 <connections>
-                                                    <action selector="backButton:" destination="bs7-D4-1mn" eventType="touchUpInside" id="GIR-Cm-QES"/>
-                                                    <action selector="filterAction:" destination="tqd-u3-ECJ" eventType="touchUpInside" id="Zp6-YE-nBq"/>
+                                                    <action selector="showListViewDataAction:" destination="tqd-u3-ECJ" eventType="touchUpInside" id="edP-hF-zrW"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2042,6 +2011,7 @@ CAPITAL OF CAPITAL</string>
                     <connections>
                         <outlet property="backButton" destination="5vE-Dx-5Ef" id="xiT-b1-C21"/>
                         <outlet property="collectionView" destination="L5R-dP-oE9" id="7rz-Nv-4ar"/>
+                        <outlet property="listViewButton" destination="cFD-wy-uQv" id="d72-60-AcQ"/>
                         <outlet property="navigationView" destination="Kly-GF-OJy" id="zAC-jF-DzG"/>
                         <outlet property="pageTitle" destination="13R-BE-3eB" id="aY2-85-BJk"/>
                         <outlet property="searchBarView" destination="bge-6W-5d5" id="4QP-q0-CQn"/>
@@ -2294,106 +2264,6 @@ CAPITAL OF CAPITAL</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uJW-7k-ggo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="7907.6335877862593" y="1936.6197183098593"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="ZNN-pW-kzZ">
-            <objects>
-                <viewController id="D75-iU-6oz" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ECy-pL-QhE">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ido-kR-PGw">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9zN-Hc-Hld">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="720-2B-Tfj">
-                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="50" id="DEd-4O-Zll"/>
-                                                    <constraint firstAttribute="height" constant="50" id="IgK-FE-McI"/>
-                                                </constraints>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" image="back"/>
-                                                <connections>
-                                                    <action selector="backAction:" destination="tqd-u3-ECJ" eventType="touchUpInside" id="bVm-TH-zw6"/>
-                                                    <action selector="backButton:" destination="bs7-D4-1mn" eventType="touchUpInside" id="CbK-S4-elr"/>
-                                                    <action selector="buttonAction:" destination="e5s-C1-kNY" eventType="touchUpInside" id="Aps-fc-7Cu"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Overview" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ztH-xI-5Dk">
-                                                <rect key="frame" x="50" y="14.999999999999998" width="327" height="20.333333333333329"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GIC-lV-zU9">
-                                                <rect key="frame" x="385" y="0.0" width="0.0" height="50"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" id="cy7-0X-0rU"/>
-                                                    <constraint firstAttribute="height" constant="50" id="kvp-KN-pAz"/>
-                                                </constraints>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" image="favouriteHeart"/>
-                                                <connections>
-                                                    <action selector="backButton:" destination="bs7-D4-1mn" eventType="touchUpInside" id="Mjr-aG-NXH"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstItem="720-2B-Tfj" firstAttribute="centerY" secondItem="9zN-Hc-Hld" secondAttribute="centerY" id="0fg-OI-2NJ"/>
-                                            <constraint firstItem="ztH-xI-5Dk" firstAttribute="leading" secondItem="720-2B-Tfj" secondAttribute="trailing" id="A1q-tw-UUR"/>
-                                            <constraint firstItem="GIC-lV-zU9" firstAttribute="leading" secondItem="ztH-xI-5Dk" secondAttribute="trailing" constant="8" id="BgD-dL-YZg"/>
-                                            <constraint firstAttribute="trailing" secondItem="GIC-lV-zU9" secondAttribute="trailing" constant="8" id="Nap-8S-bEF"/>
-                                            <constraint firstAttribute="height" constant="50" id="Yn7-wK-hse"/>
-                                            <constraint firstItem="ztH-xI-5Dk" firstAttribute="centerY" secondItem="9zN-Hc-Hld" secondAttribute="centerY" id="cXw-j6-JcY"/>
-                                            <constraint firstItem="720-2B-Tfj" firstAttribute="leading" secondItem="9zN-Hc-Hld" secondAttribute="leading" id="hoA-x7-GQf"/>
-                                            <constraint firstItem="GIC-lV-zU9" firstAttribute="centerY" secondItem="ztH-xI-5Dk" secondAttribute="centerY" id="rSN-jn-ldZ"/>
-                                        </constraints>
-                                    </view>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="adfw_bg 1" translatesAutoresizingMaskIntoConstraints="NO" id="a45-cv-aMi">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="221"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="a45-cv-aMi" secondAttribute="height" multiplier="16:9" id="hnY-fb-jCX"/>
-                                        </constraints>
-                                    </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rN1-gc-TcD">
-                                        <rect key="frame" x="16" y="303" width="361" height="203"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="rN1-gc-TcD" secondAttribute="height" multiplier="16:9" id="Nao-zI-CU7"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstItem="a45-cv-aMi" firstAttribute="top" secondItem="9zN-Hc-Hld" secondAttribute="bottom" id="0Kh-iF-qvF"/>
-                                    <constraint firstItem="rN1-gc-TcD" firstAttribute="top" secondItem="a45-cv-aMi" secondAttribute="bottom" constant="32" id="0Ox-B7-x7h"/>
-                                    <constraint firstAttribute="trailing" secondItem="rN1-gc-TcD" secondAttribute="trailing" constant="16" id="CSn-ps-pCS"/>
-                                    <constraint firstItem="a45-cv-aMi" firstAttribute="leading" secondItem="Ido-kR-PGw" secondAttribute="leading" id="NiK-VZ-0rH"/>
-                                    <constraint firstItem="rN1-gc-TcD" firstAttribute="leading" secondItem="Ido-kR-PGw" secondAttribute="leading" constant="16" id="RIN-4B-KTJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="9zN-Hc-Hld" secondAttribute="trailing" id="Vi9-sG-C7f"/>
-                                    <constraint firstItem="9zN-Hc-Hld" firstAttribute="leading" secondItem="Ido-kR-PGw" secondAttribute="leading" id="WEY-OI-eBD"/>
-                                    <constraint firstAttribute="trailing" secondItem="a45-cv-aMi" secondAttribute="trailing" id="ja3-Dv-lX0"/>
-                                    <constraint firstItem="9zN-Hc-Hld" firstAttribute="top" secondItem="Ido-kR-PGw" secondAttribute="top" id="tQh-xd-cRv"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="wwt-IG-OxL"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Ido-kR-PGw" firstAttribute="leading" secondItem="wwt-IG-OxL" secondAttribute="leading" id="1cE-a7-5vv"/>
-                            <constraint firstItem="Ido-kR-PGw" firstAttribute="top" secondItem="wwt-IG-OxL" secondAttribute="top" id="UFU-RC-tgS"/>
-                            <constraint firstItem="wwt-IG-OxL" firstAttribute="bottom" secondItem="Ido-kR-PGw" secondAttribute="bottom" id="bIq-fN-rA6"/>
-                            <constraint firstItem="wwt-IG-OxL" firstAttribute="trailing" secondItem="Ido-kR-PGw" secondAttribute="trailing" id="qBs-vb-Oqa"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lPt-4H-jCu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4727" y="2198"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="FZj-Qt-hEs">
@@ -3221,6 +3091,53 @@ CAPITAL OF CAPITAL</string>
             </objects>
             <point key="canvasLocation" x="5543" y="2198"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="FZt-pU-lG6">
+            <objects>
+                <viewController id="0Zc-33-3mR" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="seZ-P9-Spd">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aeG-40-j3J">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AGt-wg-fSg">
+                                        <rect key="frame" x="325" y="0.0" width="68" height="58"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="close-with-transparency.png"/>
+                                    </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="25c-VT-EAM">
+                                        <rect key="frame" x="16" y="29" width="105" height="115"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="115" id="tgj-WZ-Eo6"/>
+                                            <constraint firstAttribute="width" constant="105" id="vlc-wU-ta1"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="25c-VT-EAM" firstAttribute="leading" secondItem="aeG-40-j3J" secondAttribute="leading" constant="16" id="7ph-c0-ua2"/>
+                                    <constraint firstItem="AGt-wg-fSg" firstAttribute="top" secondItem="aeG-40-j3J" secondAttribute="top" id="LPg-q5-q5E"/>
+                                    <constraint firstAttribute="trailing" secondItem="AGt-wg-fSg" secondAttribute="trailing" id="Nsm-pb-Ozd"/>
+                                    <constraint firstItem="25c-VT-EAM" firstAttribute="top" secondItem="AGt-wg-fSg" secondAttribute="bottom" multiplier="0.5" id="Okm-ac-OHo"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="pr2-vD-KGN"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pr2-vD-KGN" firstAttribute="bottom" secondItem="aeG-40-j3J" secondAttribute="bottom" id="7zL-sX-AiR"/>
+                            <constraint firstItem="aeG-40-j3J" firstAttribute="top" secondItem="pr2-vD-KGN" secondAttribute="top" id="OGL-Gs-HdV"/>
+                            <constraint firstItem="pr2-vD-KGN" firstAttribute="trailing" secondItem="aeG-40-j3J" secondAttribute="trailing" id="XjA-f2-Ref"/>
+                            <constraint firstItem="aeG-40-j3J" firstAttribute="leading" secondItem="pr2-vD-KGN" secondAttribute="leading" id="oQR-2m-JuI"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IKe-cy-xaI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6827" y="2615"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Side_Menu" width="39" height="36"/>
@@ -3232,6 +3149,7 @@ CAPITAL OF CAPITAL</string>
         <image name="button_blue" width="129.33332824707031" height="32"/>
         <image name="button_white" width="126.66666412353516" height="32"/>
         <image name="calendarToggleIcon" width="38" height="38"/>
+        <image name="close-with-transparency.png" width="44" height="44"/>
         <image name="enterCalender" width="38" height="38.333332061767578"/>
         <image name="favouriteHeart" width="20" height="20.333333969116211"/>
         <image name="filter" width="38" height="38"/>

@@ -47,7 +47,7 @@
                                     <constraint firstItem="UuY-bF-NdP" firstAttribute="leading" secondItem="Mq0-8R-8vn" secondAttribute="leading" id="veT-oL-ccu"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEo-hq-CAJ">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEo-hq-CAJ">
                                 <rect key="frame" x="4" y="176" width="210" height="61"/>
                                 <string key="text">H.H. Sheikha Shamma
 bint Sultan bin Khalifa
@@ -56,8 +56,8 @@ Al Nahyan</string>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="President &amp; CEO, UICCA" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4mP-XY-NNL">
-                                <rect key="frame" x="4" y="245" width="210" height="20.333333333333314"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="President &amp; CEO, UICCA" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4mP-XY-NNL">
+                                <rect key="frame" x="4" y="241" width="210" height="20.333333333333314"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -65,12 +65,11 @@ Al Nahyan</string>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="4mP-XY-NNL" secondAttribute="bottom" constant="8" id="0uC-f4-TMy"/>
                             <constraint firstAttribute="trailing" secondItem="4mP-XY-NNL" secondAttribute="trailing" constant="4" id="8ao-Bf-geo"/>
                             <constraint firstItem="sEo-hq-CAJ" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" constant="4" id="99Q-Yy-Pkf"/>
-                            <constraint firstItem="4mP-XY-NNL" firstAttribute="top" secondItem="sEo-hq-CAJ" secondAttribute="bottom" constant="8" id="Cia-i7-EIY"/>
                             <constraint firstItem="4mP-XY-NNL" firstAttribute="leading" secondItem="ijB-4c-ai3" secondAttribute="leading" constant="4" id="GD5-Yc-7cE"/>
                             <constraint firstAttribute="trailing" secondItem="sEo-hq-CAJ" secondAttribute="trailing" constant="4" id="OK4-Q4-dU2"/>
+                            <constraint firstItem="4mP-XY-NNL" firstAttribute="top" secondItem="sEo-hq-CAJ" secondAttribute="bottom" constant="4" id="naT-E8-5aa"/>
                             <constraint firstItem="Mq0-8R-8vn" firstAttribute="centerX" secondItem="ijB-4c-ai3" secondAttribute="centerX" id="nvW-e9-kLo"/>
                             <constraint firstItem="sEo-hq-CAJ" firstAttribute="top" secondItem="Mq0-8R-8vn" secondAttribute="bottom" constant="8" id="rXu-Kp-h3e"/>
                             <constraint firstItem="Mq0-8R-8vn" firstAttribute="top" secondItem="ijB-4c-ai3" secondAttribute="top" constant="8" id="uhc-bo-I69"/>

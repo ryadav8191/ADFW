@@ -74,6 +74,7 @@
             <connections>
                 <outlet property="addressImgview" destination="Ugi-85-Db0" id="Ua8-Zq-7eY"/>
                 <outlet property="addressLabel" destination="9ry-gY-Gkr" id="Olw-SA-JSe"/>
+                <outlet property="bgColor" destination="bMY-bn-jbl" id="UJ4-al-SCX"/>
                 <outlet property="titleLabel" destination="5au-0f-H9A" id="cd9-34-RZH"/>
             </connections>
             <point key="canvasLocation" x="126.71755725190839" y="40.140845070422536"/>

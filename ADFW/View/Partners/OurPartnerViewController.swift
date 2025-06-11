@@ -10,7 +10,7 @@ import UIKit
 
 struct PartnerViewModels {
       let title: String
-      let logos: [String]
+    var logos: [String]
   }
 
 
@@ -138,19 +138,13 @@ extension OurPartnerViewController: UIScrollViewDelegate {
     func getPartnerData(page: Int) {
         guard !isLoading, !isLastPage else { return }
         isLoading = true
-        
+
         viewModel.fetchPartnerData(page: page, in: self.view) { result in
             self.isLoading = false
             switch result {
             case .success(let response):
                 if let partners = response.data, !partners.isEmpty {
-                    let newSections = self.transformToPartnerViewModels(from: partners)
-                    if page == 1 {
-                        self.partnerSections = newSections
-                    } else {
-                        self.partnerSections.append(contentsOf: newSections)
-                    }
-
+                    self.mergePartnerData(partners)
                     self.currentPage = page
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -168,31 +162,36 @@ extension OurPartnerViewController: UIScrollViewDelegate {
     }
 
 
-    func transformToPartnerViewModels(from partners: [Partner]) -> [PartnerViewModels] {
-        // Dictionary to group logos by category label
-        var categoryDict: [String: [String]] = [:]
+
+    func mergePartnerData(_ partners: [Partner]) {
+        // Group new data
+        var newCategoryDict: [String: [String]] = [:]
 
         for partner in partners {
-            // Safely unwrap category label and websiteImage
             guard let label = partner.categories?.label,
                   let image = partner.websiteImage,
                   !image.isEmpty else {
                 continue
             }
 
-            // Append the image to the correct category
-            categoryDict[label, default: []].append(image)
+            newCategoryDict[label, default: []].append(image)
         }
 
-        // Map the dictionary into PartnerViewModels
-        let viewModels = categoryDict.map { (label, images) in
-            PartnerViewModels(title: label, logos: images)
+        // Merge with existing partnerSections
+        for (label, newImages) in newCategoryDict {
+            if let index = partnerSections.firstIndex(where: { $0.title == label }) {
+                // Append to existing category
+                partnerSections[index].logos.append(contentsOf: newImages)
+            } else {
+                // Add new category
+                partnerSections.append(PartnerViewModels(title: label, logos: newImages))
+            }
         }
 
-        // Optionally sort by label or any other criteria
-//        return viewModels.sorted { $0.title < $1.title }
-        return viewModels
+        // Optionally sort once all merging is done
+        partnerSections.sort { $0.title < $1.title }
     }
+
 
     
     

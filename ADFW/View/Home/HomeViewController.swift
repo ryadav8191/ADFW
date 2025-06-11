@@ -10,14 +10,25 @@ import SideMenu
 
 class HomeViewController: UIViewController {
     
+    //MARK: OutLets
     @IBOutlet weak var tableview: UITableView!
     @IBOutlet weak var notificationBell: UIButton!
     
-    var banner = [BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: ""),BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: "")]
     
+    //MARK: ViewModel
+    var viewModel = SpeakerViewModel()
+    var homeViewModel = HomeViewModel()
+    
+    
+    //MARK: Propertise
+    var banner = [BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: ""),BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: "")]
+    var arrayOfSpeaker = [SpeakerData]()
+    var arrayOfSession = [UpcomingSessionsData]()
     var sideMenu: SideMenuNavigationController?
     private var pendingHeightUpdate: DispatchWorkItem?
+
     
+    //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
@@ -33,9 +44,9 @@ class HomeViewController: UIViewController {
         SideMenuManager.default.leftMenuNavigationController = sideMenu
         SideMenuManager.default.addPanGestureToPresent(toView: self.view)
         registerCell()
-        
-        self.tableview.reloadData()
         tableview.showsVerticalScrollIndicator = false
+        getSpeakerData(search: "")
+        getUpcommigSession()
     }
     
   
@@ -95,7 +106,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSessionTableViewCell") as! HomeSessionTableViewCell
             
-            cell.configure(with: [], type: .session) // or .session
+            cell.configure(with: self.arrayOfSession, type: .session)
+            
             cell.onClickViewAll = {
                 let story = UIStoryboard(name: "Main", bundle: nil)
                 let vc  = story.instantiateViewController(identifier: "MajorEventViewController") as! MajorEventViewController
@@ -123,7 +135,9 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             
             
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSpeakerTableViewCell") as! HomeSpeakerTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSpeakerTableViewCell") as! HomeSpeakerTableViewCell
+            cell.arrayOfSpeaker = self.arrayOfSpeaker
+            
             
             cell.onClickViewAll = {
                 let story = UIStoryboard(name: "Main", bundle: nil)
@@ -236,5 +250,58 @@ extension HomeViewController: MenuSelectionDelegate {
         let vc = storyboard.instantiateViewController(withIdentifier: id)
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+}
+
+
+//MARK: API Calling
+
+
+
+
+extension HomeViewController {
+    
+    
+    func getSpeakerData(search: String?) {
+        viewModel.fetchSpeakerLimitData(in: self.view, search: search, completion: { results in
+            switch results {
+            case .success(let response):
+                print("data",response)
+              //  self.showNoDataView(false)
+                self.arrayOfSpeaker = response
+              //  self.filteredItems = response
+             //   self.uniqueAgendaColors = self.extractUniqueAgendaColors(from: response)
+                self.tableview.reloadData()
+                                
+            case .failure(let failure):
+                //self.showNoDataView(true)
+                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+            }
+            
+            
+        })
+    }
+    
+    
+    func getUpcommigSession() {
+        homeViewModel.fetchHomeSessionData(page: 1, in: self.view, completion: { results in
+            switch results {
+            case .success(let response):
+                print("data",response)
+              //  self.showNoDataView(false)
+                self.arrayOfSession = response
+                
+                self.tableview.reloadData()
+                                
+            case .failure(let failure):
+                //self.showNoDataView(true)
+                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+            }
+            
+            
+        })
+    }
+    
+    
     
 }
