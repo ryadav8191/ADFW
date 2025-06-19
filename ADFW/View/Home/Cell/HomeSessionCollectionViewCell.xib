@@ -44,7 +44,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iIN-sH-pIK">
-                                        <rect key="frame" x="16" y="59" width="450" height="155"/>
+                                        <rect key="frame" x="16" y="59" width="450" height="158"/>
                                         <string key="text">These are safe wrappers around setting the ContentOffset of UICollectionview.
 You can get the current page by a public variable: CollectionViewPagingLayout.currentPage.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -52,7 +52,7 @@ You can get the current page by a public variable: CollectionViewPagingLayout.cu
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dSn-4H-MEy">
-                                        <rect key="frame" x="16" y="222" width="85" height="25"/>
+                                        <rect key="frame" x="16" y="225" width="85" height="25"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" translatesAutoresizingMaskIntoConstraints="NO" id="0Rw-wK-p74">
                                                 <rect key="frame" x="8" y="6.6666666666666572" width="12" height="12"/>
@@ -79,23 +79,23 @@ You can get the current page by a public variable: CollectionViewPagingLayout.cu
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e9X-88-h99">
-                                        <rect key="frame" x="8" y="255" width="465" height="1"/>
+                                        <rect key="frame" x="8" y="262" width="465" height="1"/>
                                         <color key="backgroundColor" red="0.63921568627450975" green="0.65098039215686276" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="E7Y-yq-9At"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yD4-bb-hkb">
-                                        <rect key="frame" x="16" y="264" width="449" height="25"/>
+                                        <rect key="frame" x="16" y="271" width="449" height="26"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hjB-av-gr5">
-                                                <rect key="frame" x="178" y="2.3333333333333144" width="93.333333333333314" height="20.333333333333332"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hjB-av-gr5">
+                                                <rect key="frame" x="179" y="0.0" width="91.333333333333314" height="26"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.1058823529" green="0.41568627450000001" blue="0.83529411760000005" alpha="0.8980392157" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_icon" translatesAutoresizingMaskIntoConstraints="NO" id="fvm-J6-eMS">
-                                                <rect key="frame" x="279.33333333333331" y="10.333333333333314" width="7" height="7"/>
+                                                <rect key="frame" x="278.33333333333331" y="10.666666666666686" width="7" height="7"/>
                                                 <color key="tintColor" red="0.1058823529" green="0.41568627450000001" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="7" id="eKe-d5-2B8"/>
@@ -103,7 +103,7 @@ You can get the current page by a public variable: CollectionViewPagingLayout.cu
                                                 </constraints>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="imt-Fp-fec">
-                                                <rect key="frame" x="0.0" y="0.0" width="449" height="25"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="449" height="26"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain"/>
                                             </button>
@@ -112,8 +112,10 @@ You can get the current page by a public variable: CollectionViewPagingLayout.cu
                                         <constraints>
                                             <constraint firstItem="imt-Fp-fec" firstAttribute="leading" secondItem="yD4-bb-hkb" secondAttribute="leading" id="3dH-jQ-75D"/>
                                             <constraint firstAttribute="bottom" secondItem="imt-Fp-fec" secondAttribute="bottom" id="6md-yU-gPw"/>
+                                            <constraint firstAttribute="bottom" secondItem="hjB-av-gr5" secondAttribute="bottom" id="Bib-rX-Od0"/>
+                                            <constraint firstItem="hjB-av-gr5" firstAttribute="top" secondItem="yD4-bb-hkb" secondAttribute="top" id="HkO-lA-sOv"/>
                                             <constraint firstAttribute="trailing" secondItem="imt-Fp-fec" secondAttribute="trailing" id="MsY-98-q1l"/>
-                                            <constraint firstAttribute="height" constant="25" id="O6S-gb-bXl"/>
+                                            <constraint firstAttribute="height" constant="26" id="O6S-gb-bXl"/>
                                             <constraint firstItem="hjB-av-gr5" firstAttribute="centerX" secondItem="yD4-bb-hkb" secondAttribute="centerX" id="OcE-l4-LpV"/>
                                             <constraint firstItem="imt-Fp-fec" firstAttribute="top" secondItem="yD4-bb-hkb" secondAttribute="top" id="YuH-NH-lRY"/>
                                             <constraint firstItem="fvm-J6-eMS" firstAttribute="centerY" secondItem="hjB-av-gr5" secondAttribute="centerY" multiplier="1.1" id="ewA-i5-2j8"/>
@@ -122,7 +124,7 @@ You can get the current page by a public variable: CollectionViewPagingLayout.cu
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mBu-qg-vAE">
-                                        <rect key="frame" x="109.00000000000001" y="222" width="57.666666666666671" height="25"/>
+                                        <rect key="frame" x="109.00000000000001" y="225" width="57.666666666666671" height="25"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="ye6-Pm-JFe">
                                                 <rect key="frame" x="4" y="6.6666666666666572" width="12" height="12"/>
@@ -154,12 +156,12 @@ You can get the current page by a public variable: CollectionViewPagingLayout.cu
                                     <constraint firstItem="K9f-3y-H5Y" firstAttribute="leading" secondItem="sYj-aY-ZEI" secondAttribute="leading" constant="16" id="3NA-Ql-6v7"/>
                                     <constraint firstItem="yD4-bb-hkb" firstAttribute="top" secondItem="e9X-88-h99" secondAttribute="bottom" constant="8" id="4ka-ws-Z8a"/>
                                     <constraint firstItem="e9X-88-h99" firstAttribute="leading" secondItem="sYj-aY-ZEI" secondAttribute="leading" constant="8" id="5i2-Gv-x1y"/>
-                                    <constraint firstAttribute="bottom" secondItem="yD4-bb-hkb" secondAttribute="bottom" constant="16" id="94h-OS-4Pw"/>
+                                    <constraint firstAttribute="bottom" secondItem="yD4-bb-hkb" secondAttribute="bottom" constant="8" id="94h-OS-4Pw"/>
                                     <constraint firstItem="iIN-sH-pIK" firstAttribute="top" secondItem="K9f-3y-H5Y" secondAttribute="bottom" constant="8" id="DMx-U3-xYv"/>
                                     <constraint firstItem="mBu-qg-vAE" firstAttribute="leading" secondItem="dSn-4H-MEy" secondAttribute="trailing" constant="8" id="E7J-v5-Xe9"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="K9f-3y-H5Y" secondAttribute="trailing" constant="16" id="Jmt-wO-fVu"/>
                                     <constraint firstItem="mBu-qg-vAE" firstAttribute="centerY" secondItem="dSn-4H-MEy" secondAttribute="centerY" id="Pmi-sM-AeJ"/>
-                                    <constraint firstItem="e9X-88-h99" firstAttribute="top" secondItem="dSn-4H-MEy" secondAttribute="bottom" constant="8" id="ZJt-sE-XhO"/>
+                                    <constraint firstItem="e9X-88-h99" firstAttribute="top" secondItem="dSn-4H-MEy" secondAttribute="bottom" constant="12" id="ZJt-sE-XhO"/>
                                     <constraint firstAttribute="trailing" secondItem="yD4-bb-hkb" secondAttribute="trailing" constant="16" id="agw-Wv-qxX"/>
                                     <constraint firstItem="yD4-bb-hkb" firstAttribute="leading" secondItem="sYj-aY-ZEI" secondAttribute="leading" constant="16" id="dqi-vf-c07"/>
                                     <constraint firstItem="iIN-sH-pIK" firstAttribute="leading" secondItem="sYj-aY-ZEI" secondAttribute="leading" constant="16" id="hie-LP-74j"/>

@@ -7,6 +7,7 @@ enum NetworkError: Error, LocalizedError {
     case unsuccessful
     case decodingError(Error)
     case httpError(statusCode: Int)
+    case custom(message: String) // ✅ NEW
 
     var errorDescription: String? {
         switch self {
@@ -20,9 +21,12 @@ enum NetworkError: Error, LocalizedError {
             return "Failed to decode response: \(error.localizedDescription)"
         case .httpError(let statusCode):
             return "Server returned an error (HTTP \(statusCode))."
+        case .custom(let message): // ✅ NEW
+            return message
         }
     }
 }
+
 
 
 class NetworkManager {
@@ -52,11 +56,11 @@ class NetworkManager {
         print("📡 Request URL: \(urlString)")
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            DispatchQueue.main.async { [weak self] in
-                if view != nil {
-                    Loader.shared.hide()
-                }
-            }
+//            DispatchQueue.main.async { [weak self] in
+//                if view != nil {
+//                    Loader.shared.hide()
+//                }
+//            }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 if let _ = view {

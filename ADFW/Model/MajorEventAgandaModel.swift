@@ -72,7 +72,7 @@ struct Agendas : Codable {
 //    let logo : String?
 //    let priority : Int?
     let viewDetails : Bool?
-//    let image3 : String?
+    let image3 : String?
 //    let sponsers : String?
 //    let banner2 : String?
     let viewAgenda : Bool?
@@ -81,14 +81,14 @@ struct Agendas : Codable {
 //    let image4 : String?
 //    let subHeading : String?
 //    let textColor : String?
-//    let permaLink : String?
+    let permaLink : String?
 //    let metaTitle : String?
 //    let metaDescription : String?
 //    let showFilter : Bool?
 //    let isPrivateEvent : Bool?
 //    let bannerLogo : String?
 //    let mobileBanner : String?
-//    let agendaMobileBanner : String?
+    let agendaMobileBanner : String?
 //    let publishVideo : String?
 //    let mobile_app_image : String?
 //    let mobile_app_mobile_banner : String?
@@ -125,7 +125,7 @@ struct Agendas : Codable {
 //        case logo = "logo"
 //        case priority = "priority"
         case viewDetails = "viewDetails"
-//        case image3 = "image3"
+        case image3 = "image3"
 //        case sponsers = "sponsers"
 //        case banner2 = "banner2"
         case viewAgenda = "viewAgenda"
@@ -134,14 +134,14 @@ struct Agendas : Codable {
 //        case image4 = "image4"
 //        case subHeading = "subHeading"
 //        case textColor = "textColor"
-//        case permaLink = "permaLink"
+        case permaLink = "permaLink"
 //        case metaTitle = "metaTitle"
 //        case metaDescription = "metaDescription"
 //        case showFilter = "showFilter"
 //        case isPrivateEvent = "isPrivateEvent"
 //        case bannerLogo = "bannerLogo"
 //        case mobileBanner = "mobileBanner"
-//        case agendaMobileBanner = "agendaMobileBanner"
+        case agendaMobileBanner = "agendaMobileBanner"
 //        case publishVideo = "publishVideo"
 //        case mobile_app_image = "mobile_app_image"
 //        case mobile_app_mobile_banner = "mobile_app_mobile_banner"
@@ -179,7 +179,7 @@ struct Agendas : Codable {
 //        logo = try values.decodeIfPresent(String.self, forKey: .logo)
 //        priority = try values.decodeIfPresent(Int.self, forKey: .priority)
         viewDetails = try values.decodeIfPresent(Bool.self, forKey: .viewDetails)
-//        image3 = try values.decodeIfPresent(String.self, forKey: .image3)
+        image3 = try values.decodeIfPresent(String.self, forKey: .image3)
 //        sponsers = try values.decodeIfPresent(String.self, forKey: .sponsers)
 //        banner2 = try values.decodeIfPresent(String.self, forKey: .banner2)
         viewAgenda = try values.decodeIfPresent(Bool.self, forKey: .viewAgenda)
@@ -188,14 +188,14 @@ struct Agendas : Codable {
 //        image4 = try values.decodeIfPresent(String.self, forKey: .image4)
 //        subHeading = try values.decodeIfPresent(String.self, forKey: .subHeading)
 //        textColor = try values.decodeIfPresent(String.self, forKey: .textColor)
-//        permaLink = try values.decodeIfPresent(String.self, forKey: .permaLink)
+        permaLink = try values.decodeIfPresent(String.self, forKey: .permaLink)
 //        metaTitle = try values.decodeIfPresent(String.self, forKey: .metaTitle)
 //        metaDescription = try values.decodeIfPresent(String.self, forKey: .metaDescription)
 //        showFilter = try values.decodeIfPresent(Bool.self, forKey: .showFilter)
 //        isPrivateEvent = try values.decodeIfPresent(Bool.self, forKey: .isPrivateEvent)
 //        bannerLogo = try values.decodeIfPresent(String.self, forKey: .bannerLogo)
 //        mobileBanner = try values.decodeIfPresent(String.self, forKey: .mobileBanner)
-//        agendaMobileBanner = try values.decodeIfPresent(String.self, forKey: .agendaMobileBanner)
+        agendaMobileBanner = try values.decodeIfPresent(String.self, forKey: .agendaMobileBanner)
 //        publishVideo = try values.decodeIfPresent(String.self, forKey: .publishVideo)
 //        mobile_app_image = try values.decodeIfPresent(String.self, forKey: .mobile_app_image)
 //        mobile_app_mobile_banner = try values.decodeIfPresent(String.self, forKey: .mobile_app_mobile_banner)

@@ -9,13 +9,28 @@ import UIKit
 
 class EntertainmentViewModel {
     
-    func fetchEntertainmentData(in view: UIView, completion: @escaping (Result<EntertainmentModel, Error>) -> Void) {
-        let urlString = APIEndpoints.entertainment
+    func fetchEntertainmentData(
+        page: Int,
+        pageSize: Int,
+        sort: String = "createdAt:desc",
+        in view: UIView,
+        completion: @escaping (Result<EntertainmentModel, Error>) -> Void
+    ) {
+        var components = URLComponents(string: APIEndpoints.entertainment)
+        components?.queryItems = [
+            URLQueryItem(name: "pagination[page]", value: "\(page)"),
+            URLQueryItem(name: "pagination[pageSize]", value: "\(pageSize)"),
+            URLQueryItem(name: "sort", value: sort)
+        ]
 
-        NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<EntertainmentResponseModel, Error>) in
+        guard let url = components?.url?.absoluteString else {
+            completion(.failure(NetworkError.invalidURL))
+            return
+        }
+
+        NetworkManager.shared.fetchData(from: url, in: view) { (result: Result<EntertainmentResponseModel, Error>) in
             switch result {
             case .success(let response):
-                // Check if status is true
                 if response.status == true {
                     if let result = response.data {
                         completion(.success(result))
@@ -23,7 +38,6 @@ class EntertainmentViewModel {
                         completion(.failure(NetworkError.noData))
                     }
                 } else {
-                    // Server responded but with an unsuccessful status
                     completion(.failure(NetworkError.unsuccessful))
                 }
             case .failure(let error):
@@ -31,4 +45,5 @@ class EntertainmentViewModel {
             }
         }
     }
+
 }

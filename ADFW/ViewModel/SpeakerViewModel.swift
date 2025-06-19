@@ -12,8 +12,8 @@ import UIKit
 
 class SpeakerViewModel {
     
-    func fetchSpeakerData(in view: UIView, search:String?, completion: @escaping (Result<[SpeakerData], Error>) -> Void) {
-        let urlString = APIEndpoints.getAllSpeakersURL(page: 1, pageSize: 100,searchQuery: search)
+    func fetchSpeakerData(in view: UIView, page: Int, search:String?, agendaPermaLink: String? = nil, completion: @escaping (Result<[SpeakerData], Error>) -> Void) {
+        let urlString = APIEndpoints.getAllSpeakersURL(page: page, pageSize: 20,searchQuery: search, agendaPermaLink: agendaPermaLink)
         
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<SpeakerResponseModel, Error>) in
             switch result {

@@ -19,11 +19,21 @@ struct APIEndpoints {
     static var homepageData: String {
         return "\(baseURL)home_new.php?id=309"
     }
-  
     
     
-   
-    
+    static var LoginUrl: String {
+        return "\(baseURL)user/login/"
+    }
+
+    static func getFilteredAgendasURL() -> String {
+        let query = """
+        ?filters[is_deleted]=false\
+        &pagination[limit]=-1\
+        &filters[published]=true\
+        &filters[viewAgenda]=true
+        """
+        return baseURL + "agendas/" + query
+    }
     
     static  func getAllSponsors(page: Int, pageSize: Int) -> String {
             return "\(baseURL)sponsor/all?page=\(page)&pageSize=\(pageSize)"
@@ -51,21 +61,28 @@ struct APIEndpoints {
     static func getMajorEvent(date:String, isFilter: Bool) -> String {
         return "\(baseURL)agenda/byDate?isSessionFilter=\(isFilter)&date=\(date)"
     }
+    
+    static func getMajorEvent() -> String {
+        return "\(baseURL)agenda/byDate"
+    }
 
-    static func getAgendaByDateURL(date: String, id: Int) -> String {
-        let query = "?isSessionFilter=true&date=\(date)&id=\(id)"
+    static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
+        var query = ""
+        
+        if isSessionFilter {
+            if let id = id {
+                query = "?isSessionFilter=true&date=\(date)&id=\(id)"
+            } else {
+                query = "?isSessionFilter=true&date=\(date)"
+            }
+        } else {
+            query = "?date=\(date)"
+        }
+    
         return baseURL + "agenda/byDate" + query
     }
-
     
-    
-   
-
-    static var getSpeaker: String {
-        return "\(baseURL)speaker/all"
-    }
-    
-    static func getAllSpeakersURL(page: Int, pageSize: Int, searchQuery: String? = nil) -> String {
+    static func getAllSpeakersURL(page: Int, pageSize: Int, searchQuery: String? = nil, agendaPermaLink: String? = nil) -> String {
         var query = """
         ?populate=agenda_sessions.agenda\
         &filters[published]=true\
@@ -89,9 +106,14 @@ struct APIEndpoints {
             """
         }
         
+        if let permaLink = agendaPermaLink {
+            let encoded = permaLink.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            query += "&filters[agenda_sessions][agenda][permaLink][$eq]=\(encoded)"
+        }
+
         return baseURL + "speakers" + query
     }
-    
+
     
     static func getStaticSpeakerListURL(limit: Int) -> String {
         let query = """
@@ -111,25 +133,30 @@ struct APIEndpoints {
         return baseURL + "speakers" + query
     }
 
-
-
-    
-//    static var getPartner: String {
-//        return "\(baseURL)about_doha.php?doha_id=11"
-//    }
-   
-    
-   
-
-  
-   
     static func  getSeatingData(id:Int) -> String {
         return "\(baseURL)seating_plan.php?user_id=\(id)"
     }
         
+ 
+   
+   
+    static func getCountry() -> String {
+        return "\(baseURL)countries?pagination[limit]=-1"
+    }
     
-   
-   
+ //   "https://api-prod.adfw.com/api/"
+    
+    //"https://api-prod.adfw.com/api/"
+    
+    static func updateUser(userId: Int) -> String {
+        return "\(baseURL)ticket-user/update/\(userId)"
+    }
+    
+    
+    static var getVenue: String {
+        return "\(baseURL)venues?filters[is_deleted]=false&pagination[limit]=-1"
+    }
+    
 }
 
 

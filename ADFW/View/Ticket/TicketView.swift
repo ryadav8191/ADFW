@@ -86,7 +86,7 @@ struct TicketView: View {
                         }) {
                             HStack(spacing: 0) {
                                 Text("Ticket ")
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(.black)
                                 Text("Benefits")
                                     .foregroundColor(Color(UIColor.blueColor))
                             }
@@ -159,7 +159,9 @@ struct TicketView: View {
                 .padding(.vertical)
             }
         }
+        .background(Color.white)
     }
+    
 }
 
 

@@ -32,7 +32,7 @@ class HomeSessionTableViewCell: UITableViewCell {
     
 
     private var items: [UpcomingSessionsData] = []
-    var selectedCell: SelectedCell = .session
+    var selectedCell: SelectedCell = .event
     weak var delegate: HomeSessionTableViewCellDelegate?
     
     var onClickViewAll: (() -> Void)?
@@ -55,6 +55,8 @@ class HomeSessionTableViewCell: UITableViewCell {
         self.selectedCell = type
         bgColor.isHidden = selectedCell == .event ? false : true
      
+        
+        setupCollectionView()
         updateLayoutForSelectedCell()
         collectionView.reloadData()
     }
@@ -90,10 +92,19 @@ class HomeSessionTableViewCell: UITableViewCell {
         collectionView.register(UINib(nibName: "HomeSessionCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "HomeSessionCollectionViewCell")
         collectionView.register(UINib(nibName: "FeatureEventCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "FeatureEventCollectionViewCell")
         
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+        if selectedCell == .event {
+            let layout = CenterLastRowFlowLayout()
+            layout.minimumLineSpacing = 10
+            layout.minimumInteritemSpacing = 10
+            collectionView.setCollectionViewLayout(layout, animated: false)
+        } else {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
             layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0
+            collectionView.setCollectionViewLayout(layout, animated: false)
         }
+
 
         
         
@@ -137,7 +148,7 @@ class HomeSessionTableViewCell: UITableViewCell {
 extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
+        return  selectedCell == .event ? 10 :  items.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -161,27 +172,106 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch selectedCell {
         case .session:
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-
+            
         case .event:
-          
-//            let spacing: CGFloat = 12
-//            let insets: CGFloat = 8 * 2
-//            let totalSpacing = spacing * 2 + insets
-            let width = (collectionView.bounds.width) / 3
-            print("+=++++=+++================================",width)
-            return CGSize(width: width, height: width)
-
+            let itemsPerRow: CGFloat = 3
+            let spacing: CGFloat = 10
+            
+            let totalSpacing = (itemsPerRow - 1) * spacing
+            let availableWidth = collectionView.bounds.width - totalSpacing
+            let itemWidth = floor(availableWidth / itemsPerRow)
+            
+            return CGSize(width: itemWidth, height: itemWidth)
         }
     }
-    
 
-//    
+    
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        guard selectedCell == .event else {
+            return .zero
+        }
+
+        let itemsPerRow: CGFloat = 3
+        let spacing: CGFloat = 10
+        let numberOfItems = collectionView.numberOfItems(inSection: section)
+
+        if numberOfItems >= Int(itemsPerRow) {
+            return .zero
+        }
+
+        // Calculate item width as done in sizeForItemAt
+        let totalSpacing = CGFloat(numberOfItems - 1) * spacing
+        let availableWidth = collectionView.bounds.width - ((itemsPerRow - 1) * spacing)
+        let itemWidth = floor(availableWidth / itemsPerRow)
+        
+        let totalItemWidth = CGFloat(numberOfItems) * itemWidth + totalSpacing
+        let inset = max((collectionView.bounds.width - totalItemWidth) / 2, 0)
+        
+        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+    }
+
+
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
         pageControlSquare.set(progress: page, animated: true)
     }
 }
+
+
+class CenterLastRowFlowLayout: UICollectionViewFlowLayout {
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        guard let attributes = super.layoutAttributesForElements(in: rect)?.map({ $0.copy() as! UICollectionViewLayoutAttributes }) else {
+            return nil
+        }
+
+        // Group attributes by their row (based on Y position)
+        var rows: [[UICollectionViewLayoutAttributes]] = []
+        var currentRow: [UICollectionViewLayoutAttributes] = []
+        var currentY: CGFloat = -1
+
+        for attr in attributes where attr.representedElementCategory == .cell {
+            if abs(attr.frame.origin.y - currentY) > 1 {
+                if !currentRow.isEmpty {
+                    rows.append(currentRow)
+                    currentRow = []
+                }
+                currentY = attr.frame.origin.y
+            }
+            currentRow.append(attr)
+        }
+        if !currentRow.isEmpty {
+            rows.append(currentRow)
+        }
+
+        // Center only the last row
+        if let lastRow = rows.last {
+            let totalWidth = lastRow.reduce(0) { $0 + $1.frame.width } +
+                minimumInteritemSpacing * CGFloat(max(0, lastRow.count - 1))
+            let inset = (collectionView!.bounds.width - totalWidth) / 2
+
+            var x = inset
+            for attr in lastRow {
+                var frame = attr.frame
+                frame.origin.x = x
+                attr.frame = frame
+                x += frame.width + minimumInteritemSpacing
+            }
+        }
+
+        return attributes
+    }
+}
+
+
+

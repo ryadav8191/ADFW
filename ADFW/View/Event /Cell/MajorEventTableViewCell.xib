@@ -22,10 +22,10 @@
                         <rect key="frame" x="16" y="6" width="427" height="284"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="event_banner" translatesAutoresizingMaskIntoConstraints="NO" id="sbW-4E-jve" customClass="ScaledHeightImageView" customModule="ADFW" customModuleProvider="target">
-                                <rect key="frame" x="8" y="8" width="411" height="100"/>
+                                <rect key="frame" x="8" y="8" width="411" height="90"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FXZ-3d-udB">
-                                <rect key="frame" x="8" y="124" width="411" height="20"/>
+                                <rect key="frame" x="8" y="114" width="411" height="20"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Nl4-8U-dxb"/>
@@ -38,53 +38,63 @@
                                 </collectionViewFlowLayout>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCd-Yb-tQT">
-                                <rect key="frame" x="8" y="160" width="411" height="60"/>
+                                <rect key="frame" x="8" y="150" width="411" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zsA-mr-0jo">
-                                <rect key="frame" x="8" y="236" width="157" height="32"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hvT-KU-Xpf">
+                                <rect key="frame" x="8" y="236" width="123" height="32"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zsA-mr-0jo">
+                                        <rect key="frame" x="0.0" y="0.0" width="35.666666666666664" height="32"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="VIEW AGANDA" image="login_icon"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" imagePadding="8"/>
+                                        <connections>
+                                            <action selector="viewAganda:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="8WR-LN-MwL"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P9r-Rg-Xd2">
+                                        <rect key="frame" x="43.666666666666671" y="0.0" width="35.666666666666671" height="32"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="20" maxX="100" maxY="20"/>
+                                        <state key="normal" title="VIEW DETAIL"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" imagePadding="8"/>
+                                        <connections>
+                                            <action selector="viewDetail:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="tne-2F-VLO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNN-Pi-RcR">
+                                        <rect key="frame" x="87.333333333333314" y="0.0" width="35.666666666666686" height="32"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="20" maxX="100" maxY="20"/>
+                                        <state key="normal" title="VIEW DETAIL"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" imagePadding="8"/>
+                                        <connections>
+                                            <action selector="viewDetail:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="J1u-l2-Ra5"/>
+                                            <action selector="viewWebsiteAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="KGH-Gp-75n"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="MsS-ys-C49"/>
+                                    <constraint firstAttribute="height" constant="32" id="KmC-E1-WzF"/>
                                 </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="VIEW AGANDA" image="login_icon"/>
-                                <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" title="VIEW AGANDA" imagePadding="8"/>
-                                <connections>
-                                    <action selector="viewAganda:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="8WR-LN-MwL"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P9r-Rg-Xd2">
-                                <rect key="frame" x="173" y="236" width="144" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="KP0-RW-YKf"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="20" maxX="100" maxY="20"/>
-                                <state key="normal" title="VIEW DETAIL"/>
-                                <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" title="VIEW DETAIL" imagePadding="8"/>
-                                <connections>
-                                    <action selector="viewDetail:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="tne-2F-VLO"/>
-                                </connections>
-                            </button>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="OCd-Yb-tQT" firstAttribute="leading" secondItem="VHP-zu-Ta7" secondAttribute="leading" constant="8" id="1VL-Qv-rD4"/>
-                            <constraint firstItem="zsA-mr-0jo" firstAttribute="top" secondItem="OCd-Yb-tQT" secondAttribute="bottom" constant="16" id="7fa-3u-N3L"/>
+                            <constraint firstItem="hvT-KU-Xpf" firstAttribute="leading" secondItem="VHP-zu-Ta7" secondAttribute="leading" constant="8" id="BT1-DR-Cbl"/>
                             <constraint firstItem="FXZ-3d-udB" firstAttribute="top" secondItem="sbW-4E-jve" secondAttribute="bottom" constant="16" id="H5G-cE-qOG"/>
                             <constraint firstAttribute="trailing" secondItem="sbW-4E-jve" secondAttribute="trailing" constant="8" id="I3D-sN-BDf"/>
                             <constraint firstItem="sbW-4E-jve" firstAttribute="leading" secondItem="VHP-zu-Ta7" secondAttribute="leading" constant="8" id="Jyb-St-dYg"/>
                             <constraint firstItem="FXZ-3d-udB" firstAttribute="leading" secondItem="VHP-zu-Ta7" secondAttribute="leading" constant="8" id="LN1-4Z-Bfn"/>
-                            <constraint firstItem="P9r-Rg-Xd2" firstAttribute="top" secondItem="OCd-Yb-tQT" secondAttribute="bottom" constant="16" id="NG6-3V-U62"/>
-                            <constraint firstItem="P9r-Rg-Xd2" firstAttribute="leading" secondItem="zsA-mr-0jo" secondAttribute="trailing" constant="8" id="PGb-Cd-dSs"/>
-                            <constraint firstItem="zsA-mr-0jo" firstAttribute="leading" secondItem="VHP-zu-Ta7" secondAttribute="leading" constant="8" id="Y2S-3d-aNg"/>
+                            <constraint firstAttribute="bottom" secondItem="hvT-KU-Xpf" secondAttribute="bottom" constant="16" id="N2o-Wh-5tj"/>
+                            <constraint firstItem="hvT-KU-Xpf" firstAttribute="top" secondItem="OCd-Yb-tQT" secondAttribute="bottom" constant="16" id="bYK-Ms-eTe"/>
                             <constraint firstItem="sbW-4E-jve" firstAttribute="top" secondItem="VHP-zu-Ta7" secondAttribute="top" constant="8" id="bhL-eO-bOV"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hvT-KU-Xpf" secondAttribute="trailing" constant="16" id="gjf-4W-TOO"/>
                             <constraint firstAttribute="trailing" secondItem="FXZ-3d-udB" secondAttribute="trailing" constant="8" id="i11-mi-9Dh"/>
                             <constraint firstItem="OCd-Yb-tQT" firstAttribute="top" secondItem="FXZ-3d-udB" secondAttribute="bottom" constant="16" id="lw8-sC-Wun"/>
                             <constraint firstAttribute="trailing" secondItem="OCd-Yb-tQT" secondAttribute="trailing" constant="8" id="pGc-Ck-owg"/>
-                            <constraint firstAttribute="bottom" secondItem="zsA-mr-0jo" secondAttribute="bottom" constant="16" id="q2N-v0-dAM"/>
-                            <constraint firstAttribute="bottom" secondItem="P9r-Rg-Xd2" secondAttribute="bottom" constant="16" id="z1M-No-9kt"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -99,14 +109,15 @@
             <connections>
                 <outlet property="ViewAgendaButton" destination="zsA-mr-0jo" id="iUd-QF-CtM"/>
                 <outlet property="ViewDetailButton" destination="P9r-Rg-Xd2" id="3ok-qa-ABt"/>
+                <outlet property="ViewWebSite" destination="oNN-Pi-RcR" id="7kz-DO-QI3"/>
                 <outlet property="bannerimageView" destination="sbW-4E-jve" id="A4i-Ma-gbx"/>
                 <outlet property="collectionView" destination="FXZ-3d-udB" id="OoD-Cv-zvG"/>
                 <outlet property="collectionViewHeightConstraint" destination="Nl4-8U-dxb" id="O4W-de-Moh"/>
                 <outlet property="containerView" destination="VHP-zu-Ta7" id="qIA-z3-wBB"/>
                 <outlet property="descriptionLabel" destination="OCd-Yb-tQT" id="0Y7-Ph-ObX"/>
                 <outlet property="descrtion" destination="OCd-Yb-tQT" id="bdJ-LT-mcl"/>
-                <outlet property="viewAgandaCons" destination="MsS-ys-C49" id="cOz-WM-HE4"/>
-                <outlet property="viewDetailsCons" destination="KP0-RW-YKf" id="BEc-Qs-8gf"/>
+                <outlet property="stackViewHeightConst" destination="KmC-E1-WzF" id="wbG-vE-2uc"/>
+                <outlet property="stackViewTopConst" destination="bYK-Ms-eTe" id="ABK-6v-RZ0"/>
             </connections>
             <point key="canvasLocation" x="190.57971014492756" y="31.793478260869566"/>
         </tableViewCell>

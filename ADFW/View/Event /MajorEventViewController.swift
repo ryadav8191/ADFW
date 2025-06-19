@@ -40,8 +40,15 @@ class MajorEventViewController: UIViewController {
         self.delegate = self
         registerCell()
         configureUI()
-        getMajorEventData(date: "")
         listViewButton.setImage(UIImage.calendarToList, for: .normal)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        selectedIndex = 0
+        getMajorEventData(date: "")
+        tableView.setContentOffset(.zero, animated: true)
+       
     }
     
 
@@ -125,7 +132,7 @@ class MajorEventViewController: UIViewController {
     
     
     @IBAction func backAction(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        self.tabBarController?.selectedIndex = 0
     }
     
 
@@ -160,11 +167,23 @@ extension MajorEventViewController: UICollectionViewDataSource, UICollectionView
            if indexPath.row == 0 {
                getMajorEventData(date: "")
            } else {
-               getMajorEventData(date: arrDate[indexPath.row - 1].date ?? "")
+//               getMajorEventData(date: arrDate[indexPath.row - 1].date ?? "")
+               
+               
+               
+               if let vc = self.storyboard?.instantiateViewController(withIdentifier: "AgandaViewController") as? AgandaViewController {
+                 //  vc.id = item?.id
+                   vc.date = arrDate[indexPath.row - 1].date ?? ""
+                   vc.selectedIndex = arrDate[indexPath.row - 1].date ?? ""
+                   self.navigationController?.pushViewController(vc, animated: true)
+               }
            }
         
            collectionView.reloadData()
-           // Update agenda table based on selected date
+           
+          
+           
+           
        }
     
 }
@@ -215,11 +234,28 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MajorEventTableViewCell", for: indexPath) as! MajorEventTableViewCell
             cell.configure(with: item)
             cell.delegate = self
-            
+           
             cell.viewAganda = {
                 if let vc = self.storyboard?.instantiateViewController(withIdentifier: "AgandaViewController") as? AgandaViewController {
                     vc.id = item?.id
                     vc.date = item?.date
+                    vc.selectedIndex = self.data[indexPath.section].date ?? ""
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+            
+            cell.viewWebSite = {
+                if let url = URL(string: item?.websiteLink ?? "") {
+                    UIApplication.shared.open(url)
+                }
+            }
+            
+            cell.viewDetail = {
+                
+                
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "EventOveviewViewController") as? EventOveviewViewController {
+                    vc.selectedIndex = self.data[indexPath.section].date ?? ""
+                    vc.data = self.data[indexPath.section].agendas?[indexPath.row]
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -246,13 +282,13 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         let sectionData = data[section] 
-        header.configure(dateText: Helper.formatToDayFullMonth(from: sectionData.date ?? "" ) ?? "", yearText: Helper.extractYear(from: sectionData.date ?? "") ?? "",bannerImage: nil, hide: false)
+        header.configure(dateText: Helper.formatToDayFullMonth(from: sectionData.date ?? "" ) ?? "", yearText: Helper.extractYear(from: sectionData.date ?? "") ?? "",bannerImage: "", hide: false)
 
         return header
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60 // Adjust based on your XIB design
+        return UITableView.automaticDimension
     }
 
 
@@ -310,15 +346,7 @@ extension MajorEventViewController {
     
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
-                    
-                  
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.tableView.reloadData()
-                    self.collectionView.reloadData()
-                }
-            
-                
+               
             case .failure(let error):
                 // self.showNoDataView(true)
                 print(error.localizedDescription)

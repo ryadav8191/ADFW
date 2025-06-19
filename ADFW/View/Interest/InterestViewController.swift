@@ -29,39 +29,40 @@ class InterestViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     
-    private var categories: [Category] = [
-            .init(title: "Regulation", isSelected: false),
-            .init(title: "Asset Management", isSelected: false),
-            .init(title: "Fintech", isSelected: false),
-            .init(title: "Blockchain & Ai", isSelected: true),
-            .init(title: "Economy Forum", isSelected: false),
-            .init(title: "Event - B", isSelected: false),
-            .init(title: "Setting Up In ADGM", isSelected: true),
-            .init(title: "Event - C", isSelected: false),
-            .init(title: "Event - D", isSelected: false),
-            .init(title: "Sustainable Finance", isSelected: false),
-            .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false),
-            .init(title: "Roundtable Meeting", isSelected: true)
-        ]
-    
+//    private var categories: [Category] = [
+//            .init(title: "Regulation", isSelected: false),
+//            .init(title: "Asset Management", isSelected: false),
+//            .init(title: "Fintech", isSelected: false),
+//            .init(title: "Blockchain & Ai", isSelected: true),
+//            .init(title: "Economy Forum", isSelected: false),
+//            .init(title: "Event - B", isSelected: false),
+//            .init(title: "Setting Up In ADGM", isSelected: true),
+//            .init(title: "Event - C", isSelected: false),
+//            .init(title: "Event - D", isSelected: false),
+//            .init(title: "Sustainable Finance", isSelected: false),
+//            .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false),
+//            .init(title: "Roundtable Meeting", isSelected: true)
+//        ]
+//    
+    var viewModel = InterestViewModel()
+    var arrOfInter = [InterestData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
         configureUI()
         scrollView.contentInsetAdjustmentBehavior = .never
+        getInterest()
 
     }
-    
-   
     
     func updateCollectionViewHeight() {
         collectionView.layoutIfNeeded()
         collectionHeightConstraint.constant = collectionView.contentSize.height
     }
     
+    
+    
     func configureUI() {
-        
         categorieView.layer.shadowColor = UIColor(red: 20/255, green: 52/255, blue: 20/255, alpha: 0.08).cgColor
         categorieView.layer.shadowOpacity = 1
         categorieView.layer.shadowOffset = CGSize(width: 5, height: 5)
@@ -107,6 +108,18 @@ class InterestViewController: UIViewController {
     }
     
     
+    @IBAction func saveInterestAction(_ sender: Any) {
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let homeVC = storyboard.instantiateViewController(withIdentifier: "CustomTabBarController") as! CustomTabBarController
+            sceneDelegate.window?.rootViewController = homeVC
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
+    }
+    
+    
+    
+    
     
 }
 
@@ -114,27 +127,50 @@ class InterestViewController: UIViewController {
 
 extension InterestViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories.count
+        return arrOfInter.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.identifier, for: indexPath) as? CategoryCell else {
             return UICollectionViewCell()
         }
-        cell.configure(with: categories[indexPath.item])
+        cell.configure(with: arrOfInter[indexPath.item])
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        categories[indexPath.item].isSelected.toggle()
+       arrOfInter[indexPath.item].attributes?.is_deleted?.toggle()
         UIView.performWithoutAnimation {
             collectionView.reloadItems(at: [indexPath])
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text = categories[indexPath.item].title
+        let text = arrOfInter[indexPath.item].attributes?.label ?? ""
         let size = (text as NSString).size(withAttributes: [.font: FontManager.font(weight: .medium, size: 14)])
         return CGSize(width: size.width + 35, height: 36)
+    }
+}
+
+
+extension InterestViewController {
+    
+    func getInterest() {
+        
+        viewModel.fetchInterests(in: self.view) { result in
+            switch result {
+            case .success(let interests):
+                print("Fetched interests: \(interests)")
+                self.arrOfInter = interests
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                    self.updateCollectionViewHeight()
+                }
+                
+            case .failure(let error):
+                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+            }
+        }
     }
 }

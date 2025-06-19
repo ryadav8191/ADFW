@@ -10,11 +10,14 @@ import SwiftUI
 
 
 class SessionViewController: UIViewController {
+    
+    var session:Session?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Embed SwiftUI View
-        let swiftUIView = SessionOverviewView(onBack: { [weak self] in
+        let swiftUIView = SessionOverviewView(session: session, onBack: { [weak self] in
             guard let self = self else { return }
 
             

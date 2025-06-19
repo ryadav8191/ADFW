@@ -24,11 +24,15 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="2km-ya-MCx">
                                 <rect key="frame" x="16" y="16" width="362" height="178"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gji-IQ-xPf">
+                                        <rect key="frame" x="0.0" y="0.0" width="78.666666666666671" height="178"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kVF-Gs-TdO">
-                                        <rect key="frame" x="0.0" y="0.0" width="173" height="178"/>
+                                        <rect key="frame" x="94.666666666666686" y="0.0" width="78.333333333333314" height="178"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="La6-oc-NFN">
-                                                <rect key="frame" x="0.0" y="0.0" width="173" height="178"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="78.333333333333329" height="178"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -40,10 +44,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8f5-8l-Fnz">
-                                        <rect key="frame" x="189" y="0.0" width="173" height="178"/>
+                                        <rect key="frame" x="189" y="0.0" width="78.666666666666686" height="178"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jLr-Wl-Tow">
-                                                <rect key="frame" x="0.0" y="0.0" width="173" height="178"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="78.666666666666671" height="178"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -53,6 +57,10 @@
                                             <constraint firstItem="jLr-Wl-Tow" firstAttribute="leading" secondItem="8f5-8l-Fnz" secondAttribute="leading" id="XZE-1u-ipW"/>
                                             <constraint firstAttribute="bottom" secondItem="jLr-Wl-Tow" secondAttribute="bottom" id="vXG-i1-wxc"/>
                                         </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1rF-X5-i96">
+                                        <rect key="frame" x="283.66666666666669" y="0.0" width="78.333333333333314" height="178"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
                                 </subviews>
                             </stackView>
@@ -76,8 +84,10 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="leftImageView" destination="La6-oc-NFN" id="Ovr-pH-yI4"/>
+                <outlet property="leftSpacer" destination="Gji-IQ-xPf" id="XZf-7n-pPp"/>
                 <outlet property="leftView" destination="kVF-Gs-TdO" id="OdW-y4-iiW"/>
                 <outlet property="rightImageView" destination="jLr-Wl-Tow" id="3NB-pK-QWN"/>
+                <outlet property="rightSpacer" destination="1rF-X5-i96" id="Bx8-tG-HFc"/>
                 <outlet property="rightView" destination="8f5-8l-Fnz" id="vK3-zT-hkI"/>
                 <outlet property="stackView" destination="2km-ya-MCx" id="tCs-Y0-Hyh"/>
             </connections>

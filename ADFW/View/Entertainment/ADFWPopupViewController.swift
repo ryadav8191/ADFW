@@ -11,7 +11,7 @@ import UIKit
 class ADFWPopupViewController: UIViewController {
 
     var dates: [String] = []
-    var selectedIndex: Int = 0
+    var selectedIndex: Int = -1
     var onDateSelected: ((String, Int) -> Void)?
 
     private var buttons: [UIButton] = []
@@ -46,7 +46,7 @@ class ADFWPopupViewController: UIViewController {
             titleContainer.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
             titleContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
             titleContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
-            titleContainer.heightAnchor.constraint(equalToConstant: 40)
+            titleContainer.heightAnchor.constraint(equalToConstant: 46)
         ])
 
         let titleLabel = UILabel()
@@ -95,9 +95,10 @@ class ADFWPopupViewController: UIViewController {
                     button.titleLabel?.font = FontManager.font(weight: .semiBold, size: 17)
                     button.tag = index
                   //  button.layer.cornerRadius = 6
+                   
                     button.layer.borderWidth = 1
                     button.addTarget(self, action: #selector(handleButtonTap(_:)), for: .touchUpInside)
-
+                    button.heightAnchor.constraint(equalToConstant: 46).isActive = true
                     buttons.append(button)
                     rowStack.addArrangedSubview(button)
                 } else {

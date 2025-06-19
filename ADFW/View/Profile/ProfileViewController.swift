@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import CountryPickerView
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     
@@ -40,25 +42,67 @@ class ProfileViewController: UIViewController {
     
     
     @IBOutlet weak var updateProfileViewHeightConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var countryPickerView: UIView!
+    @IBOutlet weak var codeTextField: UITextField!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var codeLabel: UILabel!
+    @IBOutlet weak var updateViewheightConst: NSLayoutConstraint!
+    @IBOutlet weak var saveButtonHeightConst: NSLayoutConstraint!
+    @IBOutlet weak var countryCodeLabel: UILabel!
+    @IBOutlet weak var countryImageView: UIImageView!
+    @IBOutlet weak var dropDown: UIImageView!
+    
+    
     
     var isSwitchOn = false
     var isChecked: Bool = false
     var isEditingEnabled = false
-
+    
+    var viewModel = UpdateUserViewModel()
+    var countries: [CountryAttributes] = []
+    var countryViewModel =  CountryViewModel()
+    
+    
+    
+    
+    
+    
+    
+    
     //MARK: -- viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.isHidden = true
+     
         configureUI()
+        if let data = LocalDataManager.getLoginResponse() {
+            configureData(data: data)
+        }
+        
         submitButtonTapped()
         updateStatusView.isHidden = true
+        
+//        countryPickerView.delegate = self
+//        countryPickerView.dataSource = self
+//        countryPickerView.showCountryCodeInView = false
+//        countryPickerView.showCountryNameInView = false
+//        countryPickerView.showPhoneCodeInView = true
+//        countryPickerView.countryDetailsLabel.font = FontManager.font(weight: .regular, size: 14)
+//        countryPickerView.flagImageView.contentMode = .scaleAspectFit
+//        countryPickerView.flagImageView.widthAnchor.constraint(equalToConstant: 18).isActive = true
+//        countryPickerView.flagImageView.heightAnchor.constraint(equalToConstant: 18).isActive = true
+//        countryPickerView.flagSpacingInView = 4
+       // countryPickerView.showCountriesList(from: self)
+        
+        fetchCountries()
     }
     
     override func viewDidLayoutSubviews() {
         customNavigationView.layer.shadowPath = UIBezierPath(rect: customNavigationView.bounds).cgPath
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     func configureUI() {
@@ -72,6 +116,10 @@ class ProfileViewController: UIViewController {
         
         companyLabel.font = FontManager.font(weight: .medium, size: 14)
         companyLabel.textColor = UIColor.grayColor
+        
+        codeLabel.font = FontManager.font(weight: .medium, size: 14)
+        codeLabel.textColor = UIColor.grayColor
+        
         
         designationLabel.font = FontManager.font(weight: .medium, size: 14)
         designationLabel.textColor = UIColor.grayColor
@@ -115,6 +163,11 @@ class ProfileViewController: UIViewController {
         openToNetWork.font = FontManager.font(weight: .medium, size: 14)
         openToNetWork.textColor = UIColor.black
         
+        
+        
+        countryCodeLabel.font = FontManager.font(weight: .medium, size: 14)
+        countryCodeLabel.textColor = UIColor.blueColor
+        
         customNavigationView.layer.shadowColor = UIColor(hex: "#0000000D").cgColor
         customNavigationView.layer.shadowOpacity = 0.25
         customNavigationView.layer.shadowOffset = CGSize(width: 0, height: 3) // bottom only
@@ -127,9 +180,49 @@ class ProfileViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(submitButtonTapped))
         submitButtonView.addGestureRecognizer(tapGesture)
         submitButtonView.isUserInteractionEnabled = true
-
-
+        
+    }
+    
+    func configureData(data: User) {
+        
+        nameLabel.text = (data.firstName ?? "") + " " + (data.lastName ?? "")
+        
+        firstNameTextField.text = data.firstName ?? ""
+        lastNameTextField.text = data.lastName ?? ""
+        bussinessLabel.text = data.designation
        
+        companyTextField.text = data.company
+        designationTextField.text = data.designation
+        emailTextField.text = data.email
+        phoneNumberTextField.text = data.mobile ?? ""
+        
+        let ticketNumber = data.ticketNumber ?? ""
+        let fullText = "Ticket ID: \(ticketNumber)"
+
+        // Create attributed string
+        let attributedText = NSMutableAttributedString(string: fullText)
+        let ticketNumberRange = (fullText as NSString).range(of: ticketNumber)
+        attributedText.addAttribute(.font, value: FontManager.font(weight: .bold, size: 12), range: ticketNumberRange)
+        attributedText.addAttribute(.foregroundColor, value: UIColor.grayColor, range: ticketNumberRange)
+        let labelRange = (fullText as NSString).range(of: "Ticket ID:")
+        attributedText.addAttribute(.font, value: FontManager.font(weight: .medium, size: 12), range: labelRange)
+        attributedText.addAttribute(.foregroundColor, value: UIColor.grayColor, range: labelRange)
+        // Assign to label
+        ticketLabel.attributedText = attributedText
+        
+        let phoneCodeFromAPI = data.countryCode ?? ""
+        let formattedCode = phoneCodeFromAPI.hasPrefix("+") ? phoneCodeFromAPI : "+\(phoneCodeFromAPI)"
+        countryCodeLabel.text = formattedCode
+        
+        if let isoCode = getISOCode(fromPhoneCode: phoneCodeFromAPI) {
+         
+            countryViewModel.loadFlagImage(for: isoCode) { image in
+                self.countryImageView.image = image
+            }
+        }
+        isChecked = data.isTermsAgreed ?? false
+        updateCheckboxImage()
+        
     }
     
     
@@ -160,7 +253,7 @@ class ProfileViewController: UIViewController {
             return false
         }
 
-        guard let phone = phoneNumberTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !phone.isEmpty, phone.count == 10 else {
+        guard let phone = phoneNumberTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !phone.isEmpty else {
             MessageHelper.showAlert(message: "Please enter a valid 10-digit phone number.", on: self)
             return false
         }
@@ -174,6 +267,16 @@ class ProfileViewController: UIViewController {
         return emailPred.evaluate(with: email)
     }
 
+  
+
+    func getISOCode(fromPhoneCode code: String) -> String? {
+        let picker = CountryPickerView()
+        if let country = picker.countries.first(where: { $0.phoneCode == "+\(code)" }) {
+            return country.code // e.g., "AE"
+        }
+        return nil
+    }
+ 
     
     
     func updateCheckboxImage() {
@@ -186,36 +289,97 @@ class ProfileViewController: UIViewController {
         if isEditingEnabled {
                 isEditingEnabled = true
 
-                // Disable fields after saving
-                firstNameTextField.isEnabled = false
+                
+            firstNameTextField.isEnabled = false
                 lastNameTextField.isEnabled = false
                 companyTextField.isEnabled = false
                 designationTextField.isEnabled = false
                 emailTextField.isEnabled = false
                 phoneNumberTextField.isEnabled = false
                 checkBoxButton.isEnabled = false
-                mySwitch.isEnabled = false
+                //mySwitch.isEnabled = false
+            UIView.animate(withDuration: 0.3) {
+                self.saveButton.alpha = 0
+                self.submitButtonView.alpha = 1
+                self.updateViewheightConst.constant = 50
+                self.view.layoutIfNeeded()
+            } completion: { _ in
+                self.saveButton.isHidden = true
+                self.submitButtonView.isHidden = false
+            }
 
         } else {
 
-            firstNameTextField.isEnabled = false
-            lastNameTextField.isEnabled = false
-            companyTextField.isEnabled = false
-            designationTextField.isEnabled = false
-            emailTextField.isEnabled = false
-            phoneNumberTextField.isEnabled = false
-            checkBoxButton.isEnabled = false
-            mySwitch.isEnabled = false
+            firstNameTextField.isEnabled = true
+            lastNameTextField.isEnabled = true
+            companyTextField.isEnabled = true
+            designationTextField.isEnabled = true
+            emailTextField.isEnabled = true
+            phoneNumberTextField.isEnabled = true
+            checkBoxButton.isEnabled = true
+         //   mySwitch.isEnabled = false
+
+            self.saveButton.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.saveButton.alpha = 1
+                self.submitButtonView.alpha = 0
+                self.updateViewheightConst.constant = 0
+                self.view.layoutIfNeeded()
+            } completion: { _ in
+                self.submitButtonView.isHidden = true
+            }
 
             
-            
-            submitButtonLabel.text = "UPDATE PROFILE"
-            submitButtonView.backgroundColor = UIColor.clear
-            submitButtonLabel.textColor = UIColor.gray
-            loginbuttonArrowImageView.tintColor = UIColor.gray
+          //  submitButtonLabel.text = "UPDATE PROFILE"
+          //  submitButtonView.backgroundColor = UIColor.clear
+          //  submitButtonLabel.textColor = UIColor.gray
+           // loginbuttonArrowImageView.tintColor = UIColor.gray
         }
     }
 
+    
+    
+    @IBAction func selectCountryTapped(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let pickerVC = storyboard.instantiateViewController(withIdentifier: "CountryPickerViewController") as! CountryPickerViewController
+
+        pickerVC.countries = self.countries
+
+        pickerVC.onCountrySelected = { [weak self] selected in
+            guard let self = self,
+                  let flagCode = selected.flag?.lowercased(),
+                  let code = selected.code else { return }
+            countryViewModel.loadFlagImage(for: flagCode) { image in
+                self.countryImageView.image = image
+            }
+            self.countryCodeLabel.text = "+\(code)"
+        }
+
+
+
+        if #available(iOS 15.0, *) {
+            if let sheet = pickerVC.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]  // Allows dragging to expand
+                sheet.prefersGrabberVisible = true     // Shows grabber handle
+                sheet.preferredCornerRadius = 20       // Rounded corners
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            pickerVC.modalPresentationStyle = .pageSheet
+        } else {
+            pickerVC.modalPresentationStyle = .overFullScreen // fallback for < iOS 15
+        }
+
+        present(pickerVC, animated: true)
+
+       }
+
+       func flagEmoji(from countryCode: String) -> String {
+           countryCode.uppercased()
+               .unicodeScalars
+               .compactMap { UnicodeScalar(127397 + $0.value) }
+               .map { String($0) }
+               .joined()
+       }
 
     
     
@@ -227,9 +391,57 @@ class ProfileViewController: UIViewController {
     
     
     @IBAction func saveButton(_ sender: Any) {
-        
-        
+        guard validateFields() else { return }
+        let userId = LocalDataManager.getLoginResponse()?.id ?? 0
+        let parameters: [String: Any] = [
+            "firstName": firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "lastName": lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "email": emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "company": companyTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "designation": designationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "phoneNumber": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "mobile": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            "countryCode": countryCodeLabel.text ?? "",
+            "emirate": LocalDataManager.getLoginResponse()?.emirate ?? "",
+            "residanceCountry": LocalDataManager.getLoginResponse()?.residanceCountry ?? "",
+            "nationality": LocalDataManager.getLoginResponse()?.nationality ?? "",
+            "sector": LocalDataManager.getLoginResponse()?.sector ?? "",
+            "photo": LocalDataManager.getLoginResponse()?.photo ?? "",
+            "image1": LocalDataManager.getLoginResponse()?.photo ?? "",
+            "ticketNumber": LocalDataManager.getLoginResponse()?.ticketNumber ?? "",
+            "orderNumber": LocalDataManager.getLoginResponse()?.orderNumber ?? "",
+            "ticketType": LocalDataManager.getLoginResponse()?.type ?? "",
+            "badgeCategory": LocalDataManager.getLoginResponse()?.badgeCategory ?? "",
+            //"day": LocalDataManager.getLoginResponse()?.day ?? [:]
+        ]
+        viewModel.updateUserProfile(userId: userId, parameters: parameters, in: self.view) { result in
+            switch result {
+            case .success:
+                MessageHelper.showBanner(message: "Profile updated successfully", status: .success)
+            case .failure(let error):
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
+
+
+            }
+        }
     }
+    
+    
+   
+
+    
+    func fetchCountries() {
+        countryViewModel.fetchCountries(in: self.view) { result in
+            switch result {
+            case .success(let countries):
+                print("✅ Countries:", countries)
+                 self.countries = countries
+                // self.countryPicker.reloadAllComponents()
+            case .failure(let error):
+                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+            }
+        }
+     }
     
     
     
@@ -251,3 +463,40 @@ class ProfileViewController: UIViewController {
     }
     
 }
+
+
+
+// MARK: - CountryPickerViewDelegate
+extension ProfileViewController: CountryPickerViewDelegate {
+    func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {
+     
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            countryPickerView.countryDetailsLabel.font = FontManager.font(weight: .regular, size: 14)
+               }
+        print("Selected country: \(country.name) - \(country.phoneCode)")
+    }
+}
+
+// MARK: - CountryPickerViewDataSource (optional)
+extension ProfileViewController: CountryPickerViewDataSource {
+  
+    func showOnlyPreferredCountries(in countryPickerView: CountryPickerView) -> Bool {
+        return false
+    }
+
+    func sectionTitleForPreferredCountries(in countryPickerView: CountryPickerView) -> String? {
+        return "Preferred Countries"
+    }
+
+    func navigationTitle(in countryPickerView: CountryPickerView) -> String? {
+        return "Select Your Country"
+    }
+}
+
+
+
+
+
+
+

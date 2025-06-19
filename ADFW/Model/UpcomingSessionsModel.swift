@@ -94,7 +94,7 @@ struct UpcomingSessions : Codable {
 //    let iframe : String?
    // let agendaType : AgendaType?
     let location : SessionAgandaLocation?
-  //  let agenda_sessions : Agenda_sessions?
+    let agenda_sessions : Agenda_sessions?
    
   
 
@@ -148,7 +148,7 @@ struct UpcomingSessions : Codable {
 //        case iframe = "iframe"
 //        case agendaType = "agendaType"
         case location = "location"
-//        case agenda_sessions = "agenda_sessions"
+        case agenda_sessions = "agenda_sessions"
        
     }
 
@@ -202,7 +202,7 @@ struct UpcomingSessions : Codable {
 //        iframe = try values.decodeIfPresent(String.self, forKey: .iframe)
 //        agendaType = try values.decodeIfPresent(AgendaType.self, forKey: .agendaType)
         location = try values.decodeIfPresent(SessionAgandaLocation.self, forKey: .location)
-//        agenda_sessions = try values.decodeIfPresent(Agenda_sessions.self, forKey: .agenda_sessions)
+        agenda_sessions = try values.decodeIfPresent(Agenda_sessions.self, forKey: .agenda_sessions)
        
     }
 

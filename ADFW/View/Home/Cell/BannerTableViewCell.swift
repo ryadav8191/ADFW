@@ -29,10 +29,24 @@ class BannerTableViewCell: UITableViewCell {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var progressView: UIProgressView!
+    
+    
+    let imageBg: [UIImage] = [
+        UIImage.foodBanner,
+        UIImage.eventBanner,
+        UIImage.headerBackground,
+        UIImage.foodBanner,
+        UIImage.eventBanner,
+        UIImage.headerBackground,
+        UIImage.foodBanner,
+        UIImage.eventBanner,
+        UIImage.headerBackground
+        ]
     
     weak var delegate: MyBannerViewCellDelegate?
     
-    let images = ["WELCOME TO", "", ""]
+ 
     var currentIndex = 0
     var timer: Timer?
     var banner:[BannerData]?{
@@ -46,23 +60,31 @@ class BannerTableViewCell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var progressView: UIProgressView!
-    
+    var progress: Float = 0.0
+    var slideshowTimer: Timer?
+    var progressTimer: Timer?
+
+    let displayDuration: TimeInterval = 3.0
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         selectionStyle = .none
-        collectionView.isPagingEnabled = true
         collectionView.dataSource = self
-                collectionView.delegate = self
+             collectionView.delegate = self
+             
+             let layout = UICollectionViewFlowLayout()
+             layout.scrollDirection = .horizontal
+             layout.minimumLineSpacing = 0
+             layout.itemSize = collectionView.bounds.size
+             collectionView.collectionViewLayout = layout
+             collectionView.isPagingEnabled = true
+             collectionView.isScrollEnabled = false
                 collectionView.register(UINib(nibName: "BannerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "BannerCollectionViewCell")
-       // startAutoScroll()
-        
+        progressView.progress = 0.0
+        startTimers()
        
-        
-        
     }
     
    
@@ -70,43 +92,51 @@ class BannerTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    
+    func startTimers() {
+        // Start the image change timer
+        slideshowTimer = Timer.scheduledTimer(withTimeInterval: displayDuration, repeats: true) { [weak self] _ in
+            self?.showNextImage()
+        }
+
+    }
+
+    
+ 
+    
+    func showNextImage() {
+        currentIndex = (currentIndex + 1) % imageBg.count
+
+        if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? BannerCollectionViewCell {
+            UIView.transition(with: cell.imageView, duration: 1.0, options: .transitionCrossDissolve, animations: {
+                cell.imageView.image = self.imageBg[self.currentIndex]
+            }, completion: nil)
+        }
+        
+        let progress: Float
+           if currentIndex == 0 {
+               progress = 0.0
+               progressView.setProgress(1.0, animated: true) // Complete bar before reset
+               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                   self.progressView.setProgress(progress, animated: false)
+               }
+           } else {
+               progress = Float(currentIndex + 1) / Float(imageBg.count)
+               progressView.setProgress(progress, animated: true)
+           }
+    }
+
+    
     deinit {
            stopAutoScroll()
        }
        
-    func startAutoScroll() {
-        stopAutoScroll() // clean up old timer
-        let delay = isVideo(at: currentIndex) ? 8.0 : 3.0
-        timer = Timer.scheduledTimer(timeInterval: delay, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: false)
-    }
-
        
        func stopAutoScroll() {
            timer?.invalidate()
            timer = nil
        }
        
-    @objc func scrollToNextItem() {
-        guard let banner = self.banner else { return }
-        
-        if currentIndex < banner.count - 1 {
-            currentIndex += 1
-        } else {
-            currentIndex = 0
-        }
-        
-        let indexPath = IndexPath(item: currentIndex, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        pageControl.currentPage = currentIndex
-        
-        // 🛑 Restart auto-scroll with updated delay
-        stopAutoScroll()
-        
-        let isCurrentVideo = isVideo(at: currentIndex)
-        let delay = isCurrentVideo ? 8.0 : 3.0 // longer delay for videos
-        
-        timer = Timer.scheduledTimer(timeInterval: delay, target: self, selector: #selector(scrollToNextItem), userInfo: nil, repeats: false)
-    }
 
     
     func isVideo(at index: Int) -> Bool {
@@ -123,9 +153,11 @@ class BannerTableViewCell: UITableViewCell {
 
 extension BannerTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        // return banner?.count ?? 0
-        return 10
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -177,7 +209,7 @@ extension BannerTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
 //           }
 //       //
         
-        cell.imageView.image = UIImage.adfwBg1
+        cell.imageView.image = imageBg[indexPath.item]
 
         return cell
     }

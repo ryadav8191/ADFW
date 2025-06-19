@@ -21,8 +21,8 @@ class SpeackerCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     
-        nameLabel.font  = FontManager.font(weight: .semiBold, size: 13)
-        desigationLabel.font  = FontManager.font(weight: .medium, size: 11)
+        nameLabel.font  = FontManager.font(weight: .semiBold, size: 15)
+        desigationLabel.font  = FontManager.font(weight: .medium, size: 12)
         
 //        nameLabel.numberOfLines = 0
 //        desigationLabel.numberOfLines = 0

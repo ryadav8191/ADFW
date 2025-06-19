@@ -109,18 +109,18 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configure(with: self.arrayOfSession, type: .session)
             
             cell.onClickViewAll = {
-                let story = UIStoryboard(name: "Main", bundle: nil)
-                let vc  = story.instantiateViewController(identifier: "MajorEventViewController") as! MajorEventViewController
-                self.navigationController?.pushViewController(vc, animated: true)
+//                let story = UIStoryboard(name: "Main", bundle: nil)
+//                let vc  = story.instantiateViewController(identifier: "MajorEventViewController") as! MajorEventViewController
+//                self.navigationController?.pushViewController(vc, animated: true)
+                
+                self.tabBarController?.selectedIndex = 1
             }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "HomeSessionTableViewCell") as! HomeSessionTableViewCell  //AboutAGDMTableViewCell
             cell.delegate = self
             cell.onClickViewAll = {
-                let story = UIStoryboard(name: "Main", bundle: nil)
-                let vc  = story.instantiateViewController(identifier: "MajorEventViewController") as! MajorEventViewController
-                self.navigationController?.pushViewController(vc, animated: true)
+                self.tabBarController?.selectedIndex = 1
             }
             cell.configure(with: [], type: .event) // or .session
             
@@ -196,11 +196,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return self.view.frame.height / 3
+            return self.view.frame.height / 4
         case 3:
             return 350
         case 4:
             return 375
+//        case 5:
+//            return 275
         default: return UITableView.automaticDimension
         }
     }

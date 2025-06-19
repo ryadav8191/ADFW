@@ -43,10 +43,12 @@ class MajorEventCollectionViewCell: UICollectionViewCell {
             titleLabel.textColor = .white
             titleLabel.font = FontManager.font(weight: .semiBold, size: 12)
             containerView.layer.borderWidth = 0
+            containerView.layer.cornerRadius = 1
         } else {
             containerView.backgroundColor = .white
             titleLabel.textColor = UIColor.lightBlue
             containerView.layer.borderWidth = 1
+            containerView.layer.cornerRadius = 1
             titleLabel.font = FontManager.font(weight: .medium, size: 12)
             containerView.layer.borderColor =  UIColor.grayColor.cgColor
         }

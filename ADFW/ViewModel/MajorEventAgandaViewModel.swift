@@ -12,7 +12,7 @@ import UIKit
 class MajorEventAgandaViewModel {
     
     func fetchMajorAgandaData(date: String, page: Int, pageSize: Int = 50, in view: UIView, completion: @escaping (Result<[MajorEventAgandaData], Error>) -> Void) {
-        let urlString = APIEndpoints.getMajorEvent(date: date, isFilter: true)
+        let urlString = APIEndpoints.getMajorEvent()
 
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<MajorEventAgandaModel, Error>) in
             switch result {

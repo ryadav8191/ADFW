@@ -27,16 +27,22 @@ class MajorEventTableViewCell: UITableViewCell {
     @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
     
-    @IBOutlet weak var viewDetailsCons: NSLayoutConstraint!
+    @IBOutlet weak var ViewWebSite: UIButton!
     
+    @IBOutlet weak var viewDetailsCons: NSLayoutConstraint!
     @IBOutlet weak var viewAgandaCons: NSLayoutConstraint!
     
     weak var delegate: HomeSessionTableViewCellDelegate?
-
+    
+    
+    @IBOutlet weak var stackViewHeightConst: NSLayoutConstraint!
+    
+    @IBOutlet weak var stackViewTopConst: NSLayoutConstraint!
     
     var tags: [EventTagModel] = []
     var viewAganda: (() -> Void)?
     var viewDetail: (() -> Void)?
+    var viewWebSite: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -90,6 +96,11 @@ class MajorEventTableViewCell: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+            super.prepareForReuse()
+        bannerimageView.image = nil
+        }
+    
 
     
     func configure(with item: Agendas?) {
@@ -98,10 +109,25 @@ class MajorEventTableViewCell: UITableViewCell {
             descrtion.text = data.description
             bannerimageView.image = nil
             if let urlString = data.image, let url = URL(string: urlString) {
-                bannerimageView.kf.setImage(
-                    with: url,
-                    placeholder: UIImage(named: "placeholder")
-                )
+                bannerimageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder")) { [weak self] result in
+                    switch result {
+                    case .success:
+                        self?.bannerimageView.invalidateIntrinsicContentSize()
+                        self?.setNeedsLayout()
+                        self?.layoutIfNeeded()
+                        
+                        // Notify tableView to update the height of this cell
+                        if let tableView = self?.superview as? UITableView {
+                            if let indexPath = tableView.indexPath(for: self!) {
+                                tableView.reloadRows(at: [indexPath], with: .none)
+                            }
+                        }
+                    case .failure(let error):
+                        print("Image load failed: \(error)")
+                    }
+                }
+
+
             } else {
                 bannerimageView.image = UIImage(named: "")
             }
@@ -122,14 +148,32 @@ class MajorEventTableViewCell: UITableViewCell {
                 //viewDetailsCons.constant = 0
             }
             
+            if data.viewWebsite ?? false {
+                ViewWebSite.isHidden = false
+               // viewDetailsCons.constant = 32
+            } else {
+                ViewWebSite.isHidden = true
+                //viewDetailsCons.constant = 0
+            }
+            
+            if !(data.viewWebsite ?? false) && !(data.viewAgenda ?? false) && !(data.viewDetails ?? false) {
+                stackViewHeightConst.constant = 0
+                stackViewTopConst.constant = 0
+            } else {
+                stackViewHeightConst.constant = 32
+                stackViewTopConst.constant = 16
+            }
             
             ViewAgendaButton.tintColor = UIColor.white
             ViewAgendaButton.backgroundColor = UIColor(hex: data.color ?? "")
+            ViewWebSite.tintColor = UIColor.white
+            ViewWebSite.backgroundColor = UIColor(hex: data.color ?? "")
             ViewDetailButton.tintColor = UIColor(hex: data.color ?? "")
             ViewDetailButton.layer.borderColor = UIColor(hex: data.color ?? "").cgColor
             ViewDetailButton.layer.borderWidth = 1
             
             setButtonTitle(ViewDetailButton, title: "VIEW DETAILS")
+            setButtonTitle(ViewWebSite, title: "VIEW WEBSITE")
             setButtonTitle(ViewAgendaButton, title: "VIEW AGENDA")
 
            
@@ -140,6 +184,8 @@ class MajorEventTableViewCell: UITableViewCell {
                 .init(iconName: nil, title: data.agendaType?.name ?? "", isButton: true, color:  data.color ?? "")
             ]
             
+            
+          
             
             collectionView.reloadData()
             
@@ -188,6 +234,9 @@ class MajorEventTableViewCell: UITableViewCell {
     }
     
     
+    @IBAction func viewWebsiteAction(_ sender: Any) {
+        viewWebSite?()
+    }
     
     
     

@@ -22,6 +22,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7CB-eF-v6n">
                                 <rect key="frame" x="0.0" y="0.0" width="160" height="85"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain"/>
                             </button>
@@ -37,6 +38,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="lnW-vr-1Ka" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="3H7-WG-gqE"/>
                 <constraint firstAttribute="bottom" secondItem="lnW-vr-1Ka" secondAttribute="bottom" id="BjX-wE-SEc"/>

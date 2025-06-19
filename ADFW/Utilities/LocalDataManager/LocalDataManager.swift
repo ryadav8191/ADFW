@@ -13,21 +13,21 @@ class LocalDataManager {
     private static let userDefaultsKey = "loginResponseData"
 
     /// Save login response data  // change
-//    static func saveLoginResponse(_ response: User) {
-//        let encoder = JSONEncoder()
-//        if let encodedData = try? encoder.encode(response) {
-//            UserDefaults.standard.set(encodedData, forKey: userDefaultsKey)
-//        }
-//    }
+    static func saveLoginResponse(_ response: User) {
+        let encoder = JSONEncoder()
+        if let encodedData = try? encoder.encode(response) {
+            UserDefaults.standard.set(encodedData, forKey: userDefaultsKey)
+        }
+    }
   
     /// Retrieve login response data  // change
-//    static func getLoginResponse() -> User? {
-//        guard let savedData = UserDefaults.standard.data(forKey: userDefaultsKey) else {
-//            return nil
-//        }
-//        let decoder = JSONDecoder()
-//        return try? decoder.decode(User.self, from: savedData)
-//    }
+    static func getLoginResponse() -> User? {
+        guard let savedData = UserDefaults.standard.data(forKey: userDefaultsKey) else {
+            return nil
+        }
+        let decoder = JSONDecoder()
+        return try? decoder.decode(User.self, from: savedData)
+    }
 
     
 //    static func updateUserProfileImage(_ imageUrl: String) {

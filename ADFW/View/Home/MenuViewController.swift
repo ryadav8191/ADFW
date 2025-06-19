@@ -41,6 +41,21 @@ class MenuViewController: UIViewController {
         companyLabel.font = FontManager.font(weight: .semiBold, size: 13)
         companyLabel.textColor = UIColor.grayColor
         tableView.showsVerticalScrollIndicator = false
+        
+        nameLabel.text = (LocalDataManager.getLoginResponse()?.firstName ?? "") + " "  + (LocalDataManager.getLoginResponse()?.lastName ?? "")
+        companyLabel.text = LocalDataManager.getLoginResponse()?.designation
+        
+        let photo = LocalDataManager.getLoginResponse()?.photo
+        
+        if let urlString = photo , let photoUrl = URL(string: urlString) {
+            profileImageView.kf.setImage(with: photoUrl, placeholder: UIImage(named: "profile"))
+        } else {
+            profileImageView.image = UIImage(named: "profile")
+        }
+        
+        
+        
+        
       }
     
     func setupMenuItems() {
@@ -60,13 +75,9 @@ class MenuViewController: UIViewController {
     @objc func imageTapped() {
         print("Image tapped!")
 
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        if let profileVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
-//
-//            let navController = UINavigationController(rootViewController: profileVC)
-//            navController.modalPresentationStyle = .fullScreen // optional
-//            self.present(navController, animated: false, completion: nil)
-//        }
+        dismiss(animated: true) {
+            self.delegate?.didSelectMenuItem("ProfileViewController")
+        }
     }
 
 
@@ -182,7 +193,8 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
 
     
     func showSuccessPopupAndNavigate() {
-        guard let rootVC = UIApplication.shared.windows.first?.rootViewController else { return }
+        guard let window = UIApplication.shared.windows.first,
+              let rootVC = window.rootViewController else { return }
 
         // 1. Add Blur View
         let blurEffect = UIBlurEffect(style: .dark)
@@ -195,6 +207,7 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
         // 2. Add Popup
         let popup = SuccessPopupView()
         popup.translatesAutoresizingMaskIntoConstraints = false
+        popup.alpha = 0
         rootVC.view.addSubview(popup)
 
         NSLayoutConstraint.activate([
@@ -210,18 +223,29 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
             popup.alpha = 1
         }
 
-        // 4. Dismiss after delay
+        // 4. Dismiss after delay and navigate to login
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 blurView.alpha = 0
                 popup.alpha = 0
             }) { _ in
                 blurView.removeFromSuperview()
                 popup.removeFromSuperview()
-              /*  self.navigateTo("HomeLandingViewController")*/ // Replace with your actual ID
+                UserDefaults.standard.set(false, forKey: "isLoggedIn")
+                LocalDataManager.clearLoginResponse()
+              
+                let loginVC = UIStoryboard(name: "Main", bundle: nil)
+                    .instantiateViewController(withIdentifier: "LoginViewController")
+
+                let nav = UINavigationController(rootViewController: loginVC)
+                nav.modalPresentationStyle = .fullScreen
+                window.rootViewController = nav
+                window.makeKeyAndVisible()
             }
         }
     }
+
+
 
 
 

@@ -14,12 +14,7 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     private let cardView = UIView()
     private var collectionView: UICollectionView!
 
-     var tags = [
-        "OPENING CEREMONY", "VENTURE STAGE", "ASSET ABU DHABI", "WOMEN IN FINANCE",
-        "T.R.I SUMMIT", "FINTECH ABU DHABI", "R.A.C.E SUSTAINABILITY SUMMIT",
-        "ABU DHABI ECONOMIC FORUM", "GLOBAL FINANCE REGULATORS SUMMIT",
-        "INTERNATIONAL FAMILY OFFICE CONGRESS"
-    ]
+     var tags = [AgandaFilterData]()
     
     var selectedTags = Set<String>()  // Use Set for fast lookup
     weak var delegate: FilterSelectionDelegate?
@@ -54,7 +49,7 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
         NSLayoutConstraint.activate([
             cardView.centerYAnchor.constraint(equalTo: centerYAnchor),
             cardView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            cardView.widthAnchor.constraint(equalToConstant: 400),
+            cardView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9), // 90% of screen width
             cardView.heightAnchor.constraint(equalToConstant: 350)
         ])
 
@@ -70,8 +65,8 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
         cardView.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
-            collectionView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -20),
+            collectionView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
+            collectionView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
             collectionView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16)
         ])
@@ -93,23 +88,23 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.identifier, for: indexPath) as! TagCell
-        let tag = tags[indexPath.item]
+        let tag = tags[indexPath.item].attributes?.title ?? ""
            let isSelected = selectedTags.contains(tag)
-           cell.configure(title: tag, isSelected: isSelected)
+        cell.configure(title: tag, isSelected: isSelected)
            return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text = tags[indexPath.item]
+        let text = tags[indexPath.item].attributes?.title ?? ""
         let font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         let textSize = (text as NSString).size(withAttributes: [.font: font])
-        let width = textSize.width + 10 + 8 + 24 + 12 // dot + space + padding
+        let width = textSize.width + 10 + 8 + 24 + 0 // dot + space + padding
         return CGSize(width: width, height: 34)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let tag = tags[indexPath.item]
+        let tag = tags[indexPath.item].attributes?.title ?? ""
 
         if selectedTags.contains(tag) {
             selectedTags.remove(tag)
@@ -117,7 +112,14 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
             selectedTags.insert(tag)
         }
 
-        collectionView.reloadItems(at: [indexPath])
+        UIView.performWithoutAnimation {
+            collectionView.reloadItems(at: [indexPath])
+        }
+        
+        delegate?.didUpdateSelectedTags(Array(selectedTags))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.removeFromSuperview()
+        }
     }
 
 

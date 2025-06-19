@@ -17,7 +17,7 @@ import UIKit
 
 class PartnerViewModel {
     
-    func fetchPartnerData(page: Int, pageSize: Int = 50, in view: UIView, completion: @escaping (Result<PartnerData, Error>) -> Void) {
+    func fetchPartnerData(page: Int, pageSize: Int = 100, in view: UIView, completion: @escaping (Result<PartnerData, Error>) -> Void) {
         let urlString = APIEndpoints.getAllSponsors(page: page, pageSize: pageSize)
 
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<PartnerModel, Error>) in

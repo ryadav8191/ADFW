@@ -16,8 +16,8 @@ struct Session: Identifiable {
     let time: String
     let location: String
     let bannerImage: String
-    let speakers: [Person]
-    let moderators: [Person]
+    let speakers: [EventAgandaSpeakers]
+    let moderators: EventAgandaSpeakers?
 }
 
 struct Person: Identifiable {

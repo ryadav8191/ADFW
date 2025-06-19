@@ -18,12 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         
-//        if UserDefaults.standard.bool(forKey: "isLoggedIn") {
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let homeVC = storyboard.instantiateViewController(withIdentifier: "CustomTabBarController") as! CustomTabBarController
             window?.rootViewController = homeVC
             window?.makeKeyAndVisible()
-//        }
+       }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

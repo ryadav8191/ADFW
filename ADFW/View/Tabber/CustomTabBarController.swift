@@ -99,10 +99,8 @@ class CustomTabBarController: UITabBarController,UITabBarControllerDelegate {
         
        
         if let navController = viewController as? UINavigationController {
-            // Clear the stack and go to the root view controller
             navController.popToRootViewController(animated: false)
         } else {
-            // If it's not a navigation controller, just return true to select the tab
             return true
         }
         

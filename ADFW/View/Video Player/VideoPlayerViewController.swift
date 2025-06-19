@@ -6,46 +6,80 @@
 //
 
 
+
+import YouTubeiOSPlayerHelper
 import UIKit
-import AVKit
 
-import AVFoundation
+class VideoPlayerViewController: UIViewController, YTPlayerViewDelegate {
 
-class VideoPlayerViewController: AVPlayerViewController, AVPlayerViewControllerDelegate {
-
-    var videoURL: URL?
+    private var playerView: YTPlayerView!
+    var videoID: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // If videoURL was not set externally, set a default
-        if videoURL == nil {
-            videoURL = URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-        }
-        
-        if let url = videoURL {
-            self.player = AVPlayer(url: url)
-            self.player?.play()
-        }
-     
-        self.delegate = self
-    }
+        view.backgroundColor = .black
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
-//        AppUtility.lockOrientation(.landscapeRight)
+        // Lock to landscape immediately
+        AppUtility.lockOrientation(.landscapeRight, andRotateTo: .landscapeRight)
+
+        // Setup YouTube player
+        playerView = YTPlayerView()
+        playerView.delegate = self
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(playerView)
+
+        NSLayoutConstraint.activate([
+            playerView.topAnchor.constraint(equalTo: view.topAnchor),
+            playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
+        let playerVars: [String: Any] = [
+            "playsinline": 0,
+            "autoplay": 1,
+            "modestbranding": 1,
+            "rel": 0,
+            "fs": 1
+        ]
+
+        playerView.load(withVideoId: videoID
+                        , playerVars: playerVars)
+
+        addBackButton()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-       // AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        // Reset to portrait when leaving
+        AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
-    
 
-      func playerViewControllerWillDismiss(_ playerViewController: AVPlayerViewController) {
-         
-        //  AppUtility.lockOrientation(.landscape, andRotateTo: .portrait)
-      }
+    func addBackButton() {
+        let backButton = UIButton(type: .system)
+        backButton.setTitle("✕", for: .normal)
+        backButton.setTitleColor(.white, for: .normal)
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        backButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        backButton.layer.cornerRadius = 25
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.addTarget(self, action: #selector(dismissSelf), for: .touchUpInside)
+        view.addSubview(backButton)
 
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            backButton.widthAnchor.constraint(equalToConstant: 50),
+            backButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    @objc func dismissSelf() {
+        AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        dismiss(animated: true, completion: nil)
+    }
+
+    func playerViewDidBecomeReady(_ playerView: YTPlayerView) {
+        playerView.playVideo()
+    }
 }

@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,7 +37,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIX-09-DV2">
                                 <rect key="frame" x="39" y="33.666666666666664" width="290" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" red="0.0" green="0.14901960784313725" blue="0.27450980392156865" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oja-9i-eeQ">
@@ -49,7 +48,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="cO1-iV-gsV" firstAttribute="top" secondItem="Exz-pZ-MQG" secondAttribute="top" constant="8" id="1Cx-Ag-Zxk"/>
                             <constraint firstItem="cO1-iV-gsV" firstAttribute="width" secondItem="Exz-pZ-MQG" secondAttribute="width" multiplier="0.5" id="2VZ-7E-WyC"/>
@@ -65,6 +64,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="Exz-pZ-MQG" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="8nt-5t-PsS"/>
                     <constraint firstAttribute="trailing" secondItem="Exz-pZ-MQG" secondAttribute="trailing" id="Aqm-Pz-c8N"/>
@@ -73,6 +73,7 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="bottomBorder" destination="Oja-9i-eeQ" id="7xQ-u0-8HK"/>
                 <outlet property="iconImageView" destination="Off-3W-hvQ" id="w6U-Jh-JdE"/>
@@ -82,9 +83,4 @@
             <point key="canvasLocation" x="38.931297709923662" y="35.211267605633807"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

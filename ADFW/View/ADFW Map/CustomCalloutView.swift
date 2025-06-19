@@ -65,9 +65,17 @@ class CustomCalloutView: UIView {
         ])
     }
 
-    func configure(with title: String, subtitle: String, image: UIImage?) {
+   
+
+    func configure(with title: String, subtitle: String, image: String?) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
-        imageView.image = image
+        
+        if let imageUrlString = image, let url = URL(string: imageUrlString) {
+            imageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+        } else {
+            imageView.image = UIImage(named: "placeholder")
+        }
     }
+
 }

@@ -35,12 +35,18 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
         return nib.instantiate(withOwner: nil, options: nil).first as! SpeackerCollectionViewCell
     }()
 
+    var agendaPermaLink: String?
+    
+    var currentPage = 1
+   // var totalPages = 40
+    var isLoading = false
+    var isLastPage = false
     
     //MARK: -- viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        getSpeakerData(search: nil)
+        getSpeakerData(page: self.currentPage, search: nil,agendaPermaLink: agendaPermaLink)
         collectionView.backgroundColor = .white
         
     }
@@ -103,7 +109,7 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
             //     ($0.attributes?.firstName?.lowercased().contains(searchText.lowercased()) ?? false)
             // }
 
-            getSpeakerData(search: searchText)
+            getSpeakerData(page: self.currentPage, search: searchText,agendaPermaLink: agendaPermaLink)
         }
     }
 
@@ -117,7 +123,7 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
     @IBAction func fliterButtonAction(_ sender: Any) {
         let overlay = FilterOverlayView(frame: view.bounds)
            overlay.alpha = 0
-        overlay.tags = self.tag
+       // overlay.tags = self.tag
         overlay.delegate = self
            view.addSubview(overlay)
 
@@ -224,6 +230,16 @@ extension SpeakerViewController: UICollectionViewDataSource,UICollectionViewDele
     }
     
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+
+        if offsetY > contentHeight - frameHeight - 100 {
+            getSpeakerData(page: self.currentPage + 1, search: nil,agendaPermaLink: agendaPermaLink)
+        }
+    }
+    
 }
 
 
@@ -234,25 +250,42 @@ extension SpeakerViewController: UICollectionViewDataSource,UICollectionViewDele
 extension SpeakerViewController {
     
     
-    func getSpeakerData(search: String?) {
-        viewModel.fetchSpeakerData(in: self.view, search: search, completion: { results in
-            switch results {
+    func getSpeakerData(page: Int, search: String?, agendaPermaLink: String? = nil) {
+        guard !isLoading, !isLastPage else { return }
+        isLoading = true
+
+        viewModel.fetchSpeakerData(in: self.view, page: page, search: search, agendaPermaLink: agendaPermaLink) { result in
+            self.isLoading = false
+
+            switch result {
             case .success(let response):
-                print("data",response)
-                self.showNoDataView(false)
-                self.arrayOfSpeaker = response
-                self.filteredItems = response
-                self.uniqueAgendaColors = self.extractUniqueAgendaColors(from: response)
-                self.collectionView.reloadData()
-                                
-            case .failure(let failure):
+                if !response.isEmpty {
+                    if page == 1 {
+                        self.arrayOfSpeaker = response
+                    } else {
+                        self.arrayOfSpeaker += response
+                    }
+
+                    self.filteredItems = self.arrayOfSpeaker
+                    self.uniqueAgendaColors = self.extractUniqueAgendaColors(from: self.arrayOfSpeaker)
+                    self.collectionView.reloadData()
+
+                    self.currentPage = page
+                } else {
+                    self.isLastPage = true
+                    if page == 1 {
+                        self.showNoDataView(true)
+                        MessageHelper.showToast(message: "No speaker data available.", in: self.view)
+                    }
+                }
+
+            case .failure(let error):
                 self.showNoDataView(true)
-                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+                MessageHelper.showToast(message: error.localizedDescription, in: self.view)
             }
-            
-            
-        })
+        }
     }
+
     
     func extractUniqueAgendaColors(from speakers: [SpeakerData]) -> [String: String] {
         var uniqueAgendaColors: [String: String] = [:]

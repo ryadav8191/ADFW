@@ -16,7 +16,12 @@ class HomeSpeakerTableViewCell: UITableViewCell {
     @IBOutlet weak var viewAll: UIButton!
     
     
-    var arrayOfSpeaker = [SpeakerData]()
+    var arrayOfSpeaker = [SpeakerData]() {
+        didSet {
+            collectionview.reloadData()
+        }
+    }
+    
     
     
     var onClickViewAll: (() -> Void)?

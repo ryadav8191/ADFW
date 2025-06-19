@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct SessionOverviewView: View {
-    @StateObject private var viewModel = SessionViewModel()
+     var session: Session?
     @State private var isFavorite = false
     let onBack: () -> Void
 
@@ -32,7 +32,6 @@ struct SessionOverviewView: View {
             Text("Session ") ///Session overview
                 .font(Font(FontManager.font(weight: .semiBold, size: 19)))
             + Text("Overview")
-                .foregroundColor(.blue)
                 .font(Font(FontManager.font(weight: .bold, size: 19)))
                 .foregroundColor(Color(UIColor.blueColor))
             Spacer()
@@ -43,7 +42,7 @@ struct SessionOverviewView: View {
         .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 4)
       //  NavigationView {
             ScrollView {
-                if let session = viewModel.session {
+                if let session = session {
                     VStack(alignment: .leading, spacing: 16) {
 
                         // Date and Favorite
@@ -87,10 +86,26 @@ struct SessionOverviewView: View {
 
 
                         // Banner Image
-                        Image(session.bannerImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                           
+                        if let url = URL(string: session.bannerImage) {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView() // Loading indicator
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                case .failure:
+                                    Image(systemName: "photo") // Fallback image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(.gray)
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
+                        }
+
 
                         // Time and Location
                         HStack(spacing: 12) {
@@ -157,14 +172,14 @@ struct SessionOverviewView: View {
                         }
 
                         // Moderators
-                        if !session.moderators.isEmpty {
+                        if let  data = session.moderators {
                             Text("Moderator")
                                 .font(Font(FontManager.font(weight: .semiBold, size: 19)))
                                 .foregroundColor(Color(UIColor.blueColor))
 
-                            ForEach(session.moderators) { person in
-                                PersonCard(person: person)
-                            }
+//                            ForEach(session.moderators) { person in
+                            PersonCard(person: data)
+//                            }
                         }
                     }
                     .padding()

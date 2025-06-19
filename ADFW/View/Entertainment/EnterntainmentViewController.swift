@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-class EnterntainmentViewController: UIViewController, FilterSelectionDelegate {
+class EnterntainmentViewController: UIViewController, FilterSelectionDelegate, UITextFieldDelegate {
     
     
     
@@ -27,13 +27,16 @@ class EnterntainmentViewController: UIViewController, FilterSelectionDelegate {
     
     var isHeaderCollapsed = false
     private var gradientLayer: CAGradientLayer?
-    var selectedIndex = 0
+    var selectedIndex = -1
     var viewModel = EntertainmentViewModel()
     private let noDataView = NoDataView()
     var entertainments = [Entertainment]()
     var filteredItems = [Entertainment]()
     
-    
+    var currentPage = 1
+    let pageSize = 10
+    var isLoading = false
+    var isLastPage = false
     
     
     //MARK:  viewDidLoad
@@ -52,7 +55,9 @@ class EnterntainmentViewController: UIViewController, FilterSelectionDelegate {
             noDataView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
         noDataView.isHidden = true
-        
+        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchTextChanged(_:)), for: .editingChanged)
+
         //MARK: API Call
         getEnterainmentData()
         
@@ -117,14 +122,33 @@ class EnterntainmentViewController: UIViewController, FilterSelectionDelegate {
         popupVC.modalTransitionStyle = .crossDissolve
 
        
-        popupVC.dates = ["09 DECEMBER", "10 DECEMBER","11 DECEMBER","11 DECEMBER", "12 DECEMBER"]
+        popupVC.dates = self.getAllUniqueDates()
         popupVC.selectedIndex = self.selectedIndex
 
      
         popupVC.onDateSelected = { selectedDate, index in
             print("You selected: \(selectedDate) at index \(index)")
             self.selectedIndex = index
+
+            if selectedDate.isEmpty {
+                // Reset filter if deselected
+                self.entertainments = self.filteredItems
+            } else {
+                self.entertainments = self.filteredItems.compactMap { entertainment in
+                    // Filter each entertainment's artists by selected date
+                    let filteredArtists = entertainment.artists?.filter { $0.date == selectedDate }
+                    if let artists = filteredArtists, !artists.isEmpty {
+                        return Entertainment(banner: entertainment.banner, name: entertainment.name, artists: artists)
+                    } else {
+                        return nil
+                    }
+                }
+            }
+
+            self.tableView.reloadData()
+            self.showNoDataView(self.entertainments.isEmpty)
         }
+
 
         present(popupVC, animated: true)
 
@@ -185,10 +209,10 @@ extension EnterntainmentViewController: UITableViewDelegate,UITableViewDataSourc
      func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
          let headerView = SectionHeaderView()
          if section == 0 {
-             headerView.configure(dateText: self.entertainments.first?.artists?[section].date ?? "", dayText: "Day \(section + 1)", showHeaderView: false, height: self.view.frame.height/3 - 37)
+             headerView.configure(dateText: self.entertainments.first?.artists?[section].date ?? "", dayText: "Day \(section + 1)", showHeaderView: false, height: self.view.frame.height/3 - 37, image: self.entertainments.first?.banner)
          } else {
              
-             headerView.configure(dateText:  self.entertainments.first?.artists?[section].date ?? "", dayText: "Day \(section + 1)", showHeaderView: true, height: self.view.frame.height/3 - 37)
+             headerView.configure(dateText:  self.entertainments.first?.artists?[section].date ?? "", dayText: "Day \(section + 1)", showHeaderView: true, height: self.view.frame.height/3 - 37, image: "")
          }
             return headerView
     }
@@ -215,6 +239,17 @@ extension EnterntainmentViewController: UITableViewDelegate,UITableViewDataSourc
         self.gradientLayer?.frame = self.headerImageView.bounds
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
+
+        if offsetY > contentHeight - height * 1.5 {
+            getEnterainmentData(page: currentPage + 1)
+        }
+    }
+
+    
 }
 
 
@@ -223,33 +258,101 @@ extension EnterntainmentViewController: UITableViewDelegate,UITableViewDataSourc
 extension EnterntainmentViewController {
     
     
-    func getEnterainmentData() {
-        viewModel.fetchEntertainmentData(in: self.view) { result in
+    func getEnterainmentData(page: Int = 1) {
+        guard !isLoading, !isLastPage else { return }
+
+        isLoading = true
+        viewModel.fetchEntertainmentData(page: page, pageSize: pageSize, in: self.view) { result in
+            self.isLoading = false
+
             switch result {
             case .success(let response):
-                print("data:", response)
                 self.showNoDataView(false)
-                
-                if let data = response.entertainments {
-                    self.entertainments = data
-                    self.filteredItems = data
-                    self.tableView.reloadData()
-                } else {
-                    self.showNoDataView(true)
-                    MessageHelper.showToast(message: "No entertainment data available.", in: self.view)
+
+                guard let data = response.entertainments else {
+                    self.isLastPage = true
+                    if self.entertainments.isEmpty {
+                        self.showNoDataView(true)
+                        MessageHelper.showToast(message: "No entertainment data available.", in: self.view)
+                    }
+                    return
                 }
-                
+
+                if data.count < self.pageSize {
+                    self.isLastPage = true
+                }
+
+                if page == 1 {
+                    self.entertainments = data
+                } else {
+                    self.entertainments.append(contentsOf: data)
+                }
+
+                self.filteredItems = self.entertainments
+                self.tableView.reloadData()
+                self.currentPage = page
+
             case .failure(let error):
                 self.showNoDataView(true)
                 MessageHelper.showToast(message: error.localizedDescription, in: self.view)
             }
         }
     }
+  
 
+
+    func getAllUniqueDates() -> [String] {
+        var dateSet = Set<String>()
+        filteredItems.forEach { entertainment in
+            entertainment.artists?.forEach { artist in
+                if let date = artist.date {
+                    dateSet.insert(date)
+                }
+            }
+        }
+        return Array(dateSet).sorted() // sort if needed
+    }
+    
+    
 }
 
 
 
 
+
+extension EnterntainmentViewController {
+    
+    
+    @objc func searchTextChanged(_ textField: UITextField) {
+        guard let query = textField.text?.lowercased(), !query.isEmpty else {
+            self.entertainments = self.filteredItems // Reset
+            self.tableView.reloadData()
+            return
+        }
+
+        self.entertainments = self.filteredItems.compactMap { entertainment in
+            let filteredArtists = entertainment.artists?.compactMap { artist in
+                let filteredShows = artist.shows?.filter {
+                    ($0.name?.lowercased().contains(query) ?? false) ||
+                    ($0.location?.name?.lowercased().contains(query) ?? false)
+                }
+                if let filtered = filteredShows, !filtered.isEmpty {
+                    return Artist(date: artist.date, shows: filtered)
+                }
+                return nil
+            }
+
+            if let artists = filteredArtists, !artists.isEmpty {
+                return Entertainment(banner: entertainment.banner, name: entertainment.name, artists: artists)
+            }
+            return nil
+        }
+
+        self.tableView.reloadData()
+        self.showNoDataView(self.entertainments.isEmpty)
+    }
+
+    
+}
 
 

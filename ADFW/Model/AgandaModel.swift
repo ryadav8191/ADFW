@@ -35,7 +35,7 @@ struct AgandaModel : Codable {
 
 struct EventAgandaData : Codable {
     let date : String?
-    let agendas : [EventAgendas]?
+    var agendas : [EventAgendas]?
 
     enum CodingKeys: String, CodingKey {
 
@@ -53,7 +53,7 @@ struct EventAgandaData : Codable {
 
 struct EventAgendas : Codable {
     let id : Int?
-//    let title : String?
+    let title : String?
 //    let description : String?
     let image : String?
 //    let date : String?
@@ -106,7 +106,7 @@ struct EventAgendas : Codable {
     enum CodingKeys: String, CodingKey {
 
         case id = "id"
-//        case title = "title"
+        case title = "title"
 //        case description = "description"
         case image = "image"
 //        case date = "date"
@@ -160,7 +160,7 @@ struct EventAgendas : Codable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decodeIfPresent(Int.self, forKey: .id)
-//        title = try values.decodeIfPresent(String.self, forKey: .title)
+        title = try values.decodeIfPresent(String.self, forKey: .title)
 //        description = try values.decodeIfPresent(String.self, forKey: .description)
         image = try values.decodeIfPresent(String.self, forKey: .image)
 //        date = try values.decodeIfPresent(String.self, forKey: .date)
@@ -221,7 +221,7 @@ struct Agenda_sessions : Codable {
 //    let date : String?
 //    let image : String?
     let title : String?
-//    let description : String?
+    let description : String?
 //    let isBreak : Bool?
 //    let published : Bool?
     let fromTime : String?
@@ -231,12 +231,12 @@ struct Agenda_sessions : Codable {
 //    let updatedAt : String?
 //    let publishedAt : String?
 //    let is_deleted : Bool?
-//    let video : String?
+    let video : String?
 //    let publishVideo : Bool?
     let speakers : [EventAgandaSpeakers]?
   //  let location : AgandaLocation?
     let sessionType : SessionType?
-//    let moderator : String?
+    let moderator : EventAgandaSpeakers?
 
     enum CodingKeys: String, CodingKey {
 
@@ -245,7 +245,7 @@ struct Agenda_sessions : Codable {
 //        case date = "date"
 //        case image = "image"
         case title = "title"
-//        case description = "description"
+        case description = "description"
 //        case isBreak = "isBreak"
 //        case published = "published"
         case fromTime = "fromTime"
@@ -255,12 +255,12 @@ struct Agenda_sessions : Codable {
 //        case updatedAt = "updatedAt"
 //        case publishedAt = "publishedAt"
 //        case is_deleted = "is_deleted"
-//        case video = "video"
+        case video = "video"
 //        case publishVideo = "publishVideo"
         case speakers = "speakers"
      //   case location = "location"
         case sessionType = "sessionType"
-//        case moderator = "moderator"
+        case moderator = "moderator"
     }
 
     init(from decoder: Decoder) throws {
@@ -270,7 +270,7 @@ struct Agenda_sessions : Codable {
 //        date = try values.decodeIfPresent(String.self, forKey: .date)
 //        image = try values.decodeIfPresent(String.self, forKey: .image)
         title = try values.decodeIfPresent(String.self, forKey: .title)
-//        description = try values.decodeIfPresent(String.self, forKey: .description)
+        description = try values.decodeIfPresent(String.self, forKey: .description)
 //        isBreak = try values.decodeIfPresent(Bool.self, forKey: .isBreak)
 //        published = try values.decodeIfPresent(Bool.self, forKey: .published)
         fromTime = try values.decodeIfPresent(String.self, forKey: .fromTime)
@@ -280,25 +280,25 @@ struct Agenda_sessions : Codable {
 //        updatedAt = try values.decodeIfPresent(String.self, forKey: .updatedAt)
 //        publishedAt = try values.decodeIfPresent(String.self, forKey: .publishedAt)
 //        is_deleted = try values.decodeIfPresent(Bool.self, forKey: .is_deleted)
-//        video = try values.decodeIfPresent(String.self, forKey: .video)
+        video = try values.decodeIfPresent(String.self, forKey: .video)
 //        publishVideo = try values.decodeIfPresent(Bool.self, forKey: .publishVideo)
         speakers = try values.decodeIfPresent([EventAgandaSpeakers].self, forKey: .speakers)
       //  location = try values.decodeIfPresent(AgandaLocation.self, forKey: .location)
         sessionType = try values.decodeIfPresent(SessionType.self, forKey: .sessionType)
-//        moderator = try values.decodeIfPresent(String.self, forKey: .moderator)
+        moderator = try values.decodeIfPresent(EventAgandaSpeakers.self, forKey: .moderator)
     }
 
 }
 
 
-struct EventAgandaSpeakers : Codable {
+struct EventAgandaSpeakers : Codable,Identifiable {
     let id : Int?
-//    let designation : String?
-//    let firstName : String?
-//    let lastName : String?
+    let designation : String?
+    let firstName : String?
+    let lastName : String?
     let photoUrl : String?
 //    let email : String?
-//    let companyName : String?
+    let companyName : String?
 //    let bio : String?
 //    let nationality : String?
 //    let residentCountry : String?
@@ -308,12 +308,12 @@ struct EventAgandaSpeakers : Codable {
     enum CodingKeys: String, CodingKey {
 
         case id = "id"
-//        case designation = "designation"
-//        case firstName = "firstName"
-//        case lastName = "lastName"
+        case designation = "designation"
+        case firstName = "firstName"
+        case lastName = "lastName"
         case photoUrl = "photoUrl"
 //        case email = "email"
-//        case companyName = "companyName"
+        case companyName = "companyName"
 //        case bio = "bio"
 //        case nationality = "nationality"
 //        case residentCountry = "residentCountry"
@@ -324,17 +324,171 @@ struct EventAgandaSpeakers : Codable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decodeIfPresent(Int.self, forKey: .id)
-//        designation = try values.decodeIfPresent(String.self, forKey: .designation)
-//        firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
-//        lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
+        designation = try values.decodeIfPresent(String.self, forKey: .designation)
+        firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
+        lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
         photoUrl = try values.decodeIfPresent(String.self, forKey: .photoUrl)
 //        email = try values.decodeIfPresent(String.self, forKey: .email)
-//        companyName = try values.decodeIfPresent(String.self, forKey: .companyName)
+        companyName = try values.decodeIfPresent(String.self, forKey: .companyName)
 //        bio = try values.decodeIfPresent(String.self, forKey: .bio)
 //        nationality = try values.decodeIfPresent(String.self, forKey: .nationality)
 //        residentCountry = try values.decodeIfPresent(String.self, forKey: .residentCountry)
 //        published = try values.decodeIfPresent(Bool.self, forKey: .published)
 //        social = try values.decodeIfPresent(Bool.self, forKey: .social)
+    }
+
+}
+
+
+struct Moderator : Codable,Identifiable {
+    let id : Int?
+    let designation : String?
+    let photoUrl : String?
+    let firstName : String?
+    let lastName : String?
+//    let email : String?
+    let companyName : String?
+//    let bio : String?
+//    let nationality : String?
+//    let residentCountry : String?
+//    let graduationYear : String?
+//    let uniName : String?
+//    let passportUrl : String?
+//    let phone : String?
+//    let qualification : String?
+//    let emiratesIdBack : String?
+//    let published : Bool?
+//    let is_deleted : Bool?
+//    let createdAt : String?
+//    let updatedAt : String?
+//    let publishedAt : String?
+//    let social : Bool?
+//    let socialDescription : String?
+//    let emiratesIdFront : String?
+//    let countryCode : String?
+//    let emirate : String?
+//    let priority : Int?
+//    let adsff : Int?
+//    let remaining_adsff : Int?
+//    let resolve : Int?
+//    let remaining_resolve : Int?
+//    let executive : Int?
+//    let remaining_executive : Int?
+//    let delegate : Int?
+//    let remaining_delegate : Int?
+//    let general_admission : Int?
+//    let remaining_general_admission : Int?
+//    let asset_abu_dhabi : Int?
+//    let remaining_asset_abu_dhabi : Int?
+//    let fintech_abu_dhabi : Int?
+//    let remaining_fintech_abu_dhabi : Int?
+//    let single_day : Int?
+//    let remaining_single_day : Int?
+//    let password : String?
+//    let remaining_padock_club : Int?
+//    let padock_club : Int?
+//    let mobile_app_photo_url : String?
+
+    enum CodingKeys: String, CodingKey {
+
+        case id = "id"
+        case designation = "designation"
+        case photoUrl = "photoUrl"
+        case firstName = "firstName"
+        case lastName = "lastName"
+//        case email = "email"
+        case companyName = "companyName"
+//        case bio = "bio"
+//        case nationality = "nationality"
+//        case residentCountry = "residentCountry"
+//        case graduationYear = "graduationYear"
+//        case uniName = "uniName"
+//        case passportUrl = "passportUrl"
+//        case phone = "phone"
+//        case qualification = "qualification"
+//        case emiratesIdBack = "emiratesIdBack"
+//        case published = "published"
+//        case is_deleted = "is_deleted"
+//        case createdAt = "createdAt"
+//        case updatedAt = "updatedAt"
+//        case publishedAt = "publishedAt"
+//        case social = "social"
+//        case socialDescription = "socialDescription"
+//        case emiratesIdFront = "emiratesIdFront"
+//        case countryCode = "countryCode"
+//        case emirate = "emirate"
+//        case priority = "priority"
+//        case adsff = "adsff"
+//        case remaining_adsff = "remaining_adsff"
+//        case resolve = "resolve"
+//        case remaining_resolve = "remaining_resolve"
+//        case executive = "executive"
+//        case remaining_executive = "remaining_executive"
+//        case delegate = "delegate"
+//        case remaining_delegate = "remaining_delegate"
+//        case general_admission = "general_admission"
+//        case remaining_general_admission = "remaining_general_admission"
+//        case asset_abu_dhabi = "asset_abu_dhabi"
+//        case remaining_asset_abu_dhabi = "remaining_asset_abu_dhabi"
+//        case fintech_abu_dhabi = "fintech_abu_dhabi"
+//        case remaining_fintech_abu_dhabi = "remaining_fintech_abu_dhabi"
+//        case single_day = "single_day"
+//        case remaining_single_day = "remaining_single_day"
+//        case password = "password"
+//        case remaining_padock_club = "remaining_padock_club"
+//        case padock_club = "padock_club"
+//        case mobile_app_photo_url = "mobile_app_photo_url"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decodeIfPresent(Int.self, forKey: .id)
+        designation = try values.decodeIfPresent(String.self, forKey: .designation)
+        photoUrl = try values.decodeIfPresent(String.self, forKey: .photoUrl)
+        firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
+        lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
+//        email = try values.decodeIfPresent(String.self, forKey: .email)
+        companyName = try values.decodeIfPresent(String.self, forKey: .companyName)
+//        bio = try values.decodeIfPresent(String.self, forKey: .bio)
+//        nationality = try values.decodeIfPresent(String.self, forKey: .nationality)
+//        residentCountry = try values.decodeIfPresent(String.self, forKey: .residentCountry)
+//        graduationYear = try values.decodeIfPresent(String.self, forKey: .graduationYear)
+//        uniName = try values.decodeIfPresent(String.self, forKey: .uniName)
+//        passportUrl = try values.decodeIfPresent(String.self, forKey: .passportUrl)
+//        phone = try values.decodeIfPresent(String.self, forKey: .phone)
+//        qualification = try values.decodeIfPresent(String.self, forKey: .qualification)
+//        emiratesIdBack = try values.decodeIfPresent(String.self, forKey: .emiratesIdBack)
+//        published = try values.decodeIfPresent(Bool.self, forKey: .published)
+//        is_deleted = try values.decodeIfPresent(Bool.self, forKey: .is_deleted)
+//        createdAt = try values.decodeIfPresent(String.self, forKey: .createdAt)
+//        updatedAt = try values.decodeIfPresent(String.self, forKey: .updatedAt)
+//        publishedAt = try values.decodeIfPresent(String.self, forKey: .publishedAt)
+//        social = try values.decodeIfPresent(Bool.self, forKey: .social)
+//        socialDescription = try values.decodeIfPresent(String.self, forKey: .socialDescription)
+//        emiratesIdFront = try values.decodeIfPresent(String.self, forKey: .emiratesIdFront)
+//        countryCode = try values.decodeIfPresent(String.self, forKey: .countryCode)
+//        emirate = try values.decodeIfPresent(String.self, forKey: .emirate)
+//        priority = try values.decodeIfPresent(Int.self, forKey: .priority)
+//        adsff = try values.decodeIfPresent(Int.self, forKey: .adsff)
+//        remaining_adsff = try values.decodeIfPresent(Int.self, forKey: .remaining_adsff)
+//        resolve = try values.decodeIfPresent(Int.self, forKey: .resolve)
+//        remaining_resolve = try values.decodeIfPresent(Int.self, forKey: .remaining_resolve)
+//        executive = try values.decodeIfPresent(Int.self, forKey: .executive)
+//        remaining_executive = try values.decodeIfPresent(Int.self, forKey: .remaining_executive)
+//        delegate = try values.decodeIfPresent(Int.self, forKey: .delegate)
+//        remaining_delegate = try values.decodeIfPresent(Int.self, forKey: .remaining_delegate)
+//        general_admission = try values.decodeIfPresent(Int.self, forKey: .general_admission)
+//        remaining_general_admission = try values.decodeIfPresent(Int.self, forKey: .remaining_general_admission)
+//        asset_abu_dhabi = try values.decodeIfPresent(Int.self, forKey: .asset_abu_dhabi)
+//        remaining_asset_abu_dhabi = try values.decodeIfPresent(Int.self, forKey: .remaining_asset_abu_dhabi)
+//        fintech_abu_dhabi = try values.decodeIfPresent(Int.self, forKey: .fintech_abu_dhabi)
+//        remaining_fintech_abu_dhabi = try values.decodeIfPresent(Int.self, forKey: .remaining_fintech_abu_dhabi)
+//        single_day = try values.decodeIfPresent(Int.self, forKey: .single_day)
+//        remaining_single_day = try values.decodeIfPresent(Int.self, forKey: .remaining_single_day)
+//        password = try values.decodeIfPresent(String.self, forKey: .password)
+//        remaining_padock_club = try values.decodeIfPresent(Int.self, forKey: .remaining_padock_club)
+//        padock_club = try values.decodeIfPresent(Int.self, forKey: .padock_club)
+//        mobile_app_photo_url = try values.decodeIfPresent(String.self, forKey: .mobile_app_photo_url)
     }
 
 }

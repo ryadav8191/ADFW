@@ -24,10 +24,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Txo-nI-Ykp">
-                    <rect key="frame" x="0.0" y="298" width="393" height="256.33333333333326"/>
+                    <rect key="frame" x="0.0" y="308" width="393" height="236"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2B4-vl-u7m">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="256.33333333333331"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="236"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zfm-K4-jkn">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="220"/>
@@ -39,7 +39,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="393" height="220"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Entertainment @ ADFW" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qXg-Ke-1Y9">
-                                                    <rect key="frame" x="8" y="77.333333333333314" width="377" height="21"/>
+                                                    <rect key="frame" x="8" y="77.666666666666686" width="377" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -86,8 +86,8 @@
                                         <constraint firstAttribute="trailing" secondItem="ohN-oL-c9N" secondAttribute="trailing" id="oAz-no-Ns6"/>
                                     </constraints>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5k-4C-bJX">
-                                    <rect key="frame" x="8" y="236" width="377" height="20.333333333333314"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5k-4C-bJX">
+                                    <rect key="frame" x="8" y="236" width="377" height="0.0"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>

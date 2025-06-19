@@ -16,7 +16,7 @@ class DateCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         dateButton.layer.cornerRadius = 4
         dateButton.clipsToBounds = true
-        dateButton.setTitleColor(.systemBlue, for: .normal)
+        dateButton.setTitleColor(.lightBlue, for: .normal)
         dateButton.isUserInteractionEnabled = false
 
     }
@@ -38,7 +38,7 @@ class DateCollectionViewCell: UICollectionViewCell {
         let attributedTitle = NSAttributedString(string: title, attributes: attributes)
         dateButton.setAttributedTitle(attributedTitle, for: .normal)
 
-        dateButton.backgroundColor = isSelected ? .blueColor : .systemGray5
+        dateButton.backgroundColor = isSelected ? .blueColor : UIColor(hex: "#F0F2F5")
     }
 
 

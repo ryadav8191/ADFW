@@ -16,6 +16,8 @@ class OurPartnerTableViewCell: UITableViewCell {
     @IBOutlet weak var leftView: UIView!
     @IBOutlet weak var rightView: UIView!
     
+    @IBOutlet weak var leftSpacer: UIView!
+    @IBOutlet weak var rightSpacer: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -54,38 +56,77 @@ class OurPartnerTableViewCell: UITableViewCell {
 //        }
 //    
     
+//    
+//    func configure(leftImageURL: String?, rightImageURL: String?) {
+//        if let leftURLString = leftImageURL, let rightURLString = rightImageURL,
+//           let leftURL = URL(string: leftURLString), let rightURL = URL(string: rightURLString) {
+//
+//            leftImageView.kf.setImage(with: leftURL, placeholder: UIImage(named: "placeholder"))
+//            rightImageView.kf.setImage(with: rightURL, placeholder: UIImage(named: "placeholder"))
+//
+//            leftView.isHidden = false
+//            rightView.isHidden = false
+//            stackView.alignment = .fill
+//            stackView.distribution = .fillEqually
+//
+//        } else if let onlyURLString = leftImageURL ?? rightImageURL,
+//                  let url = URL(string: onlyURLString) {
+//
+//            leftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+//            leftView.isHidden = false
+//            rightView.isHidden = true
+//            stackView.alignment = .center
+//            stackView.distribution = .fill
+//            setupShadow(for: leftView)
+//            
+//        } else {
+//            // Both URLs are invalid or nil
+//            leftImageView.image = UIImage(named: "person1")
+//            rightImageView.image = nil
+//            leftView.isHidden = false
+//            rightView.isHidden = true
+//        }
+//    }
+
+    
+    
+
+
     
     func configure(leftImageURL: String?, rightImageURL: String?) {
-        if let leftURLString = leftImageURL, let rightURLString = rightImageURL,
-           let leftURL = URL(string: leftURLString), let rightURL = URL(string: rightURLString) {
+        if let leftURLString = leftImageURL,
+           let rightURLString = rightImageURL,
+           let leftURL = URL(string: leftURLString),
+           let rightURL = URL(string: rightURLString) {
 
+            // Two logos
             leftImageView.kf.setImage(with: leftURL, placeholder: UIImage(named: "placeholder"))
             rightImageView.kf.setImage(with: rightURL, placeholder: UIImage(named: "placeholder"))
 
             leftView.isHidden = false
             rightView.isHidden = false
-            stackView.alignment = .fill
-            stackView.distribution = .fillEqually
+            leftSpacer.isHidden = true
+            rightSpacer.isHidden = true
 
         } else if let onlyURLString = leftImageURL ?? rightImageURL,
                   let url = URL(string: onlyURLString) {
 
+            // One logo, centered
             leftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
             leftView.isHidden = false
             rightView.isHidden = true
-            stackView.alignment = .center
-            stackView.distribution = .fill
-            setupShadow(for: leftView)
-            
+            leftSpacer.isHidden = false
+            rightSpacer.isHidden = false
+
         } else {
-            // Both URLs are invalid or nil
-            leftImageView.image = UIImage(named: "person1")
-            rightImageView.image = nil
+            // No valid logo
+            leftImageView.image = UIImage(named: "placeholder")
             leftView.isHidden = false
             rightView.isHidden = true
+            leftSpacer.isHidden = false
+            rightSpacer.isHidden = false
         }
     }
-
     
     private func setupShadow(for view: UIView) {
         view.layer.shadowColor = UIColor(red: 0/255, green: 20/255, blue: 52/255, alpha: 0.1).cgColor

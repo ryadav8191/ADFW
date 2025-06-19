@@ -64,8 +64,8 @@ class SectionHeaderView: UIView {
         addSubview(view)
     }
 
-    func configure(dateText: String, dayText: String, showHeaderView: Bool, height: CGFloat) {
-        let fullText = "\(dateText.uppercased()) – \(dayText.capitalized)"
+    func configure(dateText: String, dayText: String, showHeaderView: Bool, height: CGFloat, image: String?) {
+        let fullText = "\(Helper.formatToDayMonth(from: dateText)?.capitalized ?? "") – \(dayText.capitalized)"
         let attributedString = NSMutableAttributedString(string: fullText)
         attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: dateText.count))
         attributedString.addAttribute(.foregroundColor, value: UIColor.systemPink, range: NSRange(location: fullText.count - dayText.count, length: dayText.count))
@@ -75,6 +75,12 @@ class SectionHeaderView: UIView {
         headerTitleLabel.font = FontManager.font(weight: .semiBold, size: 26)
         headerBodyLabel.font = FontManager.font(weight: .medium, size: 14)
         
+        
+        if let urlString = image , let photoUrl = URL(string: urlString) {
+            headerImageView.kf.setImage(with: photoUrl, placeholder: UIImage(named: "header_background"))
+        } else {
+            headerImageView.image = UIImage(named: "header_background")
+        }
         
 
         if showHeaderView {

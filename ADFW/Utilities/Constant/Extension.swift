@@ -259,3 +259,56 @@ extension UIImage {
             return UIImage(cgImage: cgImage)
         }
 }
+
+
+extension String {
+    func extractYouTubeID() -> String? {
+        // Handle shortened youtu.be URLs
+        if let url = URL(string: self), url.host?.contains("youtu.be") == true {
+            return url.pathComponents.last
+        }
+        
+        // Handle full youtube.com/watch?v= URLs
+        if let components = URLComponents(string: self),
+           let queryItems = components.queryItems {
+            for item in queryItems where item.name == "v" {
+                return item.value
+            }
+        }
+        
+        return nil
+    }
+}
+
+extension UITableView {
+    func snapshotFullTable() -> UIImage? {
+        // Save the current state
+        let originalOffset = contentOffset
+        let originalFrame = frame
+
+        // Calculate the full content size
+        let fullContentSize = contentSize
+        let fullFrame = CGRect(origin: .zero, size: fullContentSize)
+
+        // Create a temporary view
+        let tempTableView = UITableView(frame: fullFrame)
+        tempTableView.dataSource = self.dataSource
+        tempTableView.delegate = self.delegate
+        tempTableView.separatorStyle = .none
+      //  tempTableView.register(UINib(nibName: "AgendaTableViewCell", bundle: nil), forCellReuseIdentifier: "AgendaTableViewCell")  
+        tempTableView.reloadData()
+        tempTableView.layoutIfNeeded()
+
+        // Render the image
+        UIGraphicsBeginImageContextWithOptions(fullContentSize, false, UIScreen.main.scale)
+        tempTableView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        // Restore original state
+        contentOffset = originalOffset
+        frame = originalFrame
+
+        return image
+    }
+}

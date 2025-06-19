@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "location.png",
+      "filename" : "location-pin (2).png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "location-pin (1).png",
       "idiom" : "universal",
       "scale" : "2x"
     },

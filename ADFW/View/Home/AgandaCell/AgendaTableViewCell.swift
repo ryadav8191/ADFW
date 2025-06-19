@@ -20,8 +20,10 @@ class AgendaTableViewCell: UITableViewCell {
     @IBOutlet weak var viewAllLabel: UILabel!
     
     var onPlayVideo: (() -> Void)?
+    var viewDetail: (() -> Void)?
     
-
+    @IBOutlet weak var spakerViewHeightConstraints: NSLayoutConstraint!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -58,20 +60,26 @@ class AgendaTableViewCell: UITableViewCell {
         // Clear old speaker images
         speakerStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         if let speakers = item.speakers {
-            for speaker in speakers {
-                let imageView = UIImageView()
-                imageView.contentMode = .scaleAspectFit
-                imageView.clipsToBounds = true
-                // imageView.layer.cornerRadius = 16
-                imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-                imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
-                // Load image from URL using Kingfisher
-                if let urlString = speaker.photoUrl, let url = URL(string: urlString) {
-                    imageView.kf.setImage(with: url)
-                }
+            if speakers.count > 0 {
+                spakerViewHeightConstraints.constant = 32
+                for speaker in speakers {
+                    let imageView = UIImageView()
+                    imageView.contentMode = .scaleAspectFit
+                    imageView.clipsToBounds = true
+                    // imageView.layer.cornerRadius = 16
+                    imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+                    imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+                    // Load image from URL using Kingfisher
+                    if let urlString = speaker.photoUrl, let url = URL(string: urlString) {
+                        imageView.kf.setImage(with: url)
+                    }
 
-                speakerStackView.addArrangedSubview(imageView)
+                    speakerStackView.addArrangedSubview(imageView)
+                }
+            } else {
+                spakerViewHeightConstraints.constant = 0
             }
+       
         }
 
         
@@ -79,22 +87,16 @@ class AgendaTableViewCell: UITableViewCell {
     
     
     @IBAction func videoButton(_ sender: Any) {
-        
-//        guard let url = URL(string: "https://yourdomain.com/video.mp4") else { return }
-//
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            if let videoVC = storyboard.instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController {
-//                videoVC.videoURL = url
-//                videoVC.modalPresentationStyle = .fullScreen
-//                self.present(videoVC, animated: true)
-//            }
-        
         onPlayVideo?()
         
     }
     
     
     
+    @IBAction func ViewDetailButton(_ sender: Any) {
+        
+        viewDetail?()
+    }
     
     
 }
