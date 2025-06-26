@@ -9,11 +9,13 @@ import UIKit
 import SwiftUI
 
 class NotificationViewController: UIViewController {
+    
+    private let viewModel = NotificationViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let swiftUIView = NotificationView(onBack: { [weak self] in
+        let swiftUIView = NotificationView(viewModel: viewModel, onBack: { [weak self] in
             guard let self = self else { return }
 
             self.navigationController?.popViewController(animated: true)

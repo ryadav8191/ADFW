@@ -14,7 +14,7 @@ struct Locations {
     let subtitle: String
     let latitude: CLLocationDegrees
     let longitude: CLLocationDegrees
-    let imageName: String // Image name in your asset catalog
+    let imageName: String 
 }
 
 // MARK: - ViewController
@@ -26,18 +26,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var calloutView: CustomCalloutView?
     var locations: [Locations] = []
     var viewModel = VenueViewModel()
-
-    // Sample Locations
-//    let locations: [Location] = [
-//        Location(name: "Four Seasons Hotel", subtitle: "View more details", latitude: 25.1972, longitude: 55.2744, imageName: "hotel"),
-//        Location(name: "Capital Square", subtitle: "View more details", latitude: 25.2048, longitude: 55.2708, imageName: "square"),
-//        Location(name: "Falcon Square", subtitle: "View more details", latitude: 25.2100, longitude: 55.2775, imageName: "falcon"),
-//        Location(name: "Inside ADGM", subtitle: "View more details", latitude: 25.2133, longitude: 55.2810, imageName: "adgm"),
-//        Location(name: "Rosewood Hotel", subtitle: "Luxury stay in Al Maryah", latitude: 25.2105, longitude: 55.2819, imageName: "rosewood"),
-//        Location(name: "Jumeirah at Etihad Towers", subtitle: "Modern 5-star hotel", latitude: 25.2022, longitude: 55.2702, imageName: "etihad"),
-//        Location(name: "St. Regis Abu Dhabi", subtitle: "Opulent city views", latitude: 25.2111, longitude: 55.2793, imageName: "stregis"),
-//        Location(name: "The Ritz-Carlton", subtitle: "Waterfront luxury", latitude: 25.2083, longitude: 55.2750, imageName: "ritzcarlton")
-//    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,16 +40,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
 
     // MARK: - Add Annotations
-    func addLocationPins() {
-        for location in locations {
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
-            annotation.title = location.name
-            annotation.subtitle = location.subtitle
-            mapkit.addAnnotation(annotation)
-        }
-    }
-    
     
     func addLocationPins(from venues: [Locations]) {
         self.locations = venues // Make `locations` a var instead of let
@@ -147,5 +125,8 @@ extension MapViewController {
             
         }
     }
+    
+    
+    
 
 }

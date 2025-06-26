@@ -46,6 +46,16 @@ class LocalDataManager {
     }
     
     
+    static func saveId(userId: Int) {
+        UserDefaults.standard.set(userId, forKey: "userId")
+    }
+    
+    static func getUserId() -> Int {
+        return UserDefaults.standard.integer(forKey: "userId")
+    }
+    
+    
+    
 
 }
 

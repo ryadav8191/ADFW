@@ -33,18 +33,19 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Entertainment @ADFW" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="koJ-lA-F0g">
-                                        <rect key="frame" x="10" y="14.666666666666664" width="196" height="21"/>
+                                        <rect key="frame" x="10" y="14.666666666666664" width="176" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OA8-4m-LOz">
-                                        <rect key="frame" x="214" y="12" width="100" height="26"/>
+                                        <rect key="frame" x="194" y="8" width="120" height="34.333333333333336"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="Kne-He-Ce2"/>
+                                            <constraint firstAttribute="width" constant="120" id="Kne-He-Ce2"/>
                                         </constraints>
+                                        <color key="tintColor" red="0.1058823529" green="0.41568627450000001" blue="0.83529411760000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="viewAll"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" title="View All" imagePadding="8"/>
                                         <connections>
                                             <action selector="viewAllButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="PVT-v9-h2J"/>
                                         </connections>
@@ -65,7 +66,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXy-95-bGN">
                                 <rect key="frame" x="0.0" y="78" width="335" height="161"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="adfw_bg 2" translatesAutoresizingMaskIntoConstraints="NO" id="cpv-lF-1Uk">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Entertainment" translatesAutoresizingMaskIntoConstraints="NO" id="cpv-lF-1Uk">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="161"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Bc-wv-83Z">
@@ -114,13 +115,14 @@
                 <outlet property="bgImageView" destination="cpv-lF-1Uk" id="KeX-Lt-PuL"/>
                 <outlet property="enterainmentLabel" destination="koJ-lA-F0g" id="ZKx-1q-eF9"/>
                 <outlet property="entertainbodyLabel" destination="1Bc-wv-83Z" id="akR-bu-aHO"/>
+                <outlet property="viewAllButton" destination="OA8-4m-LOz" id="n0z-Dl-wCX"/>
             </connections>
             <point key="canvasLocation" x="109.16030534351144" y="88.380281690140848"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="adfw_bg 2" width="375" height="291"/>
-        <image name="viewAll" width="70" height="12"/>
+        <image name="Entertainment" width="375" height="220"/>
+        <image name="login_icon" width="11.666666984558105" height="11.666666984558105"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

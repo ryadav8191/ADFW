@@ -48,7 +48,7 @@ class OurPartnerViewController: UIViewController {
         
         
         addSwiftUIView()
-                getPartnerData(page: 1)
+        getPartnerData(page: 1)
         
 
     }

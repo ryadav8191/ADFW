@@ -9,16 +9,18 @@ import UIKit
 import SwiftUI
 
 class FoodMenuViewController: UIViewController {
+    
+    let viewModel = MenuItemsViewModel()
+    var id = 0
 
     override func viewDidLoad() {
             super.viewDidLoad()
 
-            // Create the SwiftUI view
-            let menuView = MenuView()
-
-            // Embed the SwiftUI view using UIHostingController
-            let hostingController = UIHostingController(rootView: menuView)
-
+        viewModel.fetchMenuItems(for: id, in: self.view)
+        let menuView = MenuView(viewModel: viewModel) {
+            self.navigationController?.popViewController(animated: true)
+        }
+        let hostingController = UIHostingController(rootView: menuView)
             // Add as child
             addChild(hostingController)
             hostingController.view.translatesAutoresizingMaskIntoConstraints = false

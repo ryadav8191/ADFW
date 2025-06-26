@@ -15,6 +15,8 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
         print(tags)
     }
     
+    private let spinner = UIActivityIndicatorView(style: .medium)
+
     
     @IBOutlet weak var pageTitle: UILabel!
     @IBOutlet weak var searchTexfield: UITextField!
@@ -27,6 +29,8 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
     private let noDataView = NoDataView()
     var filteredItems: [SpeakerData] = []
     var tag = [String]()
+    private var debounceWorkItem: DispatchWorkItem?
+
     
     var uniqueAgendaColors: [String: String] = [:]
     
@@ -98,20 +102,29 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
         }
     }
     
-    
     @objc func textFieldDidChange() {
         let searchText = searchTexfield.text ?? ""
 
-        if searchText.isEmpty {
-            // filteredItems = arrayOfSpeaker
-        } else {
-            // filteredItems = arrayOfSpeaker.filter {
-            //     ($0.attributes?.firstName?.lowercased().contains(searchText.lowercased()) ?? false)
-            // }
+        debounceWorkItem?.cancel()
 
-            getSpeakerData(page: self.currentPage, search: searchText,agendaPermaLink: agendaPermaLink)
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+
+            self.currentPage = 1
+            self.isLastPage = false
+            self.getSpeakerData(page: 1, search: searchText, agendaPermaLink: self.agendaPermaLink)
         }
+
+        debounceWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
     }
+    
+//    func showTableViewFooterLoader() {
+//        spinner.startAnimating()
+//        tableView.tableFooterView = spinner
+//        tableView.tableFooterView?.frame = CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 44)
+//    }
+
 
     
     @IBAction func backButton(_ sender: Any) {
@@ -236,7 +249,7 @@ extension SpeakerViewController: UICollectionViewDataSource,UICollectionViewDele
         let frameHeight = scrollView.frame.size.height
 
         if offsetY > contentHeight - frameHeight - 100 {
-            getSpeakerData(page: self.currentPage + 1, search: nil,agendaPermaLink: agendaPermaLink)
+            getSpeakerData(page: self.currentPage + 1, search: self.searchTexfield.text,agendaPermaLink: agendaPermaLink)
         }
     }
     
@@ -260,6 +273,8 @@ extension SpeakerViewController {
             switch result {
             case .success(let response):
                 if !response.isEmpty {
+                    self.showNoDataView(false)
+                    
                     if page == 1 {
                         self.arrayOfSpeaker = response
                     } else {
@@ -271,17 +286,26 @@ extension SpeakerViewController {
                     self.collectionView.reloadData()
 
                     self.currentPage = page
+                    self.isLastPage = false // reset flag if new data is found
+
                 } else {
-                    self.isLastPage = true
                     if page == 1 {
+                        // Clear old data on first page
+                        self.arrayOfSpeaker.removeAll()
+                        self.filteredItems.removeAll()
+                        self.uniqueAgendaColors.removeAll()
+                        self.collectionView.reloadData()
+
                         self.showNoDataView(true)
-                        MessageHelper.showToast(message: "No speaker data available.", in: self.view)
+                       // MessageHelper.showToast(message: "No speaker data available.", in: self.view)
+                    } else {
+                        self.isLastPage = true
                     }
                 }
 
             case .failure(let error):
                 self.showNoDataView(true)
-                MessageHelper.showToast(message: error.localizedDescription, in: self.view)
+               // MessageHelper.showToast(message: error.localizedDescription, in: self.view)
             }
         }
     }
@@ -289,8 +313,7 @@ extension SpeakerViewController {
     
     func extractUniqueAgendaColors(from speakers: [SpeakerData]) -> [String: String] {
         var uniqueAgendaColors: [String: String] = [:]
-      
-        
+
         for speaker in speakers {
             guard let sessions = speaker.attributes?.agenda_sessions?.data else { continue }
             

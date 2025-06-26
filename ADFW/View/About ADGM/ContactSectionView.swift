@@ -14,7 +14,7 @@ import SwiftUI
 import SwiftUI
 
 struct ContactSectionView: View {
-    let contactInfo: ContactInfo
+    let contactInfo: [Contact]
     let socialMediaIcons: [String] // Icons should match socialMediaLinks
 
     var body: some View {
@@ -33,26 +33,27 @@ struct ContactSectionView: View {
                 Text("& Support")
                     .foregroundColor(Color(UIColor.blueColor))
                     .font(Font(FontManager.font(weight: .semiBold, size: 19)))
+                
                     
             }
 
             // Address
             VStack(alignment: .leading, spacing: 16) {
-                Text("Address")
+                Text(contactInfo.first?.address?.heading ?? "")
                     .foregroundColor(Color(UIColor.blueColor))
                     .font(Font(FontManager.font(weight: .semiBold, size: 15)))
 
                 VStack(alignment: .leading) {
-                    Text(contactInfo.address)
+                    Text(contactInfo.first?.address?.building ?? "")
                         .foregroundColor(Color(UIColor.lightBlue))
                         .font(Font(FontManager.font(weight: .semiBold, size: 15)))
-                    Text("Al Maryah Island")
+                    Text(contactInfo.first?.address?.location ?? "")
                         .foregroundColor(Color(UIColor.lightBlue))
                         .font(Font(FontManager.font(weight: .medium, size: 15)))
-                    Text("PO Box 111999")
+                    Text(contactInfo.first?.address?.po_box ?? "")
                         .foregroundColor(Color(UIColor.lightBlue))
                         .font(Font(FontManager.font(weight: .medium, size: 15)))
-                    Text("Abu Dhabi, UAE")
+                    Text(contactInfo.first?.address?.city ?? "")
                         .foregroundColor(Color(UIColor.lightBlue))
                         .font(Font(FontManager.font(weight: .medium, size: 15)))
                 }
@@ -60,33 +61,31 @@ struct ContactSectionView: View {
 
             // Hours
             VStack(alignment: .leading, spacing: 16) {
-                Text("General working hours")
+                Text(contactInfo.first?.working_hours?.heading ?? "")
                     .foregroundColor(Color(UIColor.blueColor))
                     .font(Font(FontManager.font(weight: .semiBold, size: 15)))
 
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        ForEach(contactInfo.hours.filter { $0.day.contains("Monday") }, id: \.id) { hour in
-                            Text(hour.day)
+                        
+                        Text(contactInfo.first?.working_hours?.monday_to_thursday?.days ?? "")
                                 .foregroundColor(Color(UIColor.lightBlue))
                                 .font(Font(FontManager.font(weight: .semiBold, size: 15)))
-                            Text(hour.time)
+                        Text(contactInfo.first?.working_hours?.monday_to_thursday?.time ?? "")
                                 .foregroundColor(Color(UIColor.lightBlue))
                                 .font(Font(FontManager.font(weight: .medium, size: 15)))
-                        }
+                    
                     }
 
                     Spacer(minLength: 20)
 
                     VStack(alignment: .leading, spacing: 2) {
-                        ForEach(contactInfo.hours.filter { $0.day.contains("Friday") }, id: \.id) { hour in
-                            Text(hour.day)
+                        Text(contactInfo.first?.working_hours?.friday?.days ?? "")
                                 .foregroundColor(Color(UIColor.lightBlue))
                                 .font(Font(FontManager.font(weight: .semiBold, size: 15)))
-                            Text(hour.time)
+                        Text(contactInfo.first?.working_hours?.friday?.time ?? "")
                                 .foregroundColor(Color(UIColor.lightBlue))
                                 .font(Font(FontManager.font(weight: .medium, size: 15)))
-                        }
                     }
                 }
                 ///.padding(.top, 8)
@@ -94,22 +93,33 @@ struct ContactSectionView: View {
 
             // Social Media
             VStack(alignment: .leading, spacing: 16) {
-                Text("You can find us on social media")
+                Text(contactInfo.first?.social_media?.heading ?? "")
                     .foregroundColor(Color(UIColor.blueColor))
                     .font(Font(FontManager.font(weight: .semiBold, size: 15)))
 
                 HStack(spacing: 16) {
-                    ForEach(Array(zip(contactInfo.socialMediaLinks.indices, contactInfo.socialMediaLinks)), id: \.0) { index, url in
-                        Link(destination: url) {
-                            Image(socialMediaIcons[index])
-                                .resizable()
-                                .scaledToFit()
+                    ForEach(contactInfo.first?.social_media?.platforms ?? [], id: \.img) { platform in
+                        if let linkStr = platform.link,
+                           let url = URL(string: linkStr),
+                           let imageURLStr = platform.img,
+                           let imageURL = URL(string: imageURLStr) {
+
+                            Link(destination: url) {
+                                AsyncImage(url: imageURL) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                } placeholder: {
+                                    ProgressView() // or a default icon/image
+                                }
                                 .frame(width: 24, height: 24)
-                                .foregroundColor(.blue)
+                            }
                         }
                     }
                 }
             }
+
+
         }
         .padding(.top,30)
         .padding(.bottom,30)
@@ -118,3 +128,4 @@ struct ContactSectionView: View {
        
     }
 }
+

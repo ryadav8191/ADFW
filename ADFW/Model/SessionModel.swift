@@ -11,6 +11,7 @@ import SwiftUI
 struct Session: Identifiable {
     let id = UUID()
     let date: String
+    let year: String
     let title: String
     let description: String
     let time: String

@@ -11,7 +11,7 @@ import UIKit
 class InterestViewModel {
     
     func fetchInterests(in view: UIView, completion: @escaping (Result<[InterestData], Error>) -> Void) {
-        let urlString = "https://adfw.multitvsolution.com/api/interests"
+        let urlString = APIEndpoints.getAllInterest
         
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<InterestModel, Error>) in
             switch result {

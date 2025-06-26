@@ -18,21 +18,23 @@ class HomeViewController: UIViewController {
     //MARK: ViewModel
     var viewModel = SpeakerViewModel()
     var homeViewModel = HomeViewModel()
-    
+    var venueViewModel = VenueViewModel()
+    var featuredEventViewModel = FeaturedEventViewModel()
+    var partnerViewModel = PartnerViewModel()
     
     //MARK: Propertise
-    var banner = [BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: ""),BannerData(id: 1, image: "https://picsum.photos/200/300", orderIndex: 1, status: 1, createdAt: "", title: "", slug: "")]
     var arrayOfSpeaker = [SpeakerData]()
     var arrayOfSession = [UpcomingSessionsData]()
     var sideMenu: SideMenuNavigationController?
     private var pendingHeightUpdate: DispatchWorkItem?
-
-    
+    var locations: [Locations] = []
+    var featuredData : [FeaturedEventData]?
+    var partnerData : [Partner]?
+    var homeData: [HomeData]?
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
-        // Instantiate menu view controller from storyboard
         let menuVC = storyboard?.instantiateViewController(identifier: "MenuViewController") as! MenuViewController
         menuVC.delegate = self
         sideMenu = SideMenuNavigationController(rootViewController: menuVC)
@@ -47,6 +49,10 @@ class HomeViewController: UIViewController {
         tableview.showsVerticalScrollIndicator = false
         getSpeakerData(search: "")
         getUpcommigSession()
+        fetchVenueData()
+        fetchFeaturedEvent()
+        getPartnerData(page: 1)
+        getHomeBanner()
     }
     
   
@@ -99,7 +105,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "BannerTableViewCell") as! BannerTableViewCell
-            cell.banner = self.banner
+            cell.banner = self.homeData?.first?.attributes?.mobile_banner
             //  cell.delegate = self
             return cell
             
@@ -122,14 +128,15 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             cell.onClickViewAll = {
                 self.tabBarController?.selectedIndex = 1
             }
-            cell.configure(with: [], type: .event) // or .session
-            
+            cell.configureFeatureEvent(data: self.featuredData ?? [])
+            cell.configure(with: [], type: .event)
             
             return cell
             
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ADFWMapTableViewCell") as! ADFWMapTableViewCell
-            
+            cell.locations = self.locations
+            cell.configureMap()
             return cell
             
             
@@ -150,7 +157,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             
         case 5:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ParterTableViewCell") as! ParterTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
-            
+            cell.partnerData = partnerViewModel.partnerSections
             
             cell.onClickViewAll = {
                 let story = UIStoryboard(name: "Main", bundle: nil)
@@ -207,7 +214,18 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 4 :
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let listVC = storyboard.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController {
+                self.navigationController?.pushViewController(listVC, animated: true)
+            }
+            
+        default:
+            print("hii")
+        }
+    }
     
 }
 
@@ -265,7 +283,8 @@ extension HomeViewController {
     
     
     func getSpeakerData(search: String?) {
-        viewModel.fetchSpeakerLimitData(in: self.view, search: search, completion: { results in
+        viewModel.fetchSpeakerLimitData(in: self.view, search: search, completion: {  [weak self] results in
+            guard let self = self else { return }
             switch results {
             case .success(let response):
                 print("data",response)
@@ -305,5 +324,94 @@ extension HomeViewController {
     }
     
     
+    func fetchVenueData() {
+        venueViewModel.fetchVenueData(in: self.view) { result in
+            switch result {
+            case .success(let venues):
+                self.locations = venues
+//                self.addLocationPins(from: venues)
+//                self.zoomToFitAllAnnotations()
+                self.tableview.reloadData()
+            case .failure(let error):
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
+            }
+        }
+    }
+    
+    func fetchFeaturedEvent() {
+        featuredEventViewModel.fetchAgendas(in: self.view) { result in
+            switch result {
+            case .success(let agendas):
+                self.featuredData = agendas
+                self.tableview.reloadData()
+            case .failure(let error):
+                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+            }
+        }
+    }
+    
+    func getPartnerData(page: Int) {
+
+        partnerViewModel.fetchPartnerData(page: page,pageSize: 100, in: self.view) { result in
+            switch result {
+            case .success(let response):
+                if let partners = response.data, !partners.isEmpty {
+                    //self.partnerData = partners
+                    self.mergePartnerData(partners)
+                    self.tableview.reloadData()
+                } else {
+                MessageHelper.showToast(message: "No partner data available.", in: self.view)
+                }
+            case .failure(let error):
+                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+            }
+        }
+    }
+    
+    func mergePartnerData(_ partners: [Partner]) {
+        var newCategoryDict: [String: String] = [:]
+
+        for partner in partners {
+            guard let label = partner.categories?.label,
+                  let image = partner.websiteImage,
+                  let url = URL(string: image),
+                  !image.isEmpty else {
+                continue
+            }
+
+            // Keep the first logo per category
+            if newCategoryDict[label] == nil {
+                newCategoryDict[label] = image
+            }
+        }
+
+        // Convert to array for table view use
+        let partnerSections = newCategoryDict.map { key, value in
+            PartnerViewModels(title: key, logos: [value])
+        }.sorted { $0.title < $1.title }
+
+        // Assign to data source
+        partnerViewModel.partnerSections = partnerSections
+    }
+
+    
+    func getHomeBanner() {
+        homeViewModel.fetchHomeBannerData(page: 1, in: self.view, completion: { results in
+            switch results {
+            case .success(let response):
+                print("data",response)
+              //  self.showNoDataView(false)
+                self.homeData = response
+                self.tableview.reloadData()
+                                
+            case .failure(let failure):
+                //self.showNoDataView(true)
+                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+            }
+            
+            
+        })
+    }
+
     
 }

@@ -95,16 +95,12 @@ class CustomTabBarController: UITabBarController,UITabBarControllerDelegate {
    
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        
-        
        
         if let navController = viewController as? UINavigationController {
             navController.popToRootViewController(animated: false)
         } else {
             return true
         }
-        
-        
         
         if let index = viewControllers?.firstIndex(of: viewController), index == 4 {
 //               showCategoryPopup()

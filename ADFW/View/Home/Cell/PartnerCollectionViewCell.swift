@@ -18,10 +18,7 @@ class PartnerCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         setupShadow(for: containerView)
-
-        
     }
     
     private func setupShadow(for view: UIView) {

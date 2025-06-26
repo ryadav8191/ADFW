@@ -1,29 +1,29 @@
-////
-////  BannerTableViewCell.swift
-////  MSVC'25 APP
-////
-////  Created by MultiTV on 11/03/25.
-////
+//
+//  BannerTableViewCell.swift
+//  MSVC'25 APP
+//
+//  Created by MultiTV on 11/03/25.
+//
 
 import UIKit
 
 // MARK: - BannerDatum
-struct BannerData: Codable {
-    let id: Int?
-    let image: String?
-    let orderIndex, status: Int?
-    let createdAt: String?
-    let title:String?
-    let slug: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id, image, title
-        case orderIndex = "order_index"
-        case status
-        case slug
-        case createdAt = "created_at"
-    }
-}
+//struct BannerData: Codable {
+//    let id: Int?
+//    let image: String?
+//    let orderIndex, status: Int?
+//    let createdAt: String?
+//    let title:String?
+//    let slug: String?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case id, image, title
+//        case orderIndex = "order_index"
+//        case status
+//        case slug
+//        case createdAt = "created_at"
+//    }
+//}
 
 class BannerTableViewCell: UITableViewCell {
 
@@ -32,24 +32,24 @@ class BannerTableViewCell: UITableViewCell {
     @IBOutlet weak var progressView: UIProgressView!
     
     
-    let imageBg: [UIImage] = [
-        UIImage.foodBanner,
-        UIImage.eventBanner,
-        UIImage.headerBackground,
-        UIImage.foodBanner,
-        UIImage.eventBanner,
-        UIImage.headerBackground,
-        UIImage.foodBanner,
-        UIImage.eventBanner,
-        UIImage.headerBackground
-        ]
+//    let imageBg: [UIImage] = [
+//        UIImage.foodBanner,
+//        //  UIImage.eventBanner,
+//        UIImage.headerBackground,
+//        UIImage.foodBanner,
+//        // UIImage.eventBanner,
+//        UIImage.headerBackground,
+//        UIImage.foodBanner,
+//        //   UIImage.eventBanner,
+//        UIImage.headerBackground
+//    ]
     
     weak var delegate: MyBannerViewCellDelegate?
     
  
     var currentIndex = 0
     var timer: Timer?
-    var banner:[BannerData]?{
+    var banner:[Mobile_banner]?{
         didSet {
             pageControl.numberOfPages = banner?.count ?? 0
                         pageControl.currentPage = 0
@@ -80,7 +80,7 @@ class BannerTableViewCell: UITableViewCell {
              layout.itemSize = collectionView.bounds.size
              collectionView.collectionViewLayout = layout
              collectionView.isPagingEnabled = true
-             collectionView.isScrollEnabled = false
+            collectionView.isScrollEnabled = false
                 collectionView.register(UINib(nibName: "BannerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "BannerCollectionViewCell")
         progressView.progress = 0.0
         startTimers()
@@ -105,11 +105,16 @@ class BannerTableViewCell: UITableViewCell {
  
     
     func showNextImage() {
-        currentIndex = (currentIndex + 1) % imageBg.count
+        guard let banner = self.banner else {return}
+        currentIndex = (currentIndex + 1) % banner.count
 
         if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? BannerCollectionViewCell {
             UIView.transition(with: cell.imageView, duration: 1.0, options: .transitionCrossDissolve, animations: {
-                cell.imageView.image = self.imageBg[self.currentIndex]
+               // cell.imageView.image = banner[self.currentIndex].image_url
+                if  let urlString = banner[self.currentIndex].image_url,
+                      let url = URL(string: urlString) {
+                    cell.imageView.kf.setImage(with: url)
+                   }
             }, completion: nil)
         }
         
@@ -121,7 +126,7 @@ class BannerTableViewCell: UITableViewCell {
                    self.progressView.setProgress(progress, animated: false)
                }
            } else {
-               progress = Float(currentIndex + 1) / Float(imageBg.count)
+               progress = Float(currentIndex + 1) / Float(banner.count)
                progressView.setProgress(progress, animated: true)
            }
     }
@@ -139,14 +144,14 @@ class BannerTableViewCell: UITableViewCell {
        
 
     
-    func isVideo(at index: Int) -> Bool {
-        guard let banner = self.banner,
-              let urlString = banner[index].image,
-              let url = URL(string: urlString) else { return false }
-
-        let ext = url.pathExtension.lowercased()
-        return ext == "mp4" || ext == "mov"
-    }
+//    func isVideo(at index: Int) -> Bool {
+//        guard let banner = self.banner,
+//              let urlString = banner[index].image,
+//              let url = URL(string: urlString) else { return false }
+//
+//        let ext = url.pathExtension.lowercased()
+//        return ext == "mp4" || ext == "mov"
+//    }
 
     
 }
@@ -157,7 +162,7 @@ extension BannerTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        // return banner?.count ?? 0
-        return 1
+       return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -209,7 +214,13 @@ extension BannerTableViewCell: UICollectionViewDataSource, UICollectionViewDeleg
 //           }
 //       //
         
-        cell.imageView.image = imageBg[indexPath.item]
+        
+      
+        if  let urlString = banner?[indexPath.row].image_url,
+              let url = URL(string: urlString) {
+            cell.imageView.kf.setImage(with: url)
+           }
+      
 
         return cell
     }
@@ -282,3 +293,8 @@ extension BannerTableViewCell: UIScrollViewDelegate {
         progressView.setProgress(progress, animated: true)
     }
 }
+
+
+
+
+

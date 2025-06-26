@@ -8,32 +8,35 @@
 import SwiftUICore
 import SwiftUI
 
+import SwiftUI
+
 struct CardsRowView: View {
-    let cards: [CardInfo]
+    let cards: [Banner_content]
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
-                ForEach(cards) { card in
+                ForEach(cards, id: \.title) { card in
                     VStack(alignment: .leading, spacing: 8) {
-                        AsyncImage(url: card.imageURL) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 100)
-                                .clipped()
-                        } placeholder: {
-                            Color.gray.frame(height: 100)
+                        if let imageurl = card.image_url, let url = URL(string: imageurl) {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(height: 100)
+                                    .clipped()
+                            } placeholder: {
+                                Color.gray.frame(height: 100)
+                            }
                         }
-                        
-                        Text(card.title)
-                            .fixedSize(horizontal: false, vertical: true)  //#0088FF
+                     
+                        Text(card.title ?? "")
+                            .fixedSize(horizontal: false, vertical: true)
                             .foregroundColor(Color(UIColor(hex: "#0088FF")))
                             .font(Font(FontManager.font(weight: .semiBold, size: 15)))
                             .lineLimit(1)
                             
-                        
-                        Text(card.description)
+                        Text(card.des ?? "") // ✅ Fix: used `des` instead of `description`
                             .foregroundColor(Color(UIColor.black))
                             .font(Font(FontManager.font(weight: .regular, size: 13)))
                             .fixedSize(horizontal: false, vertical: true)
@@ -46,12 +49,10 @@ struct CardsRowView: View {
                             
                             Image(systemName: "arrow.up.right")
                                 .resizable()
-                                 .foregroundColor(Color(UIColor(hex: "#0088FF")))
-                                 .frame(width: 7, height: 7)
-                                 .padding(.bottom,2)
-                            
+                                .foregroundColor(Color(UIColor(hex: "#0088FF")))
+                                .frame(width: 7, height: 7)
+                                .padding(.bottom,2)
                         }
-                        
                     }
                     .frame(width: 200, alignment: .leading)
                 }
@@ -63,6 +64,8 @@ struct CardsRowView: View {
         .padding(.bottom,30)
     }
 }
+
+
 
 #Preview {
     CardsRowView(cards: [])

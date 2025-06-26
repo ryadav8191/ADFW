@@ -53,19 +53,19 @@ class MenuFooterTableViewCell: UITableViewCell {
        }
 
        @objc func instagramTapped() {
-           openURL?("https://instagram.com/adfw")
+           openURL?("https://www.instagram.com/adfinanceweek/")
        }
 
        @objc func linkedinTapped() {
-           openURL?("https://linkedin.com/company/adfw")
+           openURL?("https://ae.linkedin.com/company/adfw")
        }
 
        @objc func xTapped() {
-           openURL?("https://x.com/adfw")
+           openURL?("https://x.com/ADFinanceWeek")
        }
 
        @objc func youtubeTapped() {
-           openURL?("https://youtube.com/adfw")
+           openURL?("https://www.youtube.com/@adfinanceweek")
        }
     
 }

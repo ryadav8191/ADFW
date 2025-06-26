@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct TicketView: View {
-    @State private var expandedDayID: Int? = nil
+    @State private var expandedDayID: String? = nil
+    @StateObject private var viewModel = TicketViewModel()
+    var ticketNumber: String = LocalDataManager.getLoginResponse()?.ticketNumber ?? ""
     let onBack: () -> Void
 
     var body: some View {
@@ -55,24 +57,24 @@ struct TicketView: View {
                                 .scaledToFit()
                                 .frame(maxWidth: 200, maxHeight: 200)
                                 .padding()
-                            Text("RBQXCW")
+                            Text(LocalDataManager.getLoginResponse()?.ticketNumber ?? "")
                                 .font(Font(FontManager.font(weight: .regular, size: 20)))
                         }
                         .padding(12)
                         .background(Color.white)
 
-                        Text("SINGLE DAY PASS:")
-                            .font(Font(FontManager.font(weight: .semiBold, size: 26)))
-                            .foregroundColor(Color(UIColor.blueColor))
+//                        Text("SINGLE DAY PASS:")
+//                            .font(Font(FontManager.font(weight: .semiBold, size: 26)))
+//                            .foregroundColor(Color(UIColor.blueColor))
 
-                        Text("RESOLVE")
-                            .font(Font(FontManager.font(weight: .semiBold, size: 36)))
-                            .foregroundColor(Color(UIColor.blueColor))
+//                        Text("LocalDataManager.getLoginResponse()?.ticket_id?.title" ?? "")
+//                            .font(Font(FontManager.font(weight: .semiBold, size: 36)))
+//                            .foregroundColor(Color(UIColor.blueColor))
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color(UIColor.blueColor.withAlphaComponent(0.1)))
-                    .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
+                   // .overlay(RoundedRectangle(cornerRadius: 0).stroke(Color.blue, lineWidth: 1))
                     .padding(.horizontal, 16)
 
                     // Ticket Benefits Button
@@ -100,23 +102,23 @@ struct TicketView: View {
                     .padding(.leading, 16)
 
                     // Expandable Event Sections
+                    // Expandable Ticket Benefits Section
                     VStack(spacing: 10) {
-                        ForEach(eventDays) { day in
+                        ForEach(viewModel.ticketDays, id: \.day) { day in
                             VStack(alignment: .leading, spacing: 0) {
                                 // Day Header
                                 Button(action: {
                                     withAnimation {
-                                        expandedDayID = (expandedDayID == day.id) ? nil : day.id
+                                        expandedDayID = (expandedDayID == day.day) ? nil : day.day
                                     }
                                 }) {
                                     HStack {
-                                        Text("Day \(day.id) - \(day.date)")
+                                        Text(day.day ?? "")
                                             .font(Font(FontManager.font(weight: .semiBold, size: 16)))
                                             .foregroundColor(.white)
                                         Spacer()
-                                        Image(expandedDayID == day.id ? "downArrowWhite" : "upArrowWhite") //
+                                        Image(expandedDayID == day.day ? "downArrowWhite" : "upArrowWhite")
                                             .foregroundColor(.white)
-                                            
                                     }
                                     .padding()
                                     .frame(maxWidth: .infinity)
@@ -124,41 +126,45 @@ struct TicketView: View {
                                     .cornerRadius(3)
                                 }
 
-                                // Event List
-                                if expandedDayID == day.id {
+                                // Benefits List
+                                if expandedDayID == day.day {
                                     VStack(alignment: .leading, spacing: 16) {
-                                        ForEach(day.events, id: \.self) { event in
+                                        ForEach(day.benefits ?? [], id: \.id) { benefit in
                                             VStack(alignment: .leading, spacing: 4) {
-                                                Text(event.name)
+                                                Text(benefit.name ?? "")
                                                     .font(Font(FontManager.font(weight: .semiBold, size: 15)))
                                                     .foregroundColor(.black)
 
-                                                HStack(spacing: 4) {
-                                                    Image("geo-alt")
-                                                        .foregroundColor(.blue)
-                                                    Text(event.location)
-                                                        .font(Font(FontManager.font(weight: .medium, size: 15)))
-                                                        .foregroundColor(Color(UIColor.lightBlue))
+                                                if let location = benefit.venue?.name {
+                                                    HStack(spacing: 4) {
+                                                        Image("geo-alt")
+                                                        Text(location)
+                                                            .font(Font(FontManager.font(weight: .medium, size: 15)))
+                                                            .foregroundColor(Color(UIColor.lightBlue))
+                                                    }
                                                 }
                                             }
                                             .padding(.vertical, 8)
                                             .padding(.horizontal)
-                                           // .background(Color.white)
                                         }
                                     }
-                                    //.padding(.horizontal)
                                     .padding(.top, 8)
                                 }
                             }
-                           // .background(Color(UIColor.systemGray6))
-                           // .cornerRadius(8)
                         }
                     }
                     .padding(.horizontal, 16)
+
+                    
                 }
                 .padding(.vertical)
             }
         }
+        .onAppear {
+                   if let window = UIApplication.shared.windows.first {
+                       self.viewModel.load(ticketNumber: ticketNumber, in: window)
+                   }
+               }
         .background(Color.white)
     }
     

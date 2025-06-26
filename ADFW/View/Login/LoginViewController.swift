@@ -99,6 +99,7 @@ class LoginViewController: UIViewController {
                 case .success(let user):
                     
                     LocalDataManager.saveLoginResponse(user)
+                    LocalDataManager.saveId(userId: user.id ?? 0)
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let homeVC = storyboard.instantiateViewController(withIdentifier: "InterestViewController") as! InterestViewController

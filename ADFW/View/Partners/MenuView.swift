@@ -37,91 +37,123 @@ struct MenuView: View {
         ])
     ]
     
+    @ObservedObject var viewModel: MenuItemsViewModel
+    
+    var onBack: () -> Void
+    
     var body: some View {
- //       if #available(iOS 16.0, *) {
- //           NavigationStack {
-        VStack (spacing:0){
-                
-                HStack {
-                    Button(action: {
-                       // onBack()
-                    }) {
-                        Image("back")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 18, height: 18)
-                    }
-                    .frame(width: 50,height: 50)
-                   // .background(.red)
-
-                    Text("Al Meylas")
-                        .font(Font(FontManager.font(weight: .semiBold, size: 19)))
-                        .foregroundColor(.primary)
-
-                    Spacer()
+        VStack(spacing: 0) {
+            
+            // Top bar with back button and menu title
+            HStack(alignment: .center) {
+                Button(action: {
+                    onBack()
+                }) {
+                    Image("back")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 18, height: 18)
                 }
-             
-                Divider()
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Image("foodBanner") // Replace with your image name
+                .frame(width: 50, height: 50)
+                //.background(Color.red)
+                Text(viewModel.menuItems?.name ?? "")
+                    .font(Font(FontManager.font(weight: .semiBold, size: 19)))
+                    .foregroundColor(Color(UIColor.lightBlue))
+                    //.background(Color.blue)
+                Spacer()
+            }
+            
+            Divider()
+            
+            // Content
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    ZStack(alignment: .topLeading) {
+                        Image("foodBanner")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                        //  .frame(height: 180)
-                        
-                        ForEach(sections) { section in
+
+                        // Add logo on top of banner image, leading and vertically centered
+                        VStack {
+                            Spacer()
+                            HStack {
+                                if let logoUrl = viewModel.menuItems?.image1,
+                                   let url = URL(string: logoUrl) {
+                                    AsyncImage(url: url) { image in
+                                        image
+                                            .resizable()
+                                            .frame(width: 120, height: 120)
+                                            .clipShape(Rectangle()) // Optional: Make logo circular
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                } else {
+                                    Image("defaultLogo") // fallback image in Assets
+                                        .resizable()
+                                        .frame(width: 120, height: 120)
+                                        .clipShape(Rectangle())
+                                }
+                                Spacer()
+                            }
+                            Spacer()
+                        }
+                        .padding(.leading, 16)
+                    }
+
+                    
+                    if let menuSections = viewModel.menuItems?.items {
+                        ForEach(menuSections, id: \.category_id) { section in
                             VStack(alignment: .leading, spacing: 8) {
-                                Text(section.title)
+                                Text(section.category_name ?? "")
                                     .font(Font(FontManager.font(weight: .semiBold, size: 22)))
                                     .foregroundColor(Color(UIColor.blueColor))
                                     .padding(.horizontal)
                                 
-                                ForEach(section.items) { item in
+                                ForEach(section.items ?? [], id: \.item_id) { item in
                                     VStack(spacing: 4) {
                                         HStack(alignment: .top) {
                                             VStack(alignment: .leading, spacing: 4) {
-                                                Text(item.name)
+                                                Text(item.item_name ?? "")
                                                     .font(Font(FontManager.font(weight: .medium, size: 14.5)))
                                                     .foregroundColor(Color(UIColor.lightBlue))
-                                                if !item.description.isEmpty {
-                                                    Text(item.description)
+                                                
+                                                if let desc = item.item_description, !desc.isEmpty {
+                                                    Text(desc)
                                                         .font(Font(FontManager.font(weight: .medium, size: 12)))
                                                         .foregroundColor(Color(UIColor.lightGray))
                                                 }
                                             }
                                             Spacer()
-                                            Text(item.price)
-                                                .font(Font(FontManager.font(weight: .semiBold, size: 14.5)))
-                                                .foregroundColor(Color(UIColor.lightBlue))
+                                            if let price = item.item_price {
+                                                Text("QAR \(price)")
+                                                    .font(Font(FontManager.font(weight: .semiBold, size: 14.5)))
+                                                    .foregroundColor(Color(UIColor.lightBlue))
+                                            }
                                         }
                                         
                                         Divider()
                                             .frame(height: 1)
                                             .background(Color(UIColor(hex: "#D4D6D9")))
                                             .padding(.vertical, 16)
-                                        
                                     }
                                     .padding(.horizontal)
                                     .padding(.vertical, 8)
                                     .background(Color.white)
                                 }
-                                
-                                
                             }
                         }
+                    } else {
+                        Text("Loading menu...").padding()
                     }
                 }
-//                .navigationBarTitle("Al Meylas", displayMode: .inline)
             }
-//        } else {
-//            // Fallback on earlier versions
-//        }
+        }
     }
+
 }
 
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuView()
-    }
-}
+//struct MenuView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MenuView(viewModel: MenuVonBack: <#() -> Void#>)
+//    }
+//}

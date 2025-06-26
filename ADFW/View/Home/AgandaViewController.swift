@@ -330,9 +330,6 @@ extension AgandaViewController: UICollectionViewDataSource, UICollectionViewDele
            tableView.setContentOffset(.zero, animated: true)
        }
     
-    
-    
-    
 }
 
 
@@ -671,7 +668,7 @@ extension AgandaViewController {
 
                 let vc = storyboard?.instantiateViewController(withIdentifier: "SessionViewController") as! SessionViewController
                 vc.session = Session(
-                    date: Helper.formatToDayFullMonth(from: date) ?? "",
+                    date: Helper.formatToDayFullMonth(from: date) ?? "", year: Helper.extractYear(from: date) ?? "",
                     title: session.title ?? "",
                     description: session.description ?? "",
                     time: "\(session.fromTime ?? "") - \(session.toTime ?? "")",

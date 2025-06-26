@@ -73,7 +73,7 @@ struct User : Codable {
     let publishedAt : String?
     let is_deleted : Bool?
    // let day : UserDay?
-    let orderNumber : String?
+//    let orderNumber : String?
     let emirate : String?
 //    let utm_source : String?
 //    let utm_medium : String?
@@ -84,7 +84,7 @@ struct User : Codable {
     let token : String?
 //    let notes : String?
 //    let tag : String?
-    let badgeCategory : String?
+//    let badgeCategory : String?
 //    let paymentStatus : String?
 //    let allowEmail : Bool?
 //    let subSector : String?
@@ -98,7 +98,7 @@ struct User : Codable {
 //    let openingNight : String?
 //    let isConfirmed : String?
 //    let isSyncEvento : String?
-//    let ticket_id : Ticket_id?
+    let ticket_id : Ticket_id?
 
     enum CodingKeys: String, CodingKey {
 
@@ -122,7 +122,7 @@ struct User : Codable {
         case publishedAt = "publishedAt"
         case is_deleted = "is_deleted"
 //        case day = "day"
-        case orderNumber = "orderNumber"
+//        case orderNumber = "orderNumber"
         case emirate = "emirate"
 //        case utm_source = "utm_source"
 //        case utm_medium = "utm_medium"
@@ -133,7 +133,7 @@ struct User : Codable {
         case token = "token"
 //        case notes = "notes"
 //        case tag = "tag"
-        case badgeCategory = "badgeCategory"
+//        case badgeCategory = "badgeCategory"
 //        case paymentStatus = "paymentStatus"
 //        case allowEmail = "allowEmail"
 //        case subSector = "subSector"
@@ -147,7 +147,7 @@ struct User : Codable {
 //        case openingNight = "openingNight"
 //        case isConfirmed = "isConfirmed"
 //        case isSyncEvento = "isSyncEvento"
-//        case ticket_id = "ticket_id"
+        case ticket_id = "ticket_id"
     }
 
     init(from decoder: Decoder) throws {
@@ -172,7 +172,7 @@ struct User : Codable {
         publishedAt = try values.decodeIfPresent(String.self, forKey: .publishedAt)
         is_deleted = try values.decodeIfPresent(Bool.self, forKey: .is_deleted)
       //  day = try values.decodeIfPresent(UserDay.self, forKey: .day)
-        orderNumber = try values.decodeIfPresent(String.self, forKey: .orderNumber)
+//        orderNumber = try values.decodeIfPresent(String.self, forKey: .orderNumber)
         emirate = try values.decodeIfPresent(String.self, forKey: .emirate)
 //        utm_source = try values.decodeIfPresent(String.self, forKey: .utm_source)
 //        utm_medium = try values.decodeIfPresent(String.self, forKey: .utm_medium)
@@ -183,7 +183,7 @@ struct User : Codable {
         token = try values.decodeIfPresent(String.self, forKey: .token)
 //        notes = try values.decodeIfPresent(String.self, forKey: .notes)
 //        tag = try values.decodeIfPresent(String.self, forKey: .tag)
-        badgeCategory = try values.decodeIfPresent(String.self, forKey: .badgeCategory)
+//        badgeCategory = try values.decodeIfPresent(String.self, forKey: .badgeCategory)
 //        paymentStatus = try values.decodeIfPresent(String.self, forKey: .paymentStatus)
 //        allowEmail = try values.decodeIfPresent(Bool.self, forKey: .allowEmail)
 //        subSector = try values.decodeIfPresent(String.self, forKey: .subSector)
@@ -197,7 +197,7 @@ struct User : Codable {
 //        openingNight = try values.decodeIfPresent(String.self, forKey: .openingNight)
 //        isConfirmed = try values.decodeIfPresent(String.self, forKey: .isConfirmed)
 //        isSyncEvento = try values.decodeIfPresent(String.self, forKey: .isSyncEvento)
-//        ticket_id = try values.decodeIfPresent(Ticket_id.self, forKey: .ticket_id)
+        ticket_id = try values.decodeIfPresent(Ticket_id.self, forKey: .ticket_id)
     }
 
 }
@@ -207,7 +207,7 @@ struct Ticket_id : Codable {
     let title : String?
     let price : Int?
     let reccomented : Bool?
-    let details : Details?
+//    let details : Details?
     let status : Bool?
     let createdAt : String?
     let updatedAt : String?
@@ -215,11 +215,11 @@ struct Ticket_id : Codable {
     let is_deleted : Bool?
     let sold_out : Bool?
     let id_short : String?
-    let days : String?
+//    let days : String?
     let description : String?
     let isPublic : Bool?
     let isSponsor : Bool?
-    let google_tag : Google_tag?
+//    let google_tag : Google_tag?
     let priority : Int?
 
     enum CodingKeys: String, CodingKey {
@@ -228,7 +228,7 @@ struct Ticket_id : Codable {
         case title = "title"
         case price = "price"
         case reccomented = "reccomented"
-        case details = "details"
+//        case details = "details"
         case status = "status"
         case createdAt = "createdAt"
         case updatedAt = "updatedAt"
@@ -236,11 +236,11 @@ struct Ticket_id : Codable {
         case is_deleted = "is_deleted"
         case sold_out = "sold_out"
         case id_short = "id_short"
-        case days = "days"
+//        case days = "days"
         case description = "description"
         case isPublic = "isPublic"
         case isSponsor = "isSponsor"
-        case google_tag = "google_tag"
+//        case google_tag = "google_tag"
         case priority = "priority"
     }
 
@@ -250,7 +250,7 @@ struct Ticket_id : Codable {
         title = try values.decodeIfPresent(String.self, forKey: .title)
         price = try values.decodeIfPresent(Int.self, forKey: .price)
         reccomented = try values.decodeIfPresent(Bool.self, forKey: .reccomented)
-        details = try values.decodeIfPresent(Details.self, forKey: .details)
+//        details = try values.decodeIfPresent(Details.self, forKey: .details)
         status = try values.decodeIfPresent(Bool.self, forKey: .status)
         createdAt = try values.decodeIfPresent(String.self, forKey: .createdAt)
         updatedAt = try values.decodeIfPresent(String.self, forKey: .updatedAt)
@@ -258,56 +258,56 @@ struct Ticket_id : Codable {
         is_deleted = try values.decodeIfPresent(Bool.self, forKey: .is_deleted)
         sold_out = try values.decodeIfPresent(Bool.self, forKey: .sold_out)
         id_short = try values.decodeIfPresent(String.self, forKey: .id_short)
-        days = try values.decodeIfPresent(String.self, forKey: .days)
+//        days = try values.decodeIfPresent(String.self, forKey: .days)
         description = try values.decodeIfPresent(String.self, forKey: .description)
         isPublic = try values.decodeIfPresent(Bool.self, forKey: .isPublic)
         isSponsor = try values.decodeIfPresent(Bool.self, forKey: .isSponsor)
-        google_tag = try values.decodeIfPresent(Google_tag.self, forKey: .google_tag)
+//        google_tag = try values.decodeIfPresent(Google_tag.self, forKey: .google_tag)
         priority = try values.decodeIfPresent(Int.self, forKey: .priority)
     }
 
 }
 
+//
+//struct Details : Codable {
+//    let events : [UserEvents]?
+//
+//    enum CodingKeys: String, CodingKey {
+//
+//        case events = "events"
+//    }
+//
+//    init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        events = try values.decodeIfPresent([UserEvents].self, forKey: .events)
+//    }
+//
+//}
 
-struct Details : Codable {
-    let events : [UserEvents]?
 
-    enum CodingKeys: String, CodingKey {
-
-        case events = "events"
-    }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        events = try values.decodeIfPresent([UserEvents].self, forKey: .events)
-    }
-
-}
-
-
-struct UserEvents : Codable {
-    let id : Int?
-    let name : String?
-    let subEvents : [SubEvents]?
-    let isAvailable : Bool?
-
-    enum CodingKeys: String, CodingKey {
-
-        case id = "id"
-        case name = "name"
-        case subEvents = "subEvents"
-        case isAvailable = "isAvailable"
-    }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = try values.decodeIfPresent(Int.self, forKey: .id)
-        name = try values.decodeIfPresent(String.self, forKey: .name)
-        subEvents = try values.decodeIfPresent([SubEvents].self, forKey: .subEvents)
-        isAvailable = try values.decodeIfPresent(Bool.self, forKey: .isAvailable)
-    }
-
-}
+//struct UserEvents : Codable {
+//    let id : Int?
+//    let name : String?
+//    let subEvents : [SubEvents]?
+//    let isAvailable : Bool?
+//
+//    enum CodingKeys: String, CodingKey {
+//
+//        case id = "id"
+//        case name = "name"
+//        case subEvents = "subEvents"
+//        case isAvailable = "isAvailable"
+//    }
+//
+//    init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        id = try values.decodeIfPresent(Int.self, forKey: .id)
+//        name = try values.decodeIfPresent(String.self, forKey: .name)
+//        subEvents = try values.decodeIfPresent([SubEvents].self, forKey: .subEvents)
+//        isAvailable = try values.decodeIfPresent(Bool.self, forKey: .isAvailable)
+//    }
+//
+//}
 
 
 struct SubEvents : Codable {
@@ -351,23 +351,23 @@ struct Google_tag : Codable {
 }
 
 
-struct UserDay : Codable {
-    let id : String?
-    let event : String?
-    let value : String?
-
-    enum CodingKeys: String, CodingKey {
-
-        case id = "id"
-        case event = "event"
-        case value = "value"
-    }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = try values.decodeIfPresent(String.self, forKey: .id)
-        event = try values.decodeIfPresent(String.self, forKey: .event)
-        value = try values.decodeIfPresent(String.self, forKey: .value)
-    }
-
-}
+//struct UserDay : Codable {
+//    let id : String?
+//    let event : String?
+//    let value : String?
+//
+//    enum CodingKeys: String, CodingKey {
+//
+//        case id = "id"
+//        case event = "event"
+//        case value = "value"
+//    }
+//
+//    init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        id = try values.decodeIfPresent(String.self, forKey: .id)
+//        event = try values.decodeIfPresent(String.self, forKey: .event)
+//        value = try values.decodeIfPresent(String.self, forKey: .value)
+//    }
+//
+//}

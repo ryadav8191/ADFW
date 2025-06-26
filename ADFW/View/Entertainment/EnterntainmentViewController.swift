@@ -63,6 +63,15 @@ class EnterntainmentViewController: UIViewController, FilterSelectionDelegate, U
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if let presented = self.presentedViewController {
+            presented.dismiss(animated: false, completion: nil)
+        }
+    }
+
+    
     
     override func viewDidLayoutSubviews() {
         DispatchQueue.main.async {

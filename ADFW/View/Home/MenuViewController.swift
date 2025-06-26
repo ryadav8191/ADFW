@@ -52,10 +52,6 @@ class MenuViewController: UIViewController {
         } else {
             profileImageView.image = UIImage(named: "profile")
         }
-        
-        
-        
-        
       }
     
     func setupMenuItems() {

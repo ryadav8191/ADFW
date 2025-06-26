@@ -232,7 +232,7 @@ struct Agenda_sessions : Codable {
 //    let publishedAt : String?
 //    let is_deleted : Bool?
     let video : String?
-//    let publishVideo : Bool?
+    let publishVideo : Bool?
     let speakers : [EventAgandaSpeakers]?
   //  let location : AgandaLocation?
     let sessionType : SessionType?
@@ -256,7 +256,7 @@ struct Agenda_sessions : Codable {
 //        case publishedAt = "publishedAt"
 //        case is_deleted = "is_deleted"
         case video = "video"
-//        case publishVideo = "publishVideo"
+        case publishVideo = "publishVideo"
         case speakers = "speakers"
      //   case location = "location"
         case sessionType = "sessionType"
@@ -281,7 +281,7 @@ struct Agenda_sessions : Codable {
 //        publishedAt = try values.decodeIfPresent(String.self, forKey: .publishedAt)
 //        is_deleted = try values.decodeIfPresent(Bool.self, forKey: .is_deleted)
         video = try values.decodeIfPresent(String.self, forKey: .video)
-//        publishVideo = try values.decodeIfPresent(Bool.self, forKey: .publishVideo)
+        publishVideo = try values.decodeIfPresent(Bool.self, forKey: .publishVideo)
         speakers = try values.decodeIfPresent([EventAgandaSpeakers].self, forKey: .speakers)
       //  location = try values.decodeIfPresent(AgandaLocation.self, forKey: .location)
         sessionType = try values.decodeIfPresent(SessionType.self, forKey: .sessionType)

@@ -30,8 +30,10 @@ class HomeSessionTableViewCell: UITableViewCell {
     @IBOutlet weak var verticalView: UIView!
     
     
-
+    @IBOutlet weak var viewAll: UIButton!
+    
     private var items: [UpcomingSessionsData] = []
+    var featuredEvent = [FeaturedEventData]()
     var selectedCell: SelectedCell = .event
     weak var delegate: HomeSessionTableViewCellDelegate?
     
@@ -56,8 +58,21 @@ class HomeSessionTableViewCell: UITableViewCell {
         bgColor.isHidden = selectedCell == .event ? false : true
      
         
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.font(weight: .semiBold, size: 15)
+        ]
+        let attributedTitle = NSAttributedString(string: "View All", attributes: attributes)
+        viewAll.setAttributedTitle(attributedTitle, for: .normal)
+        
         setupCollectionView()
         updateLayoutForSelectedCell()
+        collectionView.reloadData()
+    }
+    
+    
+    func configureFeatureEvent(data: [FeaturedEventData]) {
+        
+        self.featuredEvent = data
         collectionView.reloadData()
     }
 
@@ -94,8 +109,8 @@ class HomeSessionTableViewCell: UITableViewCell {
         
         if selectedCell == .event {
             let layout = CenterLastRowFlowLayout()
-            layout.minimumLineSpacing = 10
-            layout.minimumInteritemSpacing = 10
+            //layout.minimumLineSpacing = 10
+           // layout.minimumInteritemSpacing = 10
             collectionView.setCollectionViewLayout(layout, animated: false)
         } else {
             let layout = UICollectionViewFlowLayout()
@@ -148,7 +163,7 @@ class HomeSessionTableViewCell: UITableViewCell {
 extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  selectedCell == .event ? 10 :  items.count
+        return  selectedCell == .event ? featuredEvent.count :  items.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -166,8 +181,8 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FeatureEventCollectionViewCell", for: indexPath) as? FeatureEventCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            
-            
+            cell.configireUI(image: featuredEvent[indexPath.row].attributes?.image4)
+          
             return cell
         }
     }
@@ -187,7 +202,7 @@ extension HomeSessionTableViewCell: UICollectionViewDelegate, UICollectionViewDa
             let availableWidth = collectionView.bounds.width - totalSpacing
             let itemWidth = floor(availableWidth / itemsPerRow)
             
-            return CGSize(width: itemWidth, height: itemWidth)
+            return CGSize(width: itemWidth, height: 90)
         }
     }
 

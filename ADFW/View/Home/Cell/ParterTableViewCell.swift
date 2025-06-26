@@ -16,13 +16,31 @@ class ParterTableViewCell: UITableViewCell {
     
     var scrollTimer: Timer?
     var currentIndex = 0
-
+    var partnerData = [PartnerViewModels]() {
+        didSet {
+            collectionView.reloadData()
+            if !partnerData.isEmpty {
+                updateTitle(for: 0)
+            }
+        }
+    }
+    
+    @IBOutlet weak var viewDetailButton: UIButton!
+    
     
     var onClickViewAll: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.font(weight: .semiBold, size: 15)
+        ]
+        let attributedTitle = NSAttributedString(string: "View All", attributes: attributes)
+        viewDetailButton.setAttributedTitle(attributedTitle, for: .normal)
+        
+        
         titleLabel.setStyledTextWithLastWordColor(fullText: "Our Partners", lastWordColor: .blueColor)
         headLineLabel.font = FontManager.font(weight: .semiBold, size: 18)
         headLineLabel.textColor = .blueColor
@@ -31,6 +49,8 @@ class ParterTableViewCell: UITableViewCell {
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "PartnerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PartnerCollectionViewCell")
         startAutoScroll()
+        
+        
         
     }
 
@@ -41,10 +61,9 @@ class ParterTableViewCell: UITableViewCell {
     }
     
     func updateTitle(for index: Int) {
-        // Example: update with dynamic content
-        headLineLabel.text = "Partner \(index + 1)" // Or any dynamic logic
+        guard index >= 0, index < partnerData.count else { return }
+        headLineLabel.text = partnerData[index].title
     }
-
     
     
     func startAutoScroll() {
@@ -75,15 +94,19 @@ extension ParterTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return partnerData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PartnerCollectionViewCell", for: indexPath) as? PartnerCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
-        
+        let image = partnerData[indexPath.row].logos.first
+        if let urlString = image , let photoUrl = URL(string: urlString) {
+            cell.partnerImageView.kf.setImage(with: photoUrl, placeholder: UIImage(named: ""))
+        } else {
+            cell.partnerImageView.image = UIImage(named: "")
+        }
         
        return cell
     }

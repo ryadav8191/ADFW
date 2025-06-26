@@ -62,7 +62,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gOh-JT-H6I">
                                 <rect key="frame" x="16" y="78" width="337" height="194"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="foodBanner" translatesAutoresizingMaskIntoConstraints="NO" id="dJx-Y6-ktW">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="adgmPdg" translatesAutoresizingMaskIntoConstraints="NO" id="dJx-Y6-ktW">
                                         <rect key="frame" x="16" y="16" width="305" height="138"/>
                                     </imageView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="22q-G9-tVP">
@@ -148,8 +148,8 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="adgmPdg" width="324.33334350585938" height="180"/>
         <image name="download" width="14.333333015441895" height="14.333333015441895"/>
-        <image name="foodBanner" width="375" height="180"/>
         <image name="viewAll" width="70" height="12"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -32,18 +32,18 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Our Speakers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bde-ZN-wth">
-                                        <rect key="frame" x="10" y="14.666666666666664" width="307" height="21"/>
+                                        <rect key="frame" x="10" y="14.666666666666664" width="277" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csM-5H-hnw">
-                                        <rect key="frame" x="325" y="12" width="100" height="26"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="csM-5H-hnw">
+                                        <rect key="frame" x="295" y="8" width="130" height="34.333333333333336"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="oge-k5-JeJ"/>
+                                            <constraint firstAttribute="width" constant="130" id="oge-k5-JeJ"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="viewAll"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="login_icon" imagePlacement="trailing" title="View All" imagePadding="8"/>
                                         <connections>
                                             <action selector="viewAllAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ACP-l8-YPT"/>
                                         </connections>
@@ -103,6 +103,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="viewAll" width="70" height="12"/>
+        <image name="login_icon" width="11.666666984558105" height="11.666666984558105"/>
     </resources>
 </document>

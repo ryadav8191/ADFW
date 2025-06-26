@@ -18,10 +18,10 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROG-ia-LEA">
-                        <rect key="frame" x="5" y="5" width="136" height="128"/>
+                        <rect key="frame" x="0.0" y="0.0" width="146" height="138"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FeatureEvent" translatesAutoresizingMaskIntoConstraints="NO" id="iWx-oE-nYS">
-                                <rect key="frame" x="0.0" y="0.0" width="136" height="128"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FeatureEvent" translatesAutoresizingMaskIntoConstraints="NO" id="iWx-oE-nYS" customClass="ScaledHeightImageView" customModule="ADFW" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="146" height="138"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -37,12 +37,15 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="ROG-ia-LEA" secondAttribute="bottom" constant="5" id="2lO-uL-lcR"/>
-                <constraint firstItem="ROG-ia-LEA" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="aK5-Pf-hex"/>
-                <constraint firstItem="ROG-ia-LEA" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="paW-VU-tLq"/>
-                <constraint firstAttribute="trailing" secondItem="ROG-ia-LEA" secondAttribute="trailing" constant="5" id="ww8-QC-AC4"/>
+                <constraint firstAttribute="bottom" secondItem="ROG-ia-LEA" secondAttribute="bottom" id="2lO-uL-lcR"/>
+                <constraint firstItem="ROG-ia-LEA" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="aK5-Pf-hex"/>
+                <constraint firstItem="ROG-ia-LEA" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="paW-VU-tLq"/>
+                <constraint firstAttribute="trailing" secondItem="ROG-ia-LEA" secondAttribute="trailing" id="ww8-QC-AC4"/>
             </constraints>
             <size key="customSize" width="146" height="138"/>
+            <connections>
+                <outlet property="featureImageview" destination="iWx-oE-nYS" id="Uwy-PB-Rbv"/>
+            </connections>
             <point key="canvasLocation" x="170.99236641221373" y="50.70422535211268"/>
         </collectionViewCell>
     </objects>

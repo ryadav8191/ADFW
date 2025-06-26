@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		27D60CBEC1830EE156E20A02 /* Pods_ADFW.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A9207E7BB75F4CE5A32B01D /* Pods_ADFW.framework */; };
-		C84D1F7C2E015F7900F4F983 /* FlagPhoneNumber in Frameworks */ = {isa = PBXBuildFile; productRef = C84D1F7B2E015F7900F4F983 /* FlagPhoneNumber */; };
-		C893019E2E01670D007688E3 /* FlagPhoneNumber in Frameworks */ = {isa = PBXBuildFile; productRef = C893019D2E01670D007688E3 /* FlagPhoneNumber */; };
 		C8A23FDE2E016F4500958620 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = C8A23FDD2E016F4500958620 /* CountryPickerView */; };
 		C8B45A452DDCFECF00751FE6 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C8B45A442DDCFECF00751FE6 /* IQKeyboardManagerSwift */; };
 		C8B45BEA2DDD170600751FE6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C8B45BE92DDD170600751FE6 /* Kingfisher */; };
@@ -58,9 +56,7 @@
 				C8DF89842DE671B7004C80B0 /* CHIPageControl in Frameworks */,
 				C8A23FDE2E016F4500958620 /* CountryPickerView in Frameworks */,
 				C8D83A532DEF0D5A009CE0C5 /* FirebaseCore in Frameworks */,
-				C893019E2E01670D007688E3 /* FlagPhoneNumber in Frameworks */,
 				C8B45BEA2DDD170600751FE6 /* Kingfisher in Frameworks */,
-				C84D1F7C2E015F7900F4F983 /* FlagPhoneNumber in Frameworks */,
 				C8D83A552DEF0D5A009CE0C5 /* FirebaseCrashlytics in Frameworks */,
 				27D60CBEC1830EE156E20A02 /* Pods_ADFW.framework in Frameworks */,
 				C8B45A452DDCFECF00751FE6 /* IQKeyboardManagerSwift in Frameworks */,
@@ -163,7 +159,6 @@
 				C8DF89822DE671B7004C80B0 /* XCRemoteSwiftPackageReference "CHIPageControl" */,
 				C8D83A512DEF0D5A009CE0C5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C8DCDB992DF98DD0008C6559 /* XCRemoteSwiftPackageReference "youtube-ios-player-helper" */,
-				C893019C2E01670D007688E3 /* XCRemoteSwiftPackageReference "FlagPhoneNumber" */,
 				C8A23FDC2E016F4500958620 /* XCRemoteSwiftPackageReference "CountryPickerView" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -471,22 +466,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C84D1F7A2E015F7900F4F983 /* XCRemoteSwiftPackageReference "FlagPhoneNumber" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/chronotruck/FlagPhoneNumber";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.0;
-			};
-		};
-		C893019C2E01670D007688E3 /* XCRemoteSwiftPackageReference "FlagPhoneNumber" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/chronotruck/FlagPhoneNumber";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.0;
-			};
-		};
 		C8A23FDC2E016F4500958620 /* XCRemoteSwiftPackageReference "CountryPickerView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kizitonwose/CountryPickerView.git";
@@ -538,16 +517,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C84D1F7B2E015F7900F4F983 /* FlagPhoneNumber */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C84D1F7A2E015F7900F4F983 /* XCRemoteSwiftPackageReference "FlagPhoneNumber" */;
-			productName = FlagPhoneNumber;
-		};
-		C893019D2E01670D007688E3 /* FlagPhoneNumber */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C893019C2E01670D007688E3 /* XCRemoteSwiftPackageReference "FlagPhoneNumber" */;
-			productName = FlagPhoneNumber;
-		};
 		C8A23FDD2E016F4500958620 /* CountryPickerView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C8A23FDC2E016F4500958620 /* XCRemoteSwiftPackageReference "CountryPickerView" */;

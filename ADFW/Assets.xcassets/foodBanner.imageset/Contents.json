@@ -1,11 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "foodBanner.jpg",
+      "filename" : "Group 48096279.jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Group 48096279@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

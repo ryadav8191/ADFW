@@ -22,6 +22,35 @@ class Helper {
         outputFormatter.dateFormat = "d MMM"
         return outputFormatter.string(from: date)
     }
+    
+    static func formattedTimeString(from dateString: String) -> String? {
+        let inputFormatter = ISO8601DateFormatter()
+        inputFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        guard let date = inputFormatter.date(from: dateString) else {
+            return nil
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "hh:mm a"
+        outputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        return outputFormatter.string(from: date)
+    }
+
+    static func formattedDateString(from dateString: String) -> String? {
+        let inputFormatter = ISO8601DateFormatter()
+        inputFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        guard let date = inputFormatter.date(from: dateString) else {
+            return nil
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MMM d"
+        outputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        return outputFormatter.string(from: date)
+    }
+
 
     
     static func extractYear(from dateString: String) -> String? {

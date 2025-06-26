@@ -231,6 +231,7 @@
                 <constraint firstItem="Tpc-2Y-qDU" firstAttribute="width" relation="lessThanOrEqual" secondItem="KGk-i7-Jjw" secondAttribute="width" multiplier="0.5" id="YiY-GI-oJg"/>
             </constraints>
             <connections>
+                <outlet property="agandaTypeImageView" destination="y3g-kX-LJI" id="Wh0-Wd-tdu"/>
                 <outlet property="containerView" destination="JOy-QN-7Um" id="FYn-QX-hyv"/>
                 <outlet property="locationLabel" destination="c9f-wv-my9" id="Oba-cB-HbD"/>
                 <outlet property="spakerViewHeightConstraints" destination="HQc-hQ-lem" id="Go5-5Y-vlD"/>
@@ -238,6 +239,7 @@
                 <outlet property="timeLabel" destination="fKM-6k-xgK" id="iUa-JH-WCi"/>
                 <outlet property="titleLabel" destination="ZnW-hG-RdZ" id="eZo-jY-9t5"/>
                 <outlet property="typeLabel" destination="oEg-jM-f55" id="PBe-5k-7h4"/>
+                <outlet property="vidoePlayerButton" destination="ESR-YP-D8R" id="wMO-gQ-Iu0"/>
                 <outlet property="viewAllLabel" destination="J2W-8x-DCc" id="LAj-fQ-xBG"/>
                 <outlet property="viewDetailsButton" destination="cLP-qe-qDs" id="acM-ot-IfO"/>
             </connections>

@@ -17,6 +17,8 @@ import UIKit
 
 class PartnerViewModel {
     
+    var partnerSections: [PartnerViewModels] = []
+    
     func fetchPartnerData(page: Int, pageSize: Int = 100, in view: UIView, completion: @escaping (Result<PartnerData, Error>) -> Void) {
         let urlString = APIEndpoints.getAllSponsors(page: page, pageSize: pageSize)
 

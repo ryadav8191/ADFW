@@ -12,7 +12,7 @@ import SwiftUI
 // MARK: - Views
 
 struct MainView: View {
-    @StateObject var viewModel = ContentViewModel()
+    @StateObject var viewModel = AboutAdgmsViewModel()
     let onBack: () -> Void
 
     var body: some View {
@@ -42,17 +42,26 @@ struct MainView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    if let header = viewModel.headerInfo {
+                    if let header = viewModel.aboutData {
                         HeaderSectionView(header: header)
+                        CardsRowView(cards: header.banner_content ?? [])
+                        FAQSectionView(faqItems: header.questions ?? [])
+                        EnquirySectionView()
+                        ContactSectionView(contactInfo: header.contact ?? [], socialMediaIcons: ["linkedin", "insta","twitter","youTube"])
+                        
                     }
-                    CardsRowView(cards: viewModel.cards)
-                    FAQSectionView(faqItems: viewModel.faqItems)
-                    EnquirySectionView()
-                    if let contact = viewModel.contactInfo {
-                        ContactSectionView(contactInfo: contact, socialMediaIcons: ["linkedin", "insta","twitter","youTube"])
-                    }
+                    
+                    
+                  
                 }
                
+            }
+        }
+        .onAppear {
+            viewModel.fetchAboutAdgms(in: UIApplication.shared.connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first ?? UIView()) { _ in
+                
             }
         }
     }

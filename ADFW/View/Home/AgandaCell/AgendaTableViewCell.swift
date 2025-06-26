@@ -19,11 +19,17 @@ class AgendaTableViewCell: UITableViewCell {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var viewAllLabel: UILabel!
     
+    
+    @IBOutlet weak var vidoePlayerButton: UIButton!
+    
+    
     var onPlayVideo: (() -> Void)?
     var viewDetail: (() -> Void)?
     
     @IBOutlet weak var spakerViewHeightConstraints: NSLayoutConstraint!
+   
     
+    @IBOutlet weak var agandaTypeImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -56,6 +62,17 @@ class AgendaTableViewCell: UITableViewCell {
         titleLabel.text = item.title
         typeLabel.text = item.sessionType?.name
         locationLabel.text = location
+        
+        if let urlString = item.sessionType?.icon, let url = URL(string: urlString) {
+            agandaTypeImageView.kf.setImage(with: url)
+        }
+        
+        if item.publishVideo ?? false {
+            vidoePlayerButton.isHidden = false
+        } else {
+            vidoePlayerButton.isHidden = true
+        }
+
         
         // Clear old speaker images
         speakerStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }

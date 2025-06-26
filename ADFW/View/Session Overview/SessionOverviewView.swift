@@ -55,7 +55,7 @@ struct SessionOverviewView: View {
                             }
                             
                             HStack {
-                                Text("2026")
+                                Text(session.year)
                                     .font(Font(FontManager.font(weight: .semiBold, size: 16)))
                                     .foregroundColor(Color.black)
                                 Rectangle()

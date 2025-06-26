@@ -50,6 +50,12 @@ class HomeSpeakerTableViewCell: UITableViewCell {
         
         titleLabel.setStyledTextWithLastWordColor(fullText: "Our Speakers", lastWordColor: .blueColor)
         
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.font(weight: .semiBold, size: 15)
+        ]
+        let attributedTitle = NSAttributedString(string: "View All", attributes: attributes)
+        viewAll.setAttributedTitle(attributedTitle, for: .normal)
+        
     }
     
     @IBAction func viewAllAction(_ sender: Any) {

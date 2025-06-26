@@ -24,7 +24,13 @@ class AboutAGDMTableViewCell: UITableViewCell {
         titleLabel.setStyledTextWithLastWordColor(fullText: "About ADGM", lastWordColor: .blueColor)
         titlebodyLabel.font  = FontManager.font(weight: .semiBold, size: 15)
         bodyLabel.font  = FontManager.font(weight: .regular, size: 14)
-        viewDetailButton.titleLabel?.font  = FontManager.font(weight: .semiBold, size: 13)
+      
+       
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: FontManager.font(weight: .semiBold, size: 15)
+        ]
+        let attributedTitle = NSAttributedString(string: "View Details", attributes: attributes)
+        viewDetailButton.setAttributedTitle(attributedTitle, for: .normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

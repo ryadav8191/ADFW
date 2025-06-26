@@ -66,24 +66,17 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IhU-eT-M2f">
                                 <rect key="frame" x="0.0" y="78" width="392" height="207"/>
                                 <subviews>
-                                    <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7V8-Pu-jiE">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7V8-Pu-jiE">
                                         <rect key="frame" x="0.0" y="0.0" width="392" height="207"/>
                                         <standardMapConfiguration key="preferredConfiguration"/>
                                     </mapView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map 1" translatesAutoresizingMaskIntoConstraints="NO" id="Vwt-zC-wC1">
-                                        <rect key="frame" x="0.0" y="0.0" width="392" height="207"/>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Vwt-zC-wC1" secondAttribute="trailing" id="D5t-Ns-WMf"/>
-                                    <constraint firstItem="Vwt-zC-wC1" firstAttribute="top" secondItem="IhU-eT-M2f" secondAttribute="top" id="Ipl-dx-f8L"/>
                                     <constraint firstAttribute="bottom" secondItem="7V8-Pu-jiE" secondAttribute="bottom" id="LpA-nz-Pyy"/>
                                     <constraint firstItem="7V8-Pu-jiE" firstAttribute="leading" secondItem="IhU-eT-M2f" secondAttribute="leading" id="Lqo-W9-ZLW"/>
-                                    <constraint firstAttribute="bottom" secondItem="Vwt-zC-wC1" secondAttribute="bottom" id="Ms1-0b-Wve"/>
                                     <constraint firstItem="7V8-Pu-jiE" firstAttribute="top" secondItem="IhU-eT-M2f" secondAttribute="top" id="bwd-mi-13O"/>
                                     <constraint firstAttribute="trailing" secondItem="7V8-Pu-jiE" secondAttribute="trailing" id="u5V-N0-nfJ"/>
-                                    <constraint firstItem="Vwt-zC-wC1" firstAttribute="leading" secondItem="IhU-eT-M2f" secondAttribute="leading" id="v4R-px-DgT"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -108,7 +101,6 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="bgImageView" destination="Vwt-zC-wC1" id="7zo-h7-kvZ"/>
                 <outlet property="mapKit" destination="7V8-Pu-jiE" id="Ekf-XN-fZa"/>
                 <outlet property="titleLabel" destination="5fk-va-9On" id="Wt0-WX-pYw"/>
                 <outlet property="viewAllButton" destination="zH2-da-hGe" id="ujQ-ce-BWA"/>
@@ -117,7 +109,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="map 1" width="2480" height="1754"/>
         <image name="viewAll" width="70" height="12"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

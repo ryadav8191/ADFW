@@ -52,6 +52,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var countryImageView: UIImageView!
     @IBOutlet weak var dropDown: UIImageView!
     
+    @IBOutlet weak var editView: UIView!
+    @IBOutlet weak var profileView: UIView!
     
     
     var isSwitchOn = false
@@ -61,10 +63,9 @@ class ProfileViewController: UIViewController {
     var viewModel = UpdateUserViewModel()
     var countries: [CountryAttributes] = []
     var countryViewModel =  CountryViewModel()
-    
-    
-    
-    
+
+    private var blurView: UIVisualEffectView?
+
     
     
     
@@ -76,6 +77,14 @@ class ProfileViewController: UIViewController {
         configureUI()
         if let data = LocalDataManager.getLoginResponse() {
             configureData(data: data)
+        }
+        
+        let photo = LocalDataManager.getLoginResponse()?.photo
+        
+        if let urlString = photo , let photoUrl = URL(string: urlString) {
+            profileImageView.kf.setImage(with: photoUrl, placeholder: UIImage(named: "profile"))
+        } else {
+            profileImageView.image = UIImage(named: "profile")
         }
         
         submitButtonTapped()
@@ -180,6 +189,11 @@ class ProfileViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(submitButtonTapped))
         submitButtonView.addGestureRecognizer(tapGesture)
         submitButtonView.isUserInteractionEnabled = true
+        
+        editView.layer.cornerRadius = editView.frame.height / 2
+        
+        profileView.layer.cornerRadius = profileView.frame.height / 2
+            profileView.clipsToBounds = true
         
     }
     
@@ -336,6 +350,28 @@ class ProfileViewController: UIViewController {
            // loginbuttonArrowImageView.tintColor = UIColor.gray
         }
     }
+    
+    func openCamera() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            print("Camera not available")
+            return
+        }
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = self
+        picker.modalPresentationStyle = .overFullScreen
+
+        present(picker, animated: true)
+    }
+
+    func openGallery() {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        picker.modalPresentationStyle = .overFullScreen
+        present(picker, animated: true)
+    }
+
 
     
     
@@ -380,9 +416,49 @@ class ProfileViewController: UIViewController {
                .map { String($0) }
                .joined()
        }
+    
+    func presentImagePickerSheet() {
+        // 1. Create and add blur view
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blur = UIVisualEffectView(effect: blurEffect)
+        blur.frame = view.bounds
+        blur.alpha = 0.6
+        view.addSubview(blur)
+        self.blurView = blur
+        
+        // 2. Setup image picker popup
+        let pickerVC = ImagePickerViewController()
+        pickerVC.modalPresentationStyle = .custom
+        pickerVC.transitioningDelegate = self
+        
+        // 3. Camera action
+        pickerVC.cameraAction = { [weak self] in
+            pickerVC.dismiss(animated: true) {
+                self?.blurView?.removeFromSuperview()
+                self?.blurView = nil
+                self?.openCamera()
+            }
+        }
+        
+        // 4. Gallery action
+        pickerVC.galleryAction = { [weak self] in
+            pickerVC.dismiss(animated: true) {
+                self?.blurView?.removeFromSuperview()
+                self?.blurView = nil
+                self?.openGallery()
+            }
+        }
+        
+        // 5. Blur cleanup
+        pickerVC.onDismiss = { [weak self] in
+            self?.blurView?.removeFromSuperview()
+            self?.blurView = nil
+        }
+        
+        // 6. Present popup
+        present(pickerVC, animated: true)
+    }
 
-    
-    
 
     //MARK: -- Button Action
     @IBAction func backButton(_ sender: Any) {
@@ -392,32 +468,34 @@ class ProfileViewController: UIViewController {
     
     @IBAction func saveButton(_ sender: Any) {
         guard validateFields() else { return }
-        let userId = LocalDataManager.getLoginResponse()?.id ?? 0
+        let userId = LocalDataManager.getUserId()
         let parameters: [String: Any] = [
             "firstName": firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "lastName": lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "email": emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "company": companyTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "designation": designationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
-            "phoneNumber": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
+            //   "phoneNumber": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "mobile": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "countryCode": countryCodeLabel.text ?? "",
-            "emirate": LocalDataManager.getLoginResponse()?.emirate ?? "",
-            "residanceCountry": LocalDataManager.getLoginResponse()?.residanceCountry ?? "",
-            "nationality": LocalDataManager.getLoginResponse()?.nationality ?? "",
-            "sector": LocalDataManager.getLoginResponse()?.sector ?? "",
-            "photo": LocalDataManager.getLoginResponse()?.photo ?? "",
-            "image1": LocalDataManager.getLoginResponse()?.photo ?? "",
-            "ticketNumber": LocalDataManager.getLoginResponse()?.ticketNumber ?? "",
-            "orderNumber": LocalDataManager.getLoginResponse()?.orderNumber ?? "",
-            "ticketType": LocalDataManager.getLoginResponse()?.type ?? "",
-            "badgeCategory": LocalDataManager.getLoginResponse()?.badgeCategory ?? "",
-            //"day": LocalDataManager.getLoginResponse()?.day ?? [:]
+            // "photo": LocalDataManager.getLoginResponse()?.photo ?? "",
+            //"image1": LocalDataManager.getLoginResponse()?.photo ?? "",
+            
         ]
         viewModel.updateUserProfile(userId: userId, parameters: parameters, in: self.view) { result in
             switch result {
-            case .success:
-                MessageHelper.showBanner(message: "Profile updated successfully", status: .success)
+            case .success(let response):
+              
+                if let data = response?.attributes, let id = response?.id {
+                    LocalDataManager.saveLoginResponse(data)
+                    LocalDataManager.saveId(userId: id)
+                    self.configureData(data: data)
+                    MessageHelper.showBanner(message: "Profile updated successfully", status: .success)
+                } else {
+                    MessageHelper.showBanner(message: NetworkError.noData.localizedDescription, status: .error)
+                }
+               
+              
             case .failure(let error):
                 MessageHelper.showBanner(message: error.localizedDescription, status: .error)
 
@@ -428,6 +506,13 @@ class ProfileViewController: UIViewController {
     
     
    
+    @IBAction func updateAction(_ sender: Any) {
+        presentImagePickerSheet()
+    }
+    
+    
+    
+    
 
     
     func fetchCountries() {
@@ -459,44 +544,56 @@ class ProfileViewController: UIViewController {
     @IBAction func checkBoxAction(_ sender: Any) {
         isChecked.toggle()
           updateCheckboxImage()
-        
     }
     
 }
 
+extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage {
+            profileImageView.image = image
+        }
 
-// MARK: - CountryPickerViewDelegate
-extension ProfileViewController: CountryPickerViewDelegate {
-    func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: Country) {
-     
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-            countryPickerView.countryDetailsLabel.font = FontManager.font(weight: .regular, size: 14)
-               }
-        print("Selected country: \(country.name) - \(country.phoneCode)")
+        picker.dismiss(animated: true) { [weak self] in
+            self?.removeBlur()
+        }
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true) { [weak self] in
+            self?.removeBlur()
+        }
+    }
+
+    private func removeBlur() {
+        self.blurView?.removeFromSuperview()
+        self.blurView = nil
     }
 }
 
-// MARK: - CountryPickerViewDataSource (optional)
-extension ProfileViewController: CountryPickerViewDataSource {
-  
-    func showOnlyPreferredCountries(in countryPickerView: CountryPickerView) -> Bool {
-        return false
-    }
-
-    func sectionTitleForPreferredCountries(in countryPickerView: CountryPickerView) -> String? {
-        return "Preferred Countries"
-    }
-
-    func navigationTitle(in countryPickerView: CountryPickerView) -> String? {
-        return "Select Your Country"
+extension ProfileViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController,
+                                presenting: UIViewController?,
+                                source: UIViewController) -> UIPresentationController? {
+        return HalfHeightPresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
 
 
+class HalfHeightPresentationController: UIPresentationController {
 
+    override var frameOfPresentedViewInContainerView: CGRect {
+        guard let containerView = containerView else { return .zero }
+        let height: CGFloat = 200
+        return CGRect(x: 0,
+                      y: containerView.bounds.height - height,
+                      width: containerView.bounds.width,
+                      height: height)
+    }
 
-
-
-
+    override func presentationTransitionWillBegin() {
+        presentedView?.layer.cornerRadius = 20
+        presentedView?.layer.masksToBounds = true
+    }
+}

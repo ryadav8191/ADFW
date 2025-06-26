@@ -19,7 +19,6 @@ class SectionHeaderView: UIView {
     @IBOutlet weak var titleLabel: UILabel!    
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var containerView: UIView!
-    
     @IBOutlet weak var ContainerViewHeightConstraints: NSLayoutConstraint!
     
     private var gradientLayer: CAGradientLayer?

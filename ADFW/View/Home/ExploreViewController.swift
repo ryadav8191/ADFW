@@ -45,4 +45,8 @@ class ExploreViewController: UIViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    
+    
+    
 }

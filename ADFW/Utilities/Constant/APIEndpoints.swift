@@ -10,12 +10,12 @@ import Foundation
 
 struct APIEndpoints {
     static let baseURL = "https://adfw.multitvsolution.com/api/"
-     static private let eventId = "309"
-
+    static private let eventId = "309"
+    
     static var token: String {
         return APITokenManager.token ?? "6646f04e2365d"
     }
-
+    
     static var homepageData: String {
         return "\(baseURL)home_new.php?id=309"
     }
@@ -24,7 +24,7 @@ struct APIEndpoints {
     static var LoginUrl: String {
         return "\(baseURL)user/login/"
     }
-
+    
     static func getFilteredAgendasURL() -> String {
         let query = """
         ?filters[is_deleted]=false\
@@ -36,8 +36,8 @@ struct APIEndpoints {
     }
     
     static  func getAllSponsors(page: Int, pageSize: Int) -> String {
-            return "\(baseURL)sponsor/all?page=\(page)&pageSize=\(pageSize)"
-        }
+        return "\(baseURL)sponsor/all?page=\(page)&pageSize=\(pageSize)"
+    }
     
     static func getHomeSessionURL() -> String {
         let query = """
@@ -51,13 +51,15 @@ struct APIEndpoints {
         
         return baseURL + "agendas/" + query
     }
-
-  
+    
+    
+    
+    
     static var entertainment: String {
         return "\(baseURL)entertainment/findAllByDate"
     }
-
-   
+    
+    
     static func getMajorEvent(date:String, isFilter: Bool) -> String {
         return "\(baseURL)agenda/byDate?isSessionFilter=\(isFilter)&date=\(date)"
     }
@@ -65,7 +67,7 @@ struct APIEndpoints {
     static func getMajorEvent() -> String {
         return "\(baseURL)agenda/byDate"
     }
-
+    
     static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
         var query = ""
         
@@ -78,7 +80,7 @@ struct APIEndpoints {
         } else {
             query = "?date=\(date)"
         }
-    
+        
         return baseURL + "agenda/byDate" + query
     }
     
@@ -110,10 +112,10 @@ struct APIEndpoints {
             let encoded = permaLink.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             query += "&filters[agenda_sessions][agenda][permaLink][$eq]=\(encoded)"
         }
-
+        
         return baseURL + "speakers" + query
     }
-
+    
     
     static func getStaticSpeakerListURL(limit: Int) -> String {
         let query = """
@@ -132,29 +134,78 @@ struct APIEndpoints {
         
         return baseURL + "speakers" + query
     }
-
+    
     static func  getSeatingData(id:Int) -> String {
         return "\(baseURL)seating_plan.php?user_id=\(id)"
     }
-        
- 
-   
-   
+    
+    
+    
+    
     static func getCountry() -> String {
         return "\(baseURL)countries?pagination[limit]=-1"
     }
     
- //   "https://api-prod.adfw.com/api/"
+    //   "https://api-prod.adfw.com/api/"
     
     //"https://api-prod.adfw.com/api/"
     
     static func updateUser(userId: Int) -> String {
-        return "\(baseURL)ticket-user/update/\(userId)"
+        return "\(baseURL)ticket-masters/\(userId)"
     }
     
     
     static var getVenue: String {
         return "\(baseURL)venues?filters[is_deleted]=false&pagination[limit]=-1"
+    }
+    
+    
+    
+    
+    static  func getAllRestaurant(page: Int, pageSize: Int) -> String {
+        return "\(baseURL)restaurant/byLocation?page=\(page)&pageSize=\(pageSize)"
+    }
+    
+    static func fetchItems(forRestaurantId id: Int) -> String {
+        return "\(baseURL)restaurant/findAllItems/\(id)"
+    }
+    
+    
+    // https://api-prod.adfw.com/api/agendas/?populate=*&filters[is_deleted][$eq]=false&sort=priority:asc&filters[major_event]=true&filters[published][$eq]=true&filters[is_deleted]=false
+    
+    
+    static func fetchFeaturedAgendas() -> String {
+        return "\(baseURL)agendas/?populate=*&filters[is_deleted][$eq]=false&sort=priority:asc&filters[major_event]=true&filters[published][$eq]=true"
+    }
+
+    
+   // "https://adfw.multitvsolution.com/api/interests"
+  //  https://adfw.multitvsolution.com/api/interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc
+    
+    static var getAllInterest: String {
+        return "\(baseURL)interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc"
+    }
+    
+    
+    static func fetchTicketBenefits(ticketNumber: String) -> String {
+        return "\(baseURL)ticket-benefit/\(ticketNumber)"
+    }
+    
+    static func fetchNotifications(page: Int, pageSize: Int) -> String {
+            return "\(baseURL)notification/all?page=\(page)&pageSize=\(pageSize)"
+        }
+    
+    //1&pagination[pageSize]=10&sort=createdAt:desc
+    
+    
+    static func getHomeBanner(page: Int, pageSize: Int) -> String {
+        return "\(baseURL)homes?pagination[page]=\(page)&pagination[pageSize]=\(pageSize)&sort=createdAt:desc"
+    }
+    
+    //"https://adfw.multitvsolution.com/api/about-adgms"
+    
+    static var getAboutADGMData: String {
+        return "\(baseURL)about-adgms"
     }
     
 }

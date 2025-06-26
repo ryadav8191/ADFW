@@ -15,7 +15,7 @@ struct GenericAPIResponse: Decodable {
 
 class UpdateUserViewModel {
 
-    func updateUserProfile(userId: Int, parameters: [String: Any], in view: UIView, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func updateUserProfile(userId: Int, parameters: [String: Any], in view: UIView, completion: @escaping (Result<UpdateProfileData?, Error>) -> Void) {
         let urlString = APIEndpoints.updateUser(userId: userId)
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
@@ -24,43 +24,33 @@ class UpdateUserViewModel {
 
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        // Convert parameters to form-urlencoded string
-        let bodyString = parameters.map { key, value in
-            let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            let encodedValue: String
+        // Wrap parameters in a "data" dictionary as shown in your cURL
+        let wrappedParameters = ["data": parameters]
 
-            if let dict = value as? [String: String] {
-                // Flatten nested dictionary as JSON string
-                if let data = try? JSONSerialization.data(withJSONObject: dict),
-                   let jsonString = String(data: data, encoding: .utf8) {
-                    encodedValue = jsonString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-                } else {
-                    encodedValue = ""
-                }
-            } else {
-                encodedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            }
-
-            return "\(encodedKey)=\(encodedValue)"
-        }.joined(separator: "&")
-
-        request.httpBody = bodyString.data(using: .utf8)
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: wrappedParameters, options: [])
+        } catch {
+            print("Failed to serialize JSON: \(error)")
+            completion(.failure(error))
+            return
+        }
 
         // Send the request
-        NetworkManager.shared.sendRequest(request, in: view) { (result: Result<GenericAPIResponse, Error>) in
+        NetworkManager.shared.sendRequest(request, in: view) { (result: Result<UpdateProfileModel, Error>) in
             switch result {
             case .success(let response):
-                if response.status == true {
-                    completion(.success(true))
+                if let data = response.data {
+                    completion(.success(data))
                 } else {
-                    let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: response.message])
-                    completion(.failure(error))
+                   
+                    completion(.failure(NetworkError.noData))
                 }
-            case .failure(let error):
-                completion(.failure(error))
+            case .failure:
+                completion(.failure(NetworkError.custom(message: "Something went wrong")))
             }
         }
     }
+
 }
