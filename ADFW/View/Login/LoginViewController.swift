@@ -103,6 +103,7 @@ class LoginViewController: UIViewController {
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let homeVC = storyboard.instantiateViewController(withIdentifier: "InterestViewController") as! InterestViewController
+                    homeVC.pageType = .LoginInterest
                     self.navigationController?.pushViewController(homeVC, animated: true)
                     
                     MessageHelper.showBanner(message: "Suessessfully login", status: .success)

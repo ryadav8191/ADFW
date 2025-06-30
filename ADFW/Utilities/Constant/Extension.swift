@@ -40,6 +40,14 @@ extension UIView {
 
         self.layer.insertSublayer(gradientLayer, at: 0)
     }
+    
+    func applyBoxShadow() {
+        self.layer.shadowColor = UIColor(hex: "#002646").withAlphaComponent(0.15).cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 4)
+        self.layer.shadowRadius = 5
+        self.layer.shadowOpacity = 1
+        self.layer.masksToBounds = false
+    }
 }
 
 extension UIImageView {
