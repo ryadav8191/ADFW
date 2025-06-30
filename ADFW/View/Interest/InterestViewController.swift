@@ -13,6 +13,11 @@ struct Category {
     var isSelected: Bool
 }
 
+enum InterestType {
+    case HomeInterest
+    case LoginInterest
+}
+
 
 class InterestViewController: UIViewController {
     
@@ -28,24 +33,19 @@ class InterestViewController: UIViewController {
     @IBOutlet weak var collectionHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var mainHeaderContainer: UIView!
+    @IBOutlet weak var navigationBarView: UIView!
+    @IBOutlet weak var pageTitle: UILabel!
+    @IBOutlet weak var navigationTitle: UILabel!
     
-//    private var categories: [Category] = [
-//            .init(title: "Regulation", isSelected: false),
-//            .init(title: "Asset Management", isSelected: false),
-//            .init(title: "Fintech", isSelected: false),
-//            .init(title: "Blockchain & Ai", isSelected: true),
-//            .init(title: "Economy Forum", isSelected: false),
-//            .init(title: "Event - B", isSelected: false),
-//            .init(title: "Setting Up In ADGM", isSelected: true),
-//            .init(title: "Event - C", isSelected: false),
-//            .init(title: "Event - D", isSelected: false),
-//            .init(title: "Sustainable Finance", isSelected: false),
-//            .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false), .init(title: "Roundtable Meeting", isSelected: false),
-//            .init(title: "Roundtable Meeting", isSelected: true)
-//        ]
-//    
+
+    @IBOutlet weak var backgroundImageView: UIImageView!
+    
+    
+    
     var viewModel = InterestViewModel()
     var arrOfInter = [InterestData]()
+    var pageType:InterestType = .HomeInterest
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,6 +100,23 @@ class InterestViewController: UIViewController {
         
         pageHeaderLabel.font = FontManager.font(weight: .semiBold, size: 26)
        // pageHeaderLabel.textColor = UIColor.blueColor
+        
+        switch pageType {
+        case .HomeInterest:
+            
+            mainHeaderContainer.backgroundColor = .white
+            pageTitle.text = ""
+            backgroundImageView.isHidden = true
+            navigationBarView.isHidden = false
+            navigationTitle.font = FontManager.font(weight: .semiBold, size: 19)
+            mainHeaderContainer.applyBoxShadow()
+            
+        case .LoginInterest:
+            mainHeaderContainer.backgroundColor = .clear
+            pageTitle.text = "WELCOME TO THE\nCAPITAL OF CAPITAL"
+            backgroundImageView.isHidden = false
+            navigationBarView.isHidden = true
+        }
         
     }
 

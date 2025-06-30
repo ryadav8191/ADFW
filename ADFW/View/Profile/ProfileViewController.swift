@@ -56,6 +56,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var profileView: UIView!
     @IBOutlet weak var countryCodePicker: UIButton!
     @IBOutlet weak var updateUserProfileButton: UIButton!
+    @IBOutlet weak var mainContainerView: UIView!
     
     
     var isSwitchOn = false
@@ -179,11 +180,13 @@ class ProfileViewController: UIViewController {
         countryCodeLabel.font = FontManager.font(weight: .medium, size: 14)
         countryCodeLabel.textColor = UIColor.blueColor
         
-        customNavigationView.layer.shadowColor = UIColor(hex: "#0000000D").cgColor
-        customNavigationView.layer.shadowOpacity = 0.25
-        customNavigationView.layer.shadowOffset = CGSize(width: 0, height: 3) // bottom only
-        customNavigationView.layer.shadowRadius = 1
-        customNavigationView.layer.masksToBounds = false
+        mainContainerView.layer.shadowColor = UIColor(hex: "#0000000D").cgColor
+        mainContainerView.layer.shadowOpacity = 0.25
+        mainContainerView.layer.shadowOffset = CGSize(width: 0, height: 3) // bottom only
+        mainContainerView.layer.shadowRadius = 1
+        mainContainerView.layer.masksToBounds = false
+        
+       // mainContainerView.applyBoxShadow()
         
         submitButtonView.layer.borderColor = UIColor.grayColor.cgColor
         submitButtonView.layer.borderWidth = 1
