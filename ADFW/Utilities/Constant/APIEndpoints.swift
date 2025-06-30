@@ -68,21 +68,52 @@ struct APIEndpoints {
         return "\(baseURL)agenda/byDate"
     }
     
-    static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
-        var query = ""
+//    static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
+//        var query = ""
+//        
+//        if isSessionFilter {
+//            if let id = id {
+//                query = "?isSessionFilter=true&date=\(date)&id=\(id)"
+//            } else {
+//                query = "?isSessionFilter=true&date=\(date)"
+//            }
+//        } else {
+//            query = "?date=\(date)"
+//        }
+//        
+//        return baseURL + "agenda/byDate" + query
+//    }
+    
+    static func getAgendaByDateURL(
+        date: String,
+        id: Int?,
+        isSessionFilter: Bool,
+        search: String?,
+        isSessionSearch: Bool
+    ) -> String {
+        var queryItems: [String] = []
         
         if isSessionFilter {
-            if let id = id {
-                query = "?isSessionFilter=true&date=\(date)&id=\(id)"
-            } else {
-                query = "?isSessionFilter=true&date=\(date)"
-            }
-        } else {
-            query = "?date=\(date)"
+            queryItems.append("isSessionFilter=true")
         }
         
+        queryItems.append("date=\(date)")
+        
+        if let id = id {
+            queryItems.append("id=\(id)")
+        }
+        
+        if let search = search, !search.isEmpty {
+            queryItems.append("search=\(search)")
+            if isSessionSearch {
+                queryItems.append("isSessionSearch=true")
+            }
+        }
+        
+        let query = "?" + queryItems.joined(separator: "&")
         return baseURL + "agenda/byDate" + query
     }
+
     
     static func getAllSpeakersURL(page: Int, pageSize: Int, searchQuery: String? = nil, agendaPermaLink: String? = nil) -> String {
         var query = """

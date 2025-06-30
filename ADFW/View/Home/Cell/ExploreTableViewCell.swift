@@ -14,12 +14,15 @@ class ExploreTableViewCell: UITableViewCell {
     @IBOutlet weak var downloadLabel: UILabel!
     @IBOutlet weak var downloadImageView: UIImageView!
     
+    @IBOutlet weak var bannerImageView: UIImageView!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
         downloadLabel.font = FontManager.font(weight: .medium, size: 13)
         downloadLabel.textColor = .blueColor
-        titleLabel.setStyledTextWithLastWordColor(fullText: "Explore Abu Dhabi", lastWordColor: .blueColor)
+       // titleLabel.setStyledTextWithLastWordColor(fullText: "Explore Abu Dhabi", lastWordColor: .blueColor)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -34,7 +34,7 @@ class AgandaViewController: UIViewController {
     weak var delegate: FilterSelectionDelegate?
     private var updateScheduled = false
     var updateWorkItem: DispatchWorkItem?
-
+    private var searchDebounceWorkItem: DispatchWorkItem?
     
     @IBOutlet weak var searchTextField: UITextField!
     
@@ -47,9 +47,9 @@ class AgandaViewController: UIViewController {
     var arrDate = [EventAgandaData]()
     var filterData = [EventAgandaData]()
     var date:String?
-    var selectedTags = Set<String>()
-
+    var selectedTags = Set<AgandaFilter>()
     var originalData: [EventAgandaData] = []
+    var isDateSet:Bool = false
 
     var isSingleDataMode: Bool {
         return data.count == 1
@@ -82,7 +82,7 @@ class AgandaViewController: UIViewController {
         
         
         searchTextField.delegate = self
-        searchTextField.addTarget(self, action: #selector(searchTextChanged(_:)), for: .editingDidEnd)
+        searchTextField.addTarget(self, action: #selector(searchTextChanged(_:)), for: .editingChanged)
 
     }
     
@@ -147,7 +147,7 @@ class AgandaViewController: UIViewController {
     }
     
     
-    func filterData(withTags tags: [String]) {
+    func filterData(withTags tags: [AgandaFilter]) {
         self.selectedTags = Set(tags)
         
         if tags.isEmpty {
@@ -159,7 +159,7 @@ class AgandaViewController: UIViewController {
                 let filteredAgendas = agendas.filter { agenda in
                     guard let title = agenda.title else { return false }
                     return tags.contains(where: { tag in
-                        title.localizedCaseInsensitiveContains(tag)
+                        title.localizedCaseInsensitiveContains(tag.title ?? "")
                     })
                 }
 
@@ -218,42 +218,39 @@ class AgandaViewController: UIViewController {
 
     
     func filterData(withSearchText searchText: String) {
-        let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+//        let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+//        
+//        if trimmedText.isEmpty {
+//            data = originalData
+//        } else {
+//            data = originalData.compactMap { section -> EventAgandaData? in
+//                guard let agendas = section.agendas else { return nil }
+//
+//                let filteredAgendas = agendas.filter { agenda in
+//                    // ✅ Only filter by sessionType name
+//                    let sessionMatch = agenda.agenda_sessions?.contains(where: { session in
+//                        let match = session.sessionType?.name?.localizedCaseInsensitiveContains(trimmedText) ?? false
+//                        print("Checking sessionType: \(session.sessionType?.name ?? "nil"), match: \(match)")
+//                        return match
+//                    }) ?? false
+//
+//                    return sessionMatch
+//                }
+//
+//                if !filteredAgendas.isEmpty {
+//                    var updatedSection = section
+//                    updatedSection.agendas = filteredAgendas
+//                    return updatedSection
+//                } else {
+//                    return nil
+//                }
+//            }
+//        }
         
-        if trimmedText.isEmpty {
-            data = originalData
-        } else {
-            data = originalData.compactMap { section -> EventAgandaData? in
-                guard let agendas = section.agendas else { return nil }
-
-                let filteredAgendas = agendas.filter { agenda in
-                    // ✅ Only filter by sessionType name
-                    let sessionMatch = agenda.agenda_sessions?.contains(where: { session in
-                        let match = session.sessionType?.name?.localizedCaseInsensitiveContains(trimmedText) ?? false
-                        print("Checking sessionType: \(session.sessionType?.name ?? "nil"), match: \(match)")
-                        return match
-                    }) ?? false
-
-                    return sessionMatch
-                }
-
-                if !filteredAgendas.isEmpty {
-                    var updatedSection = section
-                    updatedSection.agendas = filteredAgendas
-                    return updatedSection
-                } else {
-                    return nil
-                }
-            }
-        }
+        self.getEventData(isSessionFilter: true, date: self.date ?? "", search: searchText, isSessionSearch: true, id: nil)
 
         tableView.reloadData()
     }
-
-    
-    
-
-    
     
     
     @IBAction func favoriteAction(_ sender: Any) {
@@ -321,8 +318,10 @@ extension AgandaViewController: UICollectionViewDataSource, UICollectionViewDele
           
            if indexPath.item == 0 {
                selectedIndex = "Full Week"
+               self.date = ""
                getEventData(isSessionFilter: false, date: "", id: nil)
            } else {
+               self.date = arrDate[indexPath.row - 1].date ?? ""
                selectedIndex = arrDate[indexPath.row - 1].date ?? ""
                getEventData(isSessionFilter: true, date: arrDate[indexPath.row - 1].date ?? "", id: nil)
            }
@@ -443,14 +442,17 @@ extension AgandaViewController: UITableViewDelegate, UITableViewDataSource {
  //MARK: API Calling
 extension AgandaViewController {
     
-    func getEventData(isSessionFilter: Bool, date: String, id: Int?,completion: (() -> Void)? = nil) {
-        viewModel.agandaData(isSessionFilter: isSessionFilter, date: date, page: 1, id: id, in: self.view) { result in
+    func getEventData(isSessionFilter: Bool, date: String, search: String? = nil, isSessionSearch: Bool = false, id: Int?,completion: (() -> Void)? = nil) {
+        viewModel.agandaData(isSessionFilter: isSessionFilter, date: date, search: search, isSessionSearch: isSessionSearch, page: 1, id: id, in: self.view) { result in
             switch result {
             case .success(let response):
                 print("data:", response)
     
                
-                if date == "" {
+                if self.isDateSet{
+                   
+                } else {
+                    self.isDateSet = true
                     self.arrDate = response
                 }
                 self.data = response
@@ -502,7 +504,7 @@ extension AgandaViewController: HomeSessionTableViewCellDelegate {
 }
 
 extension AgandaViewController: FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [String]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
         filterData(withTags: tags)
     }
 }
@@ -736,8 +738,22 @@ extension AgandaViewController {
 extension AgandaViewController: UITextFieldDelegate {
     @objc func searchTextChanged(_ textField: UITextField) {
         let searchText = textField.text ?? ""
-        print(searchText)
-        filterData(withSearchText: searchText)
+
+        // Cancel previous task
+        searchDebounceWorkItem?.cancel()
+
+        // Create new task
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.filterData(withSearchText: searchText)
+        }
+
+        // Save reference to cancel if needed
+        searchDebounceWorkItem = workItem
+
+        // Execute after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
     }
 
 }
+
+

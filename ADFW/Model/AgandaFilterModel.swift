@@ -47,19 +47,21 @@ struct AgandaFilterData : Codable {
 }
 
 
-struct AgandaFilter : Codable {
+struct AgandaFilter : Codable,Hashable {
     let title : String?
-    
+    let permaLink: String?
 
     enum CodingKeys: String, CodingKey {
 
         case title = "title"
+        case permaLink = "permaLink"
 
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         title = try values.decodeIfPresent(String.self, forKey: .title)
+        permaLink = try values.decodeIfPresent(String.self, forKey: .permaLink)
         
     }
 

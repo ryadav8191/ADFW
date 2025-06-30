@@ -54,6 +54,8 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var editView: UIView!
     @IBOutlet weak var profileView: UIView!
+    @IBOutlet weak var countryCodePicker: UIButton!
+    @IBOutlet weak var updateUserProfileButton: UIButton!
     
     
     var isSwitchOn = false
@@ -243,32 +245,32 @@ class ProfileViewController: UIViewController {
     func validateFields() -> Bool {
         // Trim whitespace and check if fields are empty
         guard let firstName = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !firstName.isEmpty else {
-            MessageHelper.showAlert(message: "Please enter your first name.", on: self)
+            MessageHelper.showBanner(message: "Please enter your first name.", status: .error)
             return false
         }
         
         guard let lastName = lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !lastName.isEmpty else {
-            MessageHelper.showAlert(message: "Please enter your last name.", on: self)
+            MessageHelper.showBanner(message: "Please enter your last name.", status: .error)
             return false
         }
 
         guard let company = companyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !company.isEmpty else {
-            MessageHelper.showAlert(message: "Please enter your company name.", on: self)
+            MessageHelper.showBanner(message: "Please enter your company name.", status: .error)
             return false
         }
 
         guard let designation = designationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !designation.isEmpty else {
-            MessageHelper.showAlert(message: "Please enter your designation.", on: self)
+            MessageHelper.showBanner(message: "Please enter your designation.",status: .error)
             return false
         }
 
         guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), isValidEmail(email) else {
-            MessageHelper.showAlert(message: "Please enter a valid email address.", on: self)
+            MessageHelper.showBanner(message: "Please enter a valid email address.", status: .error)
             return false
         }
 
         guard let phone = phoneNumberTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !phone.isEmpty else {
-            MessageHelper.showAlert(message: "Please enter a valid 10-digit phone number.", on: self)
+            MessageHelper.showBanner(message: "Please enter a phone number.", status: .error)
             return false
         }
 
@@ -304,7 +306,7 @@ class ProfileViewController: UIViewController {
                 isEditingEnabled = true
 
                 
-            firstNameTextField.isEnabled = false
+               firstNameTextField.isEnabled = false
                 lastNameTextField.isEnabled = false
                 companyTextField.isEnabled = false
                 designationTextField.isEnabled = false
@@ -312,6 +314,8 @@ class ProfileViewController: UIViewController {
                 phoneNumberTextField.isEnabled = false
                 checkBoxButton.isEnabled = false
                 //mySwitch.isEnabled = false
+            countryCodePicker.isUserInteractionEnabled = false
+            updateUserProfileButton.isUserInteractionEnabled = false
             UIView.animate(withDuration: 0.3) {
                 self.saveButton.alpha = 0
                 self.submitButtonView.alpha = 1
@@ -332,7 +336,8 @@ class ProfileViewController: UIViewController {
             phoneNumberTextField.isEnabled = true
             checkBoxButton.isEnabled = true
          //   mySwitch.isEnabled = false
-
+            countryCodePicker.isUserInteractionEnabled = true
+            updateUserProfileButton.isUserInteractionEnabled = true
             self.saveButton.isHidden = false
             UIView.animate(withDuration: 0.3) {
                 self.saveButton.alpha = 1

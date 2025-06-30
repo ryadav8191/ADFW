@@ -16,6 +16,7 @@ class MenuViewController: UIViewController {
     
     var menuItems: [MenuItem] = []
     weak var delegate: MenuSelectionDelegate?
+    var sidebarMenu : SidebarMenu?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,83 +96,153 @@ class MenuViewController: UIViewController {
 extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return menuItems.count + 1
+        if let itemsCount = sidebarMenu?.navigationItems?.count {
+            return itemsCount + 2 // +1 for footer or additional cell
+        } else {
+            return 1 // Return 1 for footer or a default cell
         }
+    }
 
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-          
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == (sidebarMenu?.navigationItems?.count ?? 0) + 1{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MenuFooterTableViewCell", for: indexPath) as! MenuFooterTableViewCell
+//            cell.openURL = { [weak self] url in
+//                if let link = URL(string: url) {
+//                    UIApplication.shared.open(link)
+//                }
+//            }
+            let data = sidebarMenu?.support
+            cell.helpLabel.text = data?.text
+            cell.emailLabel.text = data?.email
+            cell.setupSocialButtons(with: sidebarMenu?.socialMedia ?? [])
             
-            if indexPath.row == menuItems.count {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "MenuFooterTableViewCell", for: indexPath) as! MenuFooterTableViewCell
-                cell.openURL = { [weak self] url in
-                    if let link = URL(string: url) {
-                        UIApplication.shared.open(link)
-                    }
-                }
-                return cell
-            } else {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MenuItemTableViewCell", for: indexPath) as? MenuItemTableViewCell else {
-                    return UITableViewCell()
-                }
-                
-                if indexPath.row == menuItems.count - 1 {
-                    cell.topBorder.isHidden = false
-                    cell.bottomBorder.isHidden = false
-                } else {
-                    cell.topBorder.isHidden = true
-                    cell.bottomBorder.isHidden = true
-                }
-
-                let item = menuItems[indexPath.row]
-                cell.titleLabel.text = item.title
+            
+            return cell
+        }
+        else if indexPath.row == sidebarMenu?.navigationItems?.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MenuItemTableViewCell", for: indexPath) as! MenuItemTableViewCell
+            cell.topBorder.isHidden = false
+            cell.bottomBorder.isHidden = false
+            if let data = sidebarMenu?.signOut {
+                cell.titleLabel.text = data.label
                 cell.titleLabel.font = FontManager.font(weight: .medium, size: 16)
-                cell.iconImageView.image = item.icon
-               // cell.badgeView.isHidden = !item.hasBadge
-
-                return cell
-                
+                cell.iconImageView.setImage(with: data.icon, placeholder: UIImage())
             }
+            
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MenuItemTableViewCell", for: indexPath) as? MenuItemTableViewCell else {
+                return UITableViewCell()
+            }
+            
+//            if let itemCount = sidebarMenu?.navigationItems?.count, indexPath.row == itemCount - 1 {
+//                cell.topBorder.isHidden = false
+//                cell.bottomBorder.isHidden = false
+//            } else {
+                cell.topBorder.isHidden = true
+                cell.bottomBorder.isHidden = true
+//            }
 
             
+            if let item = sidebarMenu?.navigationItems?[indexPath.row] {
+                   cell.titleLabel.text = item.label
+                   cell.titleLabel.font = FontManager.font(weight: .medium, size: 16)
+                   cell.iconImageView.setImage(with: item.icon, placeholder: UIImage())
+                   // cell.badgeView.isHidden = !item.hasBadge
+               } else {
+                   cell.titleLabel.text = ""
+                   cell.iconImageView.image = nil
+               }
+            
+            
+            // cell.badgeView.isHidden = !item.hasBadge
+            
+            return cell
             
         }
+        
+        
+        
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == menuItems.count {
-            return 200 // Footer cell height
-        } else  if indexPath.row == menuItems.count - 1 {
-            return 86
+        if let itemCount = sidebarMenu?.navigationItems?.count {
+            if indexPath.row == itemCount + 1{
+                return 200 // Footer cell height
+            } else if indexPath.row == itemCount {
+                return 86
+            } else {
+                return 50
+            }
         } else {
             return 50
         }
     }
-    
+
+//    
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//     dismiss(animated: true) {
+//               // handle navigation
+//               switch indexPath.row {
+//               case 0:
+//                   self.delegate?.didSelectMenuItem("ProfileViewController")
+//               case 1:
+//                   self.delegate?.didSelectMenuItem("TicketViewController")
+//               case 2:
+//                   self.delegate?.didSelectMenuItem("AgandaViewController")
+//               case 3: 
+//                   self.delegate?.didSelectMenuItem("SocialMediaActivityViewController")
+//            case 4:
+//                   self.delegate?.didSelectMenuItem("MapViewController")
+//               case 6:
+//                   self.delegate?.didSelectMenuItem("InterestViewController")
+//               case 7: self.showSuccessPopupAndNavigate()
+//               default: break
+//               }
+//           }
+//       }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let items = sidebarMenu?.navigationItems else { return }
         
+        // Footer cell (support)
+        if indexPath.row == items.count + 1 {
+            return
+        }
         
-      
-           dismiss(animated: true) {
-               // handle navigation
-               switch indexPath.row {
-               case 0:
-                   self.delegate?.didSelectMenuItem("ProfileViewController")
-               case 1:
-                   self.delegate?.didSelectMenuItem("TicketViewController")
-               case 2:
-                   self.delegate?.didSelectMenuItem("AgandaViewController")
-               case 3: 
-                   self.delegate?.didSelectMenuItem("SocialMediaActivityViewController")
-            case 4:
-                   self.delegate?.didSelectMenuItem("MapViewController")
-               case 6:
-                   self.delegate?.didSelectMenuItem("InterestViewController")
-               case 7: self.showSuccessPopupAndNavigate()
-               default: break
-               }
-           }
-       }
+        // Logout cell
+        if indexPath.row == items.count {
+            dismiss(animated: true) {
+                self.showSuccessPopupAndNavigate()
+             
+            }
+            return
+        }
+        
+        // Regular navigation item
+        let selectedItem = items[indexPath.row]
+        
+        dismiss(animated: true) {
+            // You can customize this if you want to map "target" to view controller identifiers
+            self.delegate?.didSelectMenuItem(self.viewControllerID(for: selectedItem.target ?? ""))
+        }
+    }
+
+    
+    func viewControllerID(for target: String) -> String {
+        switch target {
+        case "profile": return "ProfileViewController"
+        case "ticket": return "TicketViewController"
+        case "agenda": return "AgandaViewController"
+        case "social-feed": return "SocialMediaActivityViewController"
+        case "map": return "MapViewController"
+     //   case "favourites": return "FavouritesViewController"
+        case "interests": return "InterestViewController"
+        default: return "ProfileViewController" // fallback
+        }
+    }
+
 
     func navigateTo(_ id: String) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

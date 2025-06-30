@@ -16,7 +16,7 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
 
      var tags = [AgandaFilterData]()
     
-    var selectedTags = Set<String>()  // Use Set for fast lookup
+    var selectedTags = Set<AgandaFilter>()
     weak var delegate: FilterSelectionDelegate?
     
     override init(frame: CGRect) {
@@ -88,10 +88,12 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.identifier, for: indexPath) as! TagCell
-        let tag = tags[indexPath.item].attributes?.title ?? ""
-           let isSelected = selectedTags.contains(tag)
-        cell.configure(title: tag, isSelected: isSelected)
-           return cell
+        let tag = tags[indexPath.item].attributes
+        if let tag = tag {
+            let isSelected = selectedTags.contains(tag)
+            cell.configure(data: tag, isSelected: isSelected)
+        }
+        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -104,14 +106,17 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let tag = tags[indexPath.item].attributes?.title ?? ""
+        let tag = tags[indexPath.item].attributes
 
-        if selectedTags.contains(tag) {
-            selectedTags.remove(tag)
-        } else {
-            selectedTags.insert(tag)
+        if let tag = tag {
+            
+            if selectedTags.contains(tag) {
+                selectedTags.remove(tag)
+            } else {
+                selectedTags = [tag]
+            }
+
         }
-
         UIView.performWithoutAnimation {
             collectionView.reloadItems(at: [indexPath])
         }

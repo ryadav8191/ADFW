@@ -112,7 +112,7 @@ class EnterntainmentViewController: UIViewController, FilterSelectionDelegate, U
     }
 
     
-    func didUpdateSelectedTags(_ tags: [String]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
         print(tags)
     }
     
@@ -334,11 +334,12 @@ extension EnterntainmentViewController {
     
     @objc func searchTextChanged(_ textField: UITextField) {
         guard let query = textField.text?.lowercased(), !query.isEmpty else {
-            self.entertainments = self.filteredItems // Reset
-            self.tableView.reloadData()
-            return
-        }
-
+               self.entertainments = self.filteredItems
+               self.tableView.reloadData()
+               self.showNoDataView(self.entertainments.isEmpty)
+               return
+           }
+        
         self.entertainments = self.filteredItems.compactMap { entertainment in
             let filteredArtists = entertainment.artists?.compactMap { artist in
                 let filteredShows = artist.shows?.filter {

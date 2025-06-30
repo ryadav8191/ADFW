@@ -19,6 +19,7 @@ class ADFWPopupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        
         setupPopup()
     }
 
@@ -91,7 +92,7 @@ class ADFWPopupViewController: UIViewController {
                 let index = row * 2 + col
                 if index < dates.count {
                     let button = UIButton(type: .system)
-                    button.setTitle(dates[index], for: .normal)
+                    button.setTitle(Helper.formatToDayFullMonth(from: dates[index]), for: .normal)
                     button.titleLabel?.font = FontManager.font(weight: .semiBold, size: 17)
                     button.tag = index
                   //  button.layer.cornerRadius = 6

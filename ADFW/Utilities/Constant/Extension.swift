@@ -6,9 +6,8 @@
 //
 
 import Foundation
-
-
 import UIKit
+import Kingfisher
 
 extension UIColor {
     convenience init(hex: String, alpha: CGFloat = 1.0) {
@@ -310,5 +309,35 @@ extension UITableView {
         frame = originalFrame
 
         return image
+    }
+}
+
+
+
+
+extension UIImageView {
+    func setImage(with urlString: String?, placeholder: UIImage? = nil) {
+        guard let urlString = urlString,
+              let url = URL(string: urlString) else {
+            self.image = placeholder
+            return
+        }
+
+        self.kf.setImage(
+            with: url,
+            placeholder: placeholder,
+            options: [
+                .transition(.fade(0.2)),
+                .cacheOriginalImage
+            ],
+            completionHandler: { result in
+                switch result {
+                case .success(let value):
+                    print("Image loaded: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("Error loading image: \(error.localizedDescription)")
+                }
+            }
+        )
     }
 }

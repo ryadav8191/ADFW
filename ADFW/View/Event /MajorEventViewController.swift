@@ -307,7 +307,7 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 extension MajorEventViewController: FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [String]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
         print("Selected Tags:", tags)
        
     }

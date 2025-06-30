@@ -11,8 +11,8 @@ import UIKit
 
 class EventAgandaViewModel {
     
-    func agandaData(isSessionFilter: Bool,date: String, page: Int, pageSize: Int = 50, id: Int?, in view: UIView, completion: @escaping (Result<[EventAgandaData], Error>) -> Void) {
-        let urlString = APIEndpoints.getAgendaByDateURL(date: date, id: id, isSessionFilter: isSessionFilter)
+    func agandaData(isSessionFilter: Bool,date: String, search: String?, isSessionSearch: Bool,  page: Int, pageSize: Int = 50, id: Int?, in view: UIView, completion: @escaping (Result<[EventAgandaData], Error>) -> Void) {
+        let urlString = APIEndpoints.getAgendaByDateURL(date: date, id: id, isSessionFilter: isSessionFilter, search: search, isSessionSearch: isSessionSearch)
 
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<AgandaModel, Error>) in
             switch result {

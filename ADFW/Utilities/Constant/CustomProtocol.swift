@@ -29,7 +29,7 @@ protocol MyBannerViewCellDelegate: AnyObject {
 
 
 protocol FilterSelectionDelegate: AnyObject {
-    func didUpdateSelectedTags(_ tags: [String])
+    func didUpdateSelectedTags(_ tags: [AgandaFilter])
 }
 
 

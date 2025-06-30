@@ -11,8 +11,10 @@ import SwiftUI
 
 
 class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [String]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
         print(tags)
+       self.selectedTags = Set(tags)
+        getSpeakerData(page: self.currentPage, search: nil,agendaPermaLink: tags.first?.permaLink)
     }
     
     private let spinner = UIActivityIndicatorView(style: .medium)
@@ -29,8 +31,10 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
     private let noDataView = NoDataView()
     var filteredItems: [SpeakerData] = []
     var tag = [String]()
+    var agandaViewModel = EventAgandaViewModel()
+    var filterSelectionData = [AgandaFilterData]()
     private var debounceWorkItem: DispatchWorkItem?
-
+    var selectedTags = Set<AgandaFilter>()
     
     var uniqueAgendaColors: [String: String] = [:]
     
@@ -52,6 +56,7 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
         configureUI()
         getSpeakerData(page: self.currentPage, search: nil,agendaPermaLink: agendaPermaLink)
         collectionView.backgroundColor = .white
+        getEventFilterData()
         
     }
     
@@ -136,10 +141,10 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
     @IBAction func fliterButtonAction(_ sender: Any) {
         let overlay = FilterOverlayView(frame: view.bounds)
            overlay.alpha = 0
-       // overlay.tags = self.tag
         overlay.delegate = self
+        overlay.selectedTags = self.selectedTags
+        overlay.tags = self.filterSelectionData
            view.addSubview(overlay)
-
            UIView.animate(withDuration: 0.3) {
                overlay.alpha = 1
            }
@@ -249,7 +254,7 @@ extension SpeakerViewController: UICollectionViewDataSource,UICollectionViewDele
         let frameHeight = scrollView.frame.size.height
 
         if offsetY > contentHeight - frameHeight - 100 {
-            getSpeakerData(page: self.currentPage + 1, search: self.searchTexfield.text,agendaPermaLink: agendaPermaLink)
+            getSpeakerData(page: self.currentPage + 1, search: self.searchTexfield.text,agendaPermaLink: (agendaPermaLink == nil) ? self.selectedTags.first?.permaLink : agendaPermaLink)
         }
     }
     
@@ -348,6 +353,22 @@ extension SpeakerViewController {
     }
     
     
+    
+    func getEventFilterData() {
+        agandaViewModel.agandaFilterData(page: 1, id: 0, in: self.view) { result in
+            switch result {
+            case .success(let response):
+                print("data:", response)
+                self.filterSelectionData = response
+             
+               
+            case .failure(let error):
+                // self.showNoDataView(true)
+                print(error.localizedDescription)
+                MessageHelper.showToast(message: error.localizedDescription, in: self.view)
+            }
+        }
+    }
 
 
 }

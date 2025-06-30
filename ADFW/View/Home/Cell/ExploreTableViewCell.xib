@@ -139,6 +139,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
+                <outlet property="bannerImageView" destination="dJx-Y6-ktW" id="HZW-L7-L6E"/>
                 <outlet property="containerView" destination="gOh-JT-H6I" id="ytD-6F-u3n"/>
                 <outlet property="downloadImageView" destination="jnV-Q0-ToJ" id="FwD-hu-CYL"/>
                 <outlet property="downloadLabel" destination="pvv-yn-ak1" id="1kj-1v-FHW"/>

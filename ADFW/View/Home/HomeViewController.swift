@@ -31,12 +31,18 @@ class HomeViewController: UIViewController {
     var featuredData : [FeaturedEventData]?
     var partnerData : [Partner]?
     var homeData: [HomeData]?
+    var aboutAdgm : [About_adgm]?
+    var sidebarMenu : SidebarMenu?
+    var section : [Sections]?
+    
+    
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = true
         let menuVC = storyboard?.instantiateViewController(identifier: "MenuViewController") as! MenuViewController
         menuVC.delegate = self
+        menuVC.sidebarMenu = self.sidebarMenu
         sideMenu = SideMenuNavigationController(rootViewController: menuVC)
         sideMenu?.leftSide = true
         sideMenu?.setNavigationBarHidden(true, animated: false)
@@ -75,11 +81,32 @@ class HomeViewController: UIViewController {
         tableview.register(UINib(nibName: "ADFWMapTableViewCell", bundle: nil), forCellReuseIdentifier: "ADFWMapTableViewCell")
     }
     
+    func updateSideMenu() {
+       
+    }
+    
+    func getSection(by id: String) -> Sections? {
+        return section?.first(where: { $0.id == id })
+    }
+
+    
     
     @IBAction func sideMenu(_ sender: Any) {
-        if let menu = SideMenuManager.default.leftMenuNavigationController {
-            present(menu, animated: true, completion: nil)
-        }
+        guard let sidebarData = sidebarMenu else {
+               // Optional: show alert or toast that data is still loading
+               print("Side menu data is not yet loaded.")
+               return
+           }
+
+           if let menu = SideMenuManager.default.leftMenuNavigationController,
+              let menuVC = menu.viewControllers.first as? MenuViewController {
+               // Pass the updated data and reload
+               menuVC.sidebarMenu = sidebarData
+               _ = menuVC.view // Ensure view is loaded
+               menuVC.tableView.reloadData()
+
+               present(menu, animated: true, completion: nil)
+           }
     }
     
     @IBAction func notificationAction(_ sender: Any) {
@@ -168,8 +195,18 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case 7:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "EntertainmentTableViewCell") as! EntertainmentTableViewCell  //AboutAGDMTableViewCell //EntertainmentTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "EntertainmentTableViewCell") as! EntertainmentTableViewCell
             
+            if let section = getSection(by: "entertainmentADFW"),
+                  let card = section.card {
+                //cell.entertainbodyLabel.text = card.overlayText
+                let urlString = card.image?.url ?? ""
+                cell.bgImageView.setImage(with: urlString, placeholder: UIImage.entertainment)
+                let labelText = "\(section.title?.label ?? "") \(section.title?.highlight ?? "")"
+                cell.enterainmentLabel.setStyledTextWithLastWordColor(fullText: labelText, lastWordColor: .blueColor)
+                cell.entertainbodyLabel.setStyledTextWithLastWordColor(fullText:  card.overlayText ?? "", lastWordColor: .blueColor,fontSize: 24)
+                cell.entertainbodyLabel.textColor = .white
+               }
             cell.onClickViewAll = {
                 let story = UIStoryboard(name: "Main", bundle: nil)
                 let vc  = story.instantiateViewController(identifier: "EnterntainmentViewController") as! EnterntainmentViewController
@@ -179,12 +216,33 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case 6:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ExploreTableViewCell") as! ExploreTableViewCell
-            
-            return cell
+                if let section = getSection(by: "exploreAbuDhabi"),
+                   let card = section.card {
+                    let labelText = "\(section.title?.label ?? "") \(section.title?.highlight ?? "")"
+                    cell.titleLabel.setStyledTextWithLastWordColor(fullText: labelText, lastWordColor: .blueColor)
+
+                    let urlString = card.image?.url ?? ""
+                    cell.bannerImageView.setImage(with: urlString, placeholder: UIImage.adgmPdg)
+                    cell.downloadLabel.text = card.download?.label
+                    
+                    
+                }
+                return cell
             
         case 8:
             let cell = tableView.dequeueReusableCell(withIdentifier: "AboutAGDMTableViewCell") as! AboutAGDMTableViewCell
             
+            if let section = getSection(by: "aboutADGM"),
+                   let card = section.card {
+                let labelText = "\(section.title?.label ?? "") \(section.title?.highlight ?? "")"
+                cell.titleLabel.setStyledTextWithLastWordColor(fullText: labelText, lastWordColor: .blueColor)
+                
+                cell.titlebodyLabel.text = card.heading
+                cell.bodyLabel.text = card.description
+                let urlString = card.image?.url ?? ""
+                cell.bannerImageView.setImage(with: urlString, placeholder: UIImage.adgmBanner)
+                
+                }
             cell.onClickViewAll = {
                 let story = UIStoryboard(name: "Main", bundle: nil)
                 let vc  = story.instantiateViewController(identifier: "AboutADGMViewController") as! AboutADGMViewController
@@ -402,6 +460,8 @@ extension HomeViewController {
                 print("data",response)
               //  self.showNoDataView(false)
                 self.homeData = response
+                self.sidebarMenu = response.first?.attributes?.about_adgm?.first?.sidebarMenu
+                self.section = response.first?.attributes?.about_adgm?.first?.page?.sections
                 self.tableview.reloadData()
                                 
             case .failure(let failure):

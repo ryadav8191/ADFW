@@ -67,9 +67,9 @@ struct TicketView: View {
 //                            .font(Font(FontManager.font(weight: .semiBold, size: 26)))
 //                            .foregroundColor(Color(UIColor.blueColor))
 
-//                        Text("LocalDataManager.getLoginResponse()?.ticket_id?.title" ?? "")
-//                            .font(Font(FontManager.font(weight: .semiBold, size: 36)))
-//                            .foregroundColor(Color(UIColor.blueColor))
+                        Text(LocalDataManager.getLoginResponse()?.ticket_id?.title ?? "")
+                            .font(Font(FontManager.font(weight: .semiBold, size: 36)))
+                            .foregroundColor(Color(UIColor.blueColor))
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
