@@ -32,7 +32,7 @@ class NotificationViewModel: ObservableObject {
         guard !isLoading, hasMoreData else { return }
 
         isLoading = true
-        let urlString = "https://adfw.multitvsolution.com/api/notification/all?page=\(currentPage)&pageSize=\(pageSize)"
+        let urlString =  "\(APIEndpoints.baseURL)notification/all?page=\(currentPage)&pageSize=\(pageSize)"
 
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<NotificationModel, Error>) in
             DispatchQueue.main.async {

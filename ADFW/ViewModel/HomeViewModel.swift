@@ -27,7 +27,8 @@ class HomeViewModel {
 //                    completion(.failure(NetworkError.unsuccessful))
 //                }
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(NetworkError.custom(message: "Something Went Wrong")))
+
             }
         }
     }
@@ -48,7 +49,8 @@ class HomeViewModel {
 //                    completion(.failure(NetworkError.unsuccessful))
 //                }
             case .failure(let error):
-                completion(.failure(error))
+                print(error.localizedDescription)
+                completion(.failure(NetworkError.custom(message: "Something Went Wrong")))
             }
         }
     }

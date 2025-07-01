@@ -125,8 +125,20 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        switch section {
+        case 0: return (homeData?.first?.attributes?.mobile_banner?.isEmpty == false) ? 1 : 0
+        case 1: return arrayOfSession.isEmpty ? 0 : 1
+        case 2: return featuredData?.isEmpty == false ? 1 : 0
+        case 3: return arrayOfSpeaker.isEmpty ? 0 : 1
+        case 4: return locations.isEmpty ? 0 : 1
+        case 5: return partnerViewModel.partnerSections.isEmpty ? 0 : 1
+        case 6: return (getSection(by: "exploreAbuDhabi")?.card != nil) ? 1 : 0
+        case 7: return (getSection(by: "entertainmentADFW")?.card != nil) ? 1 : 0
+        case 8: return (getSection(by: "aboutADGM")?.card != nil) ? 1 : 0
+        default: return 0
+        }
     }
+
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
@@ -266,8 +278,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             return 350
         case 4:
             return 375
-//        case 5:
-//            return 275
+        case 1:
+            return 350
         default: return UITableView.automaticDimension
         }
     }
@@ -352,9 +364,10 @@ extension HomeViewController {
              //   self.uniqueAgendaColors = self.extractUniqueAgendaColors(from: response)
                 self.tableview.reloadData()
                                 
-            case .failure(let failure):
+            case .failure(let error):
                 //self.showNoDataView(true)
-                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+              //  MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
             }
             
             
@@ -369,12 +382,12 @@ extension HomeViewController {
                 print("data",response)
               //  self.showNoDataView(false)
                 self.arrayOfSession = response
-                
                 self.tableview.reloadData()
                                 
-            case .failure(let failure):
+            case .failure(let error):
                 //self.showNoDataView(true)
-                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+               // MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
             }
             
             
@@ -391,6 +404,7 @@ extension HomeViewController {
 //                self.zoomToFitAllAnnotations()
                 self.tableview.reloadData()
             case .failure(let error):
+                
                 MessageHelper.showBanner(message: error.localizedDescription, status: .error)
             }
         }
@@ -403,7 +417,7 @@ extension HomeViewController {
                 self.featuredData = agendas
                 self.tableview.reloadData()
             case .failure(let error):
-                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
             }
         }
     }
@@ -421,7 +435,7 @@ extension HomeViewController {
                 MessageHelper.showToast(message: "No partner data available.", in: self.view)
                 }
             case .failure(let error):
-                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
             }
         }
     }
@@ -447,7 +461,6 @@ extension HomeViewController {
         let partnerSections = newCategoryDict.map { key, value in
             PartnerViewModels(title: key, logos: [value])
         }.sorted { $0.title < $1.title }
-
         // Assign to data source
         partnerViewModel.partnerSections = partnerSections
     }
@@ -464,12 +477,10 @@ extension HomeViewController {
                 self.section = response.first?.attributes?.about_adgm?.first?.page?.sections
                 self.tableview.reloadData()
                                 
-            case .failure(let failure):
+            case .failure(let error):
                 //self.showNoDataView(true)
-                MessageHelper.showToast(message: failure.localizedDescription, in: self.view)
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
             }
-            
-            
         })
     }
 

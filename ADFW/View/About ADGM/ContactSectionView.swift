@@ -98,7 +98,7 @@ struct ContactSectionView: View {
                     .font(Font(FontManager.font(weight: .semiBold, size: 15)))
 
                 HStack(spacing: 16) {
-                    ForEach(contactInfo.first?.social_media?.platforms ?? [], id: \.img) { platform in
+                    ForEach(contactInfo.first?.social_media?.platforms ?? [], id: \.link) { platform in
                         if let linkStr = platform.link,
                            let url = URL(string: linkStr),
                            let imageURLStr = platform.img,

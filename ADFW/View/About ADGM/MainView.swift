@@ -46,7 +46,7 @@ struct MainView: View {
                         HeaderSectionView(header: header)
                         CardsRowView(cards: header.banner_content ?? [])
                         FAQSectionView(faqItems: header.questions ?? [])
-                        EnquirySectionView()
+                        EnquirySectionView(enquiry_card: header.contact?.first?.enquiry_card)
                         ContactSectionView(contactInfo: header.contact ?? [], socialMediaIcons: ["linkedin", "insta","twitter","youTube"])
                         
                     }

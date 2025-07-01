@@ -26,7 +26,7 @@ class CustomCalloutView: UIView {
 
     private func setupLayout() {
         backgroundColor = .white
-        layer.cornerRadius = 12
+      //  layer.cornerRadius = 12
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.1
         layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -34,7 +34,7 @@ class CustomCalloutView: UIView {
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 6
+       // imageView.layer.cornerRadius = 6
         imageView.clipsToBounds = true
 
         titleLabel.font = UIFont.boldSystemFont(ofSize: 16)

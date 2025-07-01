@@ -35,7 +35,8 @@ class PartnerViewModel {
                     completion(.failure(NetworkError.unsuccessful))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                print(error.localizedDescription)
+                completion(.failure(NetworkError.custom(message: "Something Went Wrong")))
             }
         }
     }

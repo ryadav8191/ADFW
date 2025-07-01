@@ -35,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qML-I7-yV5">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="818"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FyV-Oq-AZ7">
                                         <rect key="frame" x="0.0" y="59" width="393" height="65"/>
@@ -75,7 +75,7 @@
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lLr-Tj-YUF">
-                                        <rect key="frame" x="0.0" y="124" width="393" height="694"/>
+                                        <rect key="frame" x="0.0" y="124" width="393" height="645"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>
@@ -100,6 +100,7 @@
                             <constraint firstItem="wvD-eJ-Wut" firstAttribute="bottom" secondItem="qML-I7-yV5" secondAttribute="bottom" id="p6h-Xq-Gp9"/>
                         </constraints>
                     </view>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="notificationBell" destination="hQM-qv-WHB" id="hbm-hb-Edi"/>
                         <outlet property="tableview" destination="lLr-Tj-YUF" id="h6X-lc-rwv"/>
@@ -1605,7 +1606,7 @@
                                             <constraint firstAttribute="height" constant="200" id="lsM-8s-eYc"/>
                                         </constraints>
                                     </imageView>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z38-et-NA6">
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z38-et-NA6">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="818"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ony-dM-Wuk">
@@ -2181,7 +2182,7 @@ CAPITAL OF CAPITAL</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvg-yd-5bV">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="818"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kly-GF-OJy">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="215"/>
@@ -2333,7 +2334,7 @@ CAPITAL OF CAPITAL</string>
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" bouncesZoom="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="V3I-5f-9ND">
-                                        <rect key="frame" x="0.0" y="223" width="393" height="595"/>
+                                        <rect key="frame" x="0.0" y="223" width="393" height="546"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>
@@ -2359,6 +2360,7 @@ CAPITAL OF CAPITAL</string>
                             <constraint firstItem="KXe-ZE-JS7" firstAttribute="top" secondItem="T4a-7b-RUR" secondAttribute="top" id="sSF-hF-wal"/>
                         </constraints>
                     </view>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="backButton" destination="5vE-Dx-5Ef" id="xiT-b1-C21"/>
                         <outlet property="collectionView" destination="L5R-dP-oE9" id="7rz-Nv-4ar"/>
@@ -3068,10 +3070,10 @@ CAPITAL OF CAPITAL</string>
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="818"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rU5-Qy-LDy">
-                                        <rect key="frame" x="0.0" y="59" width="393" height="66"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="117"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="54z-zT-Lu4">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                                <rect key="frame" x="0.0" y="59" width="393" height="50"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HsO-6c-YG1">
                                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -3082,6 +3084,7 @@ CAPITAL OF CAPITAL</string>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                         <state key="normal" image="back"/>
                                                         <connections>
+                                                            <action selector="backAction:" destination="EFc-gZ-p99" eventType="touchUpInside" id="ov3-4a-lP3"/>
                                                             <action selector="backButton:" destination="bs7-D4-1mn" eventType="touchUpInside" id="sMs-MP-Kgw"/>
                                                             <action selector="backButtonAction:" destination="NbC-Bb-s82" eventType="touchUpInside" id="sN6-hb-BTu"/>
                                                         </connections>
@@ -3102,6 +3105,7 @@ CAPITAL OF CAPITAL</string>
                                                         <state key="normal" image="search_whatsApp"/>
                                                         <connections>
                                                             <action selector="backButton:" destination="bs7-D4-1mn" eventType="touchUpInside" id="dbc-bV-9mn"/>
+                                                            <action selector="searchAction:" destination="EFc-gZ-p99" eventType="touchUpInside" id="Fql-0u-Fqd"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1OZ-m5-r4H">
@@ -3114,6 +3118,7 @@ CAPITAL OF CAPITAL</string>
                                                         <state key="normal" image="profile"/>
                                                         <connections>
                                                             <action selector="backButton:" destination="bs7-D4-1mn" eventType="touchUpInside" id="Szb-Vd-dUg"/>
+                                                            <action selector="profileAction:" destination="EFc-gZ-p99" eventType="touchUpInside" id="nEz-fu-kXX"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -3134,7 +3139,7 @@ CAPITAL OF CAPITAL</string>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="54z-zT-Lu4" secondAttribute="bottom" constant="16" id="6Hg-EI-oPk"/>
+                                            <constraint firstAttribute="bottom" secondItem="54z-zT-Lu4" secondAttribute="bottom" constant="8" id="6Hg-EI-oPk"/>
                                             <constraint firstItem="54z-zT-Lu4" firstAttribute="leading" secondItem="rU5-Qy-LDy" secondAttribute="leading" id="JGp-JH-Sq0"/>
                                             <constraint firstAttribute="trailing" secondItem="54z-zT-Lu4" secondAttribute="trailing" id="ZKc-Y5-ddd"/>
                                         </constraints>
@@ -3144,14 +3149,14 @@ CAPITAL OF CAPITAL</string>
                                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Cnr-wm-yCD" secondAttribute="trailing" id="6NP-bS-HaJ"/>
                                     <constraint firstItem="rU5-Qy-LDy" firstAttribute="leading" secondItem="ikr-xd-oxw" secondAttribute="leading" id="G6O-15-lW9"/>
                                     <constraint firstAttribute="bottom" secondItem="Cnr-wm-yCD" secondAttribute="bottom" id="RDY-YU-ScR"/>
                                     <constraint firstItem="Cnr-wm-yCD" firstAttribute="leading" secondItem="ikr-xd-oxw" secondAttribute="leading" id="S4E-zB-hVv"/>
                                     <constraint firstAttribute="trailing" secondItem="rU5-Qy-LDy" secondAttribute="trailing" id="Sbp-DZ-whE"/>
-                                    <constraint firstItem="Cnr-wm-yCD" firstAttribute="top" secondItem="rU5-Qy-LDy" secondAttribute="bottom" id="tA3-vA-B2Y"/>
+                                    <constraint firstItem="Cnr-wm-yCD" firstAttribute="top" secondItem="rU5-Qy-LDy" secondAttribute="bottom" constant="8" id="tA3-vA-B2Y"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -3159,13 +3164,18 @@ CAPITAL OF CAPITAL</string>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ikr-xd-oxw" firstAttribute="top" secondItem="nkb-qN-FwF" secondAttribute="top" id="2Na-LY-1E1"/>
-                            <constraint firstItem="rU5-Qy-LDy" firstAttribute="top" secondItem="Qhu-Pm-DEZ" secondAttribute="top" id="JDP-la-14S"/>
+                            <constraint firstItem="rU5-Qy-LDy" firstAttribute="top" secondItem="ikr-xd-oxw" secondAttribute="top" id="JDP-la-14S"/>
                             <constraint firstItem="ikr-xd-oxw" firstAttribute="leading" secondItem="Qhu-Pm-DEZ" secondAttribute="leading" id="NHE-9G-bKs"/>
                             <constraint firstItem="Qhu-Pm-DEZ" firstAttribute="top" secondItem="54z-zT-Lu4" secondAttribute="top" id="eCd-gW-BBD"/>
                             <constraint firstItem="Qhu-Pm-DEZ" firstAttribute="trailing" secondItem="ikr-xd-oxw" secondAttribute="trailing" id="rC0-40-t7I"/>
                             <constraint firstItem="Qhu-Pm-DEZ" firstAttribute="bottom" secondItem="ikr-xd-oxw" secondAttribute="bottom" id="v8y-IQ-VQ1"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="navigationView" destination="rU5-Qy-LDy" id="bb0-ST-PIz"/>
+                        <outlet property="pageLabel" destination="oiN-qF-73w" id="X1s-Tm-x3v"/>
+                        <outlet property="tableView" destination="Cnr-wm-yCD" id="TGb-u6-E5P"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WGX-L8-izx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3553,7 +3563,7 @@ CAPITAL OF CAPITAL</string>
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

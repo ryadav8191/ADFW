@@ -30,7 +30,7 @@ struct HeaderSectionView: View {
             HStack(alignment: .center) {
                 Rectangle() // Vertical blue bar
                     .fill(Color.blue)
-                    .frame(width: 1, height: 70)
+                    .frame(width: 3, height: 70)
                     .padding(.trailing, 0)
                
                 VStack(alignment: .leading){

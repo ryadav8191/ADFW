@@ -100,9 +100,6 @@ class BannerTableViewCell: UITableViewCell {
         }
 
     }
-
-    
- 
     
     func showNextImage() {
         guard let banner = self.banner else {return}

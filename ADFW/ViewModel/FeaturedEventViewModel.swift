@@ -21,7 +21,8 @@ class FeaturedEventViewModel {
                     let agendas =  response.data
                     completion(.success(agendas ?? []))
                 case .failure(let error):
-                    completion(.failure(error))
+                    completion(.failure(NetworkError.custom(message: "Something Went Wrong")))
+
                 }
             }
         }

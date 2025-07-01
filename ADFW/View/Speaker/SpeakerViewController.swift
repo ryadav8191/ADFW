@@ -14,6 +14,8 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
     func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
         print(tags)
        self.selectedTags = Set(tags)
+        self.currentPage = 1
+        self.isLastPage = false
         getSpeakerData(page: self.currentPage, search: nil,agendaPermaLink: tags.first?.permaLink)
     }
     

@@ -43,7 +43,8 @@ class SpeakerViewModel {
                     completion(.failure(NetworkError.noData))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(NetworkError.custom(message: "Something Went Wrong")))
+
             }
         }
     }

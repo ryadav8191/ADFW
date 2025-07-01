@@ -9,7 +9,7 @@ import Foundation
 
 
 struct APIEndpoints {
-    static let baseURL = "https://adfw.multitvsolution.com/api/"
+    static let baseURL = "https://adminadfw.videostech.cloud/api/"
     static private let eventId = "309"
     
     static var token: String {

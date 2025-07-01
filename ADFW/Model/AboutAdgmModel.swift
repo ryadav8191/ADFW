@@ -138,11 +138,13 @@ struct Contact : Codable {
     let address : Address?
     let social_media : Social_media?
     let working_hours : Working_hours?
+    let enquiry_card : Enquiry_card?
 
     enum CodingKeys: String, CodingKey {
 
         case title = "title"
         case address = "address"
+        case enquiry_card = "enquiry_card"
         case social_media = "social_media"
         case working_hours = "working_hours"
     }
@@ -152,6 +154,7 @@ struct Contact : Codable {
         title = try values.decodeIfPresent(String.self, forKey: .title)
         address = try values.decodeIfPresent(Address.self, forKey: .address)
         social_media = try values.decodeIfPresent(Social_media.self, forKey: .social_media)
+        enquiry_card = try values.decodeIfPresent(Enquiry_card.self, forKey: .enquiry_card)
         working_hours = try values.decodeIfPresent(Working_hours.self, forKey: .working_hours)
     }
 
@@ -279,6 +282,69 @@ struct Friday : Codable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         days = try values.decodeIfPresent(String.self, forKey: .days)
         time = try values.decodeIfPresent(String.self, forKey: .time)
+    }
+
+}
+
+
+struct Enquiry_card : Codable {
+    let title : Title?
+    let button : CustomButton?
+    let description : String?
+
+    enum CodingKeys: String, CodingKey {
+
+        case title = "title"
+        case button = "button"
+        case description = "description"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        title = try values.decodeIfPresent(Title.self, forKey: .title)
+        button = try values.decodeIfPresent(CustomButton.self, forKey: .button)
+        description = try values.decodeIfPresent(String.self, forKey: .description)
+    }
+
+}
+
+
+//struct Title : Codable {
+//    let text : String?
+//    let highlight : [String]?
+//
+//    enum CodingKeys: String, CodingKey {
+//
+//        case text = "text"
+//        case highlight = "highlight"
+//    }
+//
+//    init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        text = try values.decodeIfPresent(String.self, forKey: .text)
+//        highlight = try values.decodeIfPresent([String].self, forKey: .highlight)
+//    }
+//
+//}
+
+
+struct CustomButton : Codable {
+    let icon : String?
+    let text : String?
+    let action : String?
+
+    enum CodingKeys: String, CodingKey {
+
+        case icon = "icon"
+        case text = "text"
+        case action = "action"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        icon = try values.decodeIfPresent(String.self, forKey: .icon)
+        text = try values.decodeIfPresent(String.self, forKey: .text)
+        action = try values.decodeIfPresent(String.self, forKey: .action)
     }
 
 }

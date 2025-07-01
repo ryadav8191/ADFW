@@ -40,7 +40,8 @@ class VenueViewModel {
                 completion(.success(validVenues))
 
             case .failure(let error):
-                completion(.failure(error))
+                print(error)
+                completion(.failure(NetworkError.custom(message: "Something Went Wrong")))
             }
         }
     }

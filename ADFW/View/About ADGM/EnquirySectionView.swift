@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftUI
 
 struct EnquirySectionView: View {
+    var enquiry_card : Enquiry_card?
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .center, spacing: 8) {
@@ -16,15 +18,15 @@ struct EnquirySectionView: View {
                     .fill(Color.blue)
                     .frame(width: 3, height: 24)
                 
-                Text("How Can ")
+                Text(enquiry_card?.title?.label ?? "")
                     .foregroundColor(Color(UIColor.black))
                     .font(Font(FontManager.font(weight: .semiBold, size: 19))) +
-                Text("We Help You?")
+                Text( " " + (enquiry_card?.title?.highlight ?? ""))
                     .foregroundColor(Color(UIColor.blueColor))
                     .font(Font(FontManager.font(weight: .semiBold, size: 19)))
             }
             
-            Text("To help us manage your enquiry better, please click below.")
+            Text(enquiry_card?.description ?? "")
                 .foregroundColor(Color(UIColor.lightBlue))
                 .font(Font(FontManager.font(weight: .medium, size: 15)))
                 .multilineTextAlignment(.center)
@@ -36,9 +38,9 @@ struct EnquirySectionView: View {
                 print("hii")
             }) {
                 HStack {
-                    Text("MAKE AN ENQUIRY")
+                    Text(enquiry_card?.button?.text ?? "")
                         .font(Font(FontManager.font(weight: .semiBold, size: 16)))
-                    Image(systemName: "arrow.right")
+                    Image("login_icon")
                 }
                 .padding(.horizontal, 16)
                 .frame(height: 36)
