@@ -9,7 +9,7 @@ import SwiftUICore
 import SwiftUI
 
 struct PersonCard: View {
-    let person: EventAgandaSpeakers
+    let person: Speaker
 
     var body: some View {
         HStack(spacing: 12) {
@@ -17,7 +17,7 @@ struct PersonCard: View {
 //                .resizable()
 //                .frame(width: 72, height: 72)
             
-            if let url = URL(string: person.photoUrl ?? "") {
+            if let url = URL(string: person.imageUrl ?? "") {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
@@ -39,9 +39,9 @@ struct PersonCard: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(person.firstName ?? "" + (person.lastName ?? ""))
+                Text(person.name)
                     .font(Font(FontManager.font(weight: .semiBold, size: 14)))
-                Text(person.designation ?? "")
+                Text(person.role)
                     .font(Font(FontManager.font(weight: .medium, size: 13)))
                     .foregroundColor(.gray)
                 Text(person.companyName ?? "")

@@ -20,7 +20,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2FS-6k-Ym6">
                         <rect key="frame" x="0.0" y="0.0" width="448" height="205"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dj_liutik" translatesAutoresizingMaskIntoConstraints="NO" id="inP-Zx-4Cd">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="frame" translatesAutoresizingMaskIntoConstraints="NO" id="inP-Zx-4Cd">
                                 <rect key="frame" x="8" y="27.666666666666671" width="120" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="2k2-ZC-huO"/>
@@ -140,7 +140,7 @@
     </objects>
     <resources>
         <image name="clock_white" width="12.666666984558105" height="13"/>
-        <image name="dj_liutik" width="124.33333587646484" height="164"/>
+        <image name="frame" width="436" height="656"/>
         <image name="location_white" width="13" height="13"/>
     </resources>
 </document>

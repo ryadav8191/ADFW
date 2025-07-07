@@ -10,7 +10,7 @@ import UIKit
 
 enum AgendaDisplayRow {
     case agendaHeader(AgendaRow)
-    case session(Agenda_sessions, location: String, image: String?)
+    case session(Agenda_sessions, location: String, image: String?, agandaId: Int )
 }
 
 struct AgendaRow {
@@ -18,6 +18,8 @@ struct AgendaRow {
     let location: String?
     let sessions: [Agenda_sessions]
     let image: String?
+    let date: String
+    let agandaId: Int
 }
 
 class AgandaViewController: UIViewController {
@@ -30,7 +32,7 @@ class AgandaViewController: UIViewController {
     @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationView: UIView!
-    
+    @IBOutlet weak var favouriteButton: UIButton!
     weak var delegate: FilterSelectionDelegate?
     private var updateScheduled = false
     var updateWorkItem: DispatchWorkItem?
@@ -50,14 +52,15 @@ class AgandaViewController: UIViewController {
     var selectedTags = Set<AgandaFilter>()
     var originalData: [EventAgandaData] = []
     var isDateSet:Bool = false
-
     var isSingleDataMode: Bool {
         return data.count == 1
     }
+    let favViewModel = FavouriteViewModel()
+    var isShowingFavourites = false
+    var favouriteDisplayRows: [[AgendaDisplayRow]] = []
 
     @IBOutlet weak var noDataFoundImageView: UIImageView!
-    
-    
+    @IBOutlet weak var collectionViewHeightConstraint: NSLayoutConstraint!
     
 
     override func viewDidLoad() {
@@ -215,6 +218,29 @@ class AgandaViewController: UIViewController {
 //
 //        tableView.reloadData()
 //    }
+    
+    func toggleFavouriteState() {
+        isShowingFavourites.toggle()
+
+        // Update favorite button icon
+        let iconName = isShowingFavourites ? "heart.fill" : "heart"
+        favouriteButton.setImage(UIImage(systemName: iconName), for: .normal)
+
+        if isShowingFavourites {
+            collectionViewHeightConstraint.constant = 0
+            getFav()
+        } else {
+            collectionViewHeightConstraint.constant = 50
+            getEventData(isSessionFilter: false, date: "", id: id) { [weak self] in
+                guard let self = self else { return }
+
+                if let selectedDate = self.date {
+                    self.getEventData(isSessionFilter: true, date: selectedDate, id: id)
+                }
+            }
+        }
+    }
+
 
     
     func filterData(withSearchText searchText: String) {
@@ -254,11 +280,13 @@ class AgandaViewController: UIViewController {
     
     
     @IBAction func favoriteAction(_ sender: Any) {
-        
+        let vc  = storyboard?.instantiateViewController(withIdentifier: "FavouriteViewController") as! FavouriteViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
     @IBAction func filterAction(_ sender: Any) {
+       
         let overlay = FilterOverlayView(frame: view.bounds)
            overlay.alpha = 0
         overlay.delegate = self
@@ -361,62 +389,6 @@ extension AgandaViewController: UICollectionViewDelegateFlowLayout {
 
 
 extension AgandaViewController: UITableViewDelegate, UITableViewDataSource {
-
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return data.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//      
-//        return data[section].agendas?.first?.agenda_sessions?.count ?? 0
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let item = data[indexPath.section].agendas?.first?.agenda_sessions?[indexPath.row]
-//
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "AgendaTableViewCell", for: indexPath) as! AgendaTableViewCell
-//        
-//      //  cell.delegate = self
-//          cell.onPlayVideo = { [weak self] in
-//               guard let self = self else { return }
-//
-//            let youtubeURL = item?.video ?? "" // or your actual URL string
-//
-//            if let videoID = youtubeURL.extractYouTubeID() {
-//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                if let videoVC = storyboard.instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController {
-//                    videoVC.videoID = videoID
-//                    videoVC.modalPresentationStyle = .fullScreen
-//                    self.present(videoVC, animated: true)
-//                }
-//            } else {
-//                print("❌ Invalid YouTube URL")
-//            } }
-//
-//        
-//        
-//        if let sess = item {
-//            cell.configure(with: sess, location: data[indexPath.section].agendas?.first?.location?.name ?? "")
-//        }
-//       
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AgendaHeaderView") as? AgendaHeaderView else {
-//            return nil
-//        }
-//        
-//        let image = data[section].agendas?.first?.image
-//        let sectionData = data[section]
-//        header.delegate = self
-//        header.configure(dateText: Helper.formatToDayFullMonth(from: sectionData.date ?? "") ?? "", yearText: Helper.extractYear(from: sectionData.date ?? "") ?? "" , bannerImage: image, hide: true)
-//        
-//
-//        return header
-//    }
-//
-//    
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
@@ -485,6 +457,20 @@ extension AgandaViewController {
             }
         }
     }
+    
+    func getFav() {
+        favViewModel.fetchFavourites(ticketId: LocalDataManager.getUserId(), in: self.view) { result in
+            switch result {
+            case .success(let favourites):
+                self.favouriteDisplayRows = self.buildAgendaSections(from: favourites)
+                self.isShowingFavourites = true
+                self.tableView.reloadData()
+            case .failure(let error):
+                print("Error fetching favourites: \(error.localizedDescription)")
+            }
+        }
+
+    }
 
     
     
@@ -510,117 +496,6 @@ extension AgandaViewController: FilterSelectionDelegate {
 }
 
 
-
-
-
-
-//extension AgandaViewController {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return data.count
-//    }
-//
-//    func buildAgendaRows(for section: Int) -> [AgendaRow] {
-//        guard let agendas = data[section].agendas else { return [] }
-//
-//        return agendas.map { agenda in
-//            AgendaRow(
-//                agendaTitle: agenda.title ?? "",
-//                location: agenda.location?.name,
-//                sessions: agenda.agenda_sessions ?? [],
-//                image: agenda.image
-//            )
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        let agendaRows = buildAgendaRows(for: section)
-//        return agendaRows.reduce(0) { $0 + $1.sessions.count }
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let agendaRows = buildAgendaRows(for: indexPath.section)
-//
-//        var sessionIndex = indexPath.row
-//        for agendaRow in agendaRows {
-//            if sessionIndex < agendaRow.sessions.count {
-//                let session = agendaRow.sessions[sessionIndex]
-//
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "AgendaTableViewCell", for: indexPath) as! AgendaTableViewCell
-//                cell.configure(with: session, location: agendaRow.location ?? "")
-//
-//                cell.onPlayVideo = { [weak self] in
-//                    guard let self = self, let url = session.video, let videoID = url.extractYouTubeID() else {
-//                        print("❌ Invalid YouTube URL")
-//                        return
-//                    }
-//
-//                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                    if let videoVC = storyboard.instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController {
-//                        videoVC.videoID = videoID
-//                        videoVC.modalPresentationStyle = .fullScreen
-//                        self.present(videoVC, animated: true)
-//                    }
-//                }
-//
-//                return cell
-//            } else {
-//                sessionIndex -= agendaRow.sessions.count
-//            }
-//        }
-//
-//        fatalError("Invalid session index")
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AgendaHeaderView") as? AgendaHeaderView else {
-//            return nil
-//        }
-//
-//        let date = data[section].date ?? ""
-//        let image = data[section].agendas?.first?.image // Safely get first image if exists
-//
-//        header.configure(
-//            dateText: Helper.formatToDayFullMonth(from: date) ?? "",
-//            yearText: Helper.extractYear(from: date) ?? "",
-//            bannerImage: image,
-//            hide: true // Hide image view only if image is nil
-//        )
-//
-//        return header
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let agendaRows = buildAgendaRows(for: indexPath.section)
-//
-//        var sessionIndex = indexPath.row
-//        for agendaRow in agendaRows {
-//            if sessionIndex < agendaRow.sessions.count {
-//                let session = agendaRow.sessions[sessionIndex]
-//                let date = data[indexPath.section].date ?? ""
-//
-//                let vc = storyboard?.instantiateViewController(withIdentifier: "SessionViewController") as! SessionViewController
-//                vc.session = Session(
-//                    date: Helper.formatToDayFullMonth(from: date) ?? "",
-//                    title: session.title ?? "",
-//                    description: session.description ?? "",
-//                    time: "\(session.fromTime ?? "") - \(session.toTime ?? "")",
-//                    location: agendaRow.location ?? "",
-//                    bannerImage: agendaRow.image ?? "",
-//                    speakers: session.speakers ?? [],
-//                    moderators: session.moderator
-//                )
-//
-//                navigationController?.pushViewController(vc, animated: true)
-//                return
-//            } else {
-//                sessionIndex -= agendaRow.sessions.count
-//            }
-//        }
-//    }
-//}
-
-
 extension AgandaViewController {
 
     var filteredData: [EventAgandaData] {
@@ -634,12 +509,12 @@ extension AgandaViewController {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return buildDisplayRows(for: section).count
+        return  buildDisplayRows(for: section).count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let rows = buildDisplayRows(for: indexPath.section)
-        let row = rows[indexPath.row]
+        let rows =  buildDisplayRows(for: indexPath.section)
+           let row = rows[indexPath.row]
 
         switch row {
         case .agendaHeader(let agendaRow):
@@ -648,7 +523,7 @@ extension AgandaViewController {
             cell.configure(title: agendaRow.agendaTitle, imageURL: agendaRow.image)
             return cell
 
-        case .session(let session, let location, let image):
+        case .session(let session, let location, let image, let agandaId):
             let cell = tableView.dequeueReusableCell(withIdentifier: "AgendaTableViewCell", for: indexPath) as! AgendaTableViewCell
             cell.configure(with: session, location: location)
 
@@ -663,21 +538,37 @@ extension AgandaViewController {
                 }
             }
 
-            // View detail button callback
             cell.viewDetail = { [weak self] in
                 guard let self = self else { return }
-                let date = filteredData[indexPath.section].date ?? ""
 
-                let vc = storyboard?.instantiateViewController(withIdentifier: "SessionViewController") as! SessionViewController
+                var date = ""
+                if self.isShowingFavourites {
+                    let rows = self.favouriteDisplayRows[indexPath.section]
+                    if let headerRow = rows.first(where: {
+                        if case .agendaHeader = $0 { return true }
+                        return false
+                    }) {
+                        if case let .agendaHeader(agendaRow) = headerRow {
+                            date = agendaRow.date
+                        }
+                    }
+                } else {
+                    date = self.filteredData[indexPath.section].date ?? ""
+                }
+
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "SessionViewController") as! SessionViewController
                 vc.session = Session(
-                    date: Helper.formatToDayFullMonth(from: date) ?? "", year: Helper.extractYear(from: date) ?? "",
+                    id: session.id ?? 0,
+                    agandaId: agandaId,
+                    date: date,
+                    year: Helper.extractYear(from: date) ?? "",
                     title: session.title ?? "",
                     description: session.description ?? "",
                     time: "\(session.fromTime ?? "") - \(session.toTime ?? "")",
                     location: location,
                     bannerImage: image ?? "",
-                    speakers: session.speakers ?? [],
-                    moderators: session.moderator
+                    speakers: (session.speakers ?? []).map { Speaker(from: $0) },
+                    moderators: session.moderator != nil ? Speaker(from: session.moderator!) : nil
                 )
                 self.navigationController?.pushViewController(vc, animated: true)
             }
@@ -687,20 +578,59 @@ extension AgandaViewController {
     }
 
 
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AgendaHeaderView") as? AgendaHeaderView else {
+//            return nil
+//        }
+//
+//        let date = filteredData[section].date ?? ""
+//        header.configure(
+//            dateText: Helper.formatToDayFullMonth(from: date) ?? "",
+//            yearText: Helper.extractYear(from: date) ?? "",
+//            bannerImage: "", // update if needed
+//            hide: false
+//        )
+//        return header
+//    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AgendaHeaderView") as? AgendaHeaderView else {
             return nil
         }
 
-        let date = filteredData[section].date ?? ""
-        header.configure(
-            dateText: Helper.formatToDayFullMonth(from: date) ?? "",
-            yearText: Helper.extractYear(from: date) ?? "",
-            bannerImage: "", // update if needed
-            hide: false
-        )
+        if isShowingFavourites {
+            // Safely get the agendaHeader row
+            let rows = favouriteDisplayRows[section]
+            if let headerRow = rows.first(where: {
+                if case .agendaHeader = $0 { return true }
+                return false
+            }) {
+                switch headerRow {
+                case .agendaHeader(let agendaRow):
+                    header.configure(
+                        dateText: Helper.formatToDayFullMonth(from: agendaRow.date) ?? "",
+                        yearText: Helper.extractYear(from: agendaRow.date) ?? "",
+                        bannerImage: agendaRow.image ?? "",
+                        hide: false
+                    )
+                default:
+                    break
+                }
+            }
+        } else {
+            // Use filteredData
+            let date = filteredData[section].date ?? ""
+            header.configure(
+                dateText: Helper.formatToDayFullMonth(from: date) ?? "",
+                yearText: Helper.extractYear(from: date) ?? "",
+                bannerImage: "", // Provide image if needed
+                hide: false
+            )
+        }
+
         return header
     }
+
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -721,15 +651,17 @@ extension AgandaViewController {
                 agendaTitle: agenda.title ?? "",
                 location: agenda.location?.name,
                 sessions: sessions,
-                image: agenda.image
+                image: agenda.image,
+                date: agenda.date ?? "",
+                agandaId: agenda.id ?? 0
             )
             rows.append(.agendaHeader(agendaRow))
 
             for session in sessions {
-                rows.append(.session(session, location: agenda.location?.name ?? "", image: agenda.image))
+                rows.append(.session(session, location: agenda.location?.name ?? "", image: agenda.image, agandaId: agenda.id ?? 0))
             }
         }
-
+ 
         return rows
     }
 }
@@ -753,6 +685,87 @@ extension AgandaViewController: UITextFieldDelegate {
         // Execute after delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
     }
+    
+    func buildAgendaSections(from favourites: [FavouriteData]) -> [[AgendaDisplayRow]] {
+        var sectionRows: [[AgendaDisplayRow]] = []
+
+        for section in favourites {
+            var rows: [AgendaDisplayRow] = []
+
+            guard let agendas = section.agendas else { continue }
+
+            for agenda in agendas {
+                guard let sessions = agenda.sessions, !sessions.isEmpty else { continue }
+
+                // Convert FavouriteSessions to Agenda_sessions
+                let agendaSessions = sessions.map {
+                    Agenda_sessions(
+                        id: $0.session_id,
+                        title: $0.session_title,
+                        description: nil, // Adjust if needed
+                        fromTime: $0.session_from_time,
+                        toTime: $0.session_to_time,
+                        video: $0.session_video,
+                        publishVideo: nil, // Adjust if you add this to FavouriteSessions
+                        speakers: $0.speakers?.map { speaker in
+                            EventAgandaSpeakers(
+                                id: UUID().hashValue,
+                                designation: nil,
+                                firstName: speaker.first_name,
+                                lastName: speaker.last_name,
+                                photoUrl: speaker.photo_url,
+                                companyName: nil
+                            )
+                        },
+                        sessionType: $0.session_type != nil ? SessionType(
+                            id: $0.session_type?.id,
+                            name: $0.session_type?.name,
+                            is_deleted: nil,
+                            label: nil,
+                            icon: $0.session_type?.icon,
+                            createdAt: nil,
+                            updatedAt: nil,
+                            publishedAt: nil,
+                            isInvitationType: nil
+                        ) : nil,
+                        moderator: nil // You can update this if your model supports it
+                    )
+                }
+
+                // Create the agenda header row
+                let agendaRow = AgendaRow(
+                    agendaTitle: agenda.agenda_title ?? "",
+                    location: agenda.location,
+                    sessions: agendaSessions,
+                    image: agenda.agenda_banner,
+                    date: section.date ?? "",
+                    agandaId: agenda.agenda_id ?? 0
+                )
+
+                rows.append(.agendaHeader(agendaRow))
+
+                // Add each session row
+                for session in agendaSessions {
+                    rows.append(
+                        .session(
+                            session,
+                            location: agenda.location ?? "",
+                            image: agenda.agenda_banner,
+                            agandaId: agenda.agenda_id ?? 0
+                        )
+                    )
+                }
+            }
+
+            if !rows.isEmpty {
+                sectionRows.append(rows)
+            }
+        }
+
+        return sectionRows
+    }
+
+
 
 }
 

@@ -1,3 +1,6 @@
 ${PODS_ROOT}/Target Support Files/Pods-ADFW/Pods-ADFW-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework
 ${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework
+${PODS_XCFRAMEWORKS_BUILD_DIR}/SendBirdUIKit/SendbirdUIKit.framework/SendbirdUIKit
+${PODS_XCFRAMEWORKS_BUILD_DIR}/SendbirdChatSDK/SendbirdChatSDK.framework/SendbirdChatSDK
+${PODS_XCFRAMEWORKS_BUILD_DIR}/SendbirdUIMessageTemplate/SendbirdUIMessageTemplate.framework/SendbirdUIMessageTemplate

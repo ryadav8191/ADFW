@@ -1,20 +1,33 @@
 PODS:
   - CollectionViewPagingLayout (1.1.0)
+  - SendbirdChatSDK (4.28.0)
+  - SendBirdUIKit (3.31.0):
+    - SendbirdChatSDK (>= 4.26.0)
+    - SendbirdUIMessageTemplate (>= 3.31.0)
+  - SendbirdUIMessageTemplate (3.31.0):
+    - SendbirdChatSDK (>= 4.26.0)
   - SideMenu (6.5.0)
 
 DEPENDENCIES:
   - CollectionViewPagingLayout
+  - SendBirdUIKit
   - SideMenu
 
 SPEC REPOS:
   trunk:
     - CollectionViewPagingLayout
+    - SendbirdChatSDK
+    - SendBirdUIKit
+    - SendbirdUIMessageTemplate
     - SideMenu
 
 SPEC CHECKSUMS:
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
+  SendbirdChatSDK: ffe090003dd49037cf93216600f5b9564e4f9966
+  SendBirdUIKit: 2c505eb580d02414a50855613e6fae012a42adc4
+  SendbirdUIMessageTemplate: bdbfd5dca8634a9db1fb94fca218d3c9a8dbf76e
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
 
-PODFILE CHECKSUM: b5e5aae5e21a6cb4ed492cada3d604e461cbd549
+PODFILE CHECKSUM: f36bd9a318ef064062ae056f0e25d77217bc1c43
 
 COCOAPODS: 1.16.2

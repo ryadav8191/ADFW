@@ -10,7 +10,7 @@ import UIKit
 
 struct GenericAPIResponse: Decodable {
     let status: Bool?
-    let message: String
+    let message: String?
 }
 
 class UpdateUserViewModel {

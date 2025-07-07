@@ -56,7 +56,7 @@ struct EventAgendas : Codable {
     let title : String?
 //    let description : String?
     let image : String?
-//    let date : String?
+    let date : String?
 //    let time : String?
 //    let published : Bool?
 //    let color : String?
@@ -109,7 +109,7 @@ struct EventAgendas : Codable {
         case title = "title"
 //        case description = "description"
         case image = "image"
-//        case date = "date"
+        case date = "date"
 //        case time = "time"
 //        case published = "published"
 //        case color = "color"
@@ -163,7 +163,7 @@ struct EventAgendas : Codable {
         title = try values.decodeIfPresent(String.self, forKey: .title)
 //        description = try values.decodeIfPresent(String.self, forKey: .description)
         image = try values.decodeIfPresent(String.self, forKey: .image)
-//        date = try values.decodeIfPresent(String.self, forKey: .date)
+        date = try values.decodeIfPresent(String.self, forKey: .date)
 //        time = try values.decodeIfPresent(String.self, forKey: .time)
 //        published = try values.decodeIfPresent(Bool.self, forKey: .published)
 //        color = try values.decodeIfPresent(String.self, forKey: .color)
@@ -217,48 +217,26 @@ struct EventAgendas : Codable {
 
 struct Agenda_sessions : Codable {
     let id : Int?
-//    let day : String?
-//    let date : String?
-//    let image : String?
     let title : String?
     let description : String?
-//    let isBreak : Bool?
-//    let published : Bool?
     let fromTime : String?
     let toTime : String?
-//    let color : String?
-//    let createdAt : String?
-//    let updatedAt : String?
-//    let publishedAt : String?
-//    let is_deleted : Bool?
     let video : String?
     let publishVideo : Bool?
     let speakers : [EventAgandaSpeakers]?
-  //  let location : AgandaLocation?
     let sessionType : SessionType?
     let moderator : EventAgandaSpeakers?
 
     enum CodingKeys: String, CodingKey {
 
         case id = "id"
-//        case day = "day"
-//        case date = "date"
-//        case image = "image"
         case title = "title"
         case description = "description"
-//        case isBreak = "isBreak"
-//        case published = "published"
         case fromTime = "fromTime"
         case toTime = "toTime"
-//        case color = "color"
-//        case createdAt = "createdAt"
-//        case updatedAt = "updatedAt"
-//        case publishedAt = "publishedAt"
-//        case is_deleted = "is_deleted"
         case video = "video"
         case publishVideo = "publishVideo"
         case speakers = "speakers"
-     //   case location = "location"
         case sessionType = "sessionType"
         case moderator = "moderator"
     }
@@ -266,27 +244,42 @@ struct Agenda_sessions : Codable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decodeIfPresent(Int.self, forKey: .id)
-//        day = try values.decodeIfPresent(String.self, forKey: .day)
-//        date = try values.decodeIfPresent(String.self, forKey: .date)
-//        image = try values.decodeIfPresent(String.self, forKey: .image)
         title = try values.decodeIfPresent(String.self, forKey: .title)
         description = try values.decodeIfPresent(String.self, forKey: .description)
-//        isBreak = try values.decodeIfPresent(Bool.self, forKey: .isBreak)
-//        published = try values.decodeIfPresent(Bool.self, forKey: .published)
         fromTime = try values.decodeIfPresent(String.self, forKey: .fromTime)
         toTime = try values.decodeIfPresent(String.self, forKey: .toTime)
-//        color = try values.decodeIfPresent(String.self, forKey: .color)
-//        createdAt = try values.decodeIfPresent(String.self, forKey: .createdAt)
-//        updatedAt = try values.decodeIfPresent(String.self, forKey: .updatedAt)
-//        publishedAt = try values.decodeIfPresent(String.self, forKey: .publishedAt)
-//        is_deleted = try values.decodeIfPresent(Bool.self, forKey: .is_deleted)
         video = try values.decodeIfPresent(String.self, forKey: .video)
         publishVideo = try values.decodeIfPresent(Bool.self, forKey: .publishVideo)
         speakers = try values.decodeIfPresent([EventAgandaSpeakers].self, forKey: .speakers)
-      //  location = try values.decodeIfPresent(AgandaLocation.self, forKey: .location)
         sessionType = try values.decodeIfPresent(SessionType.self, forKey: .sessionType)
         moderator = try values.decodeIfPresent(EventAgandaSpeakers.self, forKey: .moderator)
     }
+    
+    init(
+        id: Int?,
+        title: String?,
+        description: String?,
+        fromTime: String?,
+        toTime: String?,
+        video: String?,
+        publishVideo: Bool?,
+        speakers: [EventAgandaSpeakers]?,
+        sessionType: SessionType?,
+        moderator: EventAgandaSpeakers?
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.fromTime = fromTime
+        self.toTime = toTime
+        self.video = video
+        self.publishVideo = publishVideo
+        self.speakers = speakers
+        self.sessionType = sessionType
+        self.moderator = moderator
+    }
+
+   
 
 }
 
@@ -297,13 +290,8 @@ struct EventAgandaSpeakers : Codable,Identifiable {
     let firstName : String?
     let lastName : String?
     let photoUrl : String?
-//    let email : String?
     let companyName : String?
-//    let bio : String?
-//    let nationality : String?
-//    let residentCountry : String?
-//    let published : Bool?
-//    let social : Bool?
+   
 
     enum CodingKeys: String, CodingKey {
 
@@ -312,13 +300,7 @@ struct EventAgandaSpeakers : Codable,Identifiable {
         case firstName = "firstName"
         case lastName = "lastName"
         case photoUrl = "photoUrl"
-//        case email = "email"
         case companyName = "companyName"
-//        case bio = "bio"
-//        case nationality = "nationality"
-//        case residentCountry = "residentCountry"
-//        case published = "published"
-//        case social = "social"
     }
 
     init(from decoder: Decoder) throws {
@@ -328,14 +310,25 @@ struct EventAgandaSpeakers : Codable,Identifiable {
         firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
         lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
         photoUrl = try values.decodeIfPresent(String.self, forKey: .photoUrl)
-//        email = try values.decodeIfPresent(String.self, forKey: .email)
         companyName = try values.decodeIfPresent(String.self, forKey: .companyName)
-//        bio = try values.decodeIfPresent(String.self, forKey: .bio)
-//        nationality = try values.decodeIfPresent(String.self, forKey: .nationality)
-//        residentCountry = try values.decodeIfPresent(String.self, forKey: .residentCountry)
-//        published = try values.decodeIfPresent(Bool.self, forKey: .published)
-//        social = try values.decodeIfPresent(Bool.self, forKey: .social)
     }
+    
+    init(
+        id: Int?,
+        designation: String?,
+        firstName: String?,
+        lastName: String?,
+        photoUrl: String?,
+        companyName: String?
+    ) {
+        self.id = id
+        self.designation = designation
+        self.firstName = firstName
+        self.lastName = lastName
+        self.photoUrl = photoUrl
+        self.companyName = companyName
+    }
+
 
 }
 

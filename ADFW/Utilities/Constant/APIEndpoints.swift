@@ -68,21 +68,21 @@ struct APIEndpoints {
         return "\(baseURL)agenda/byDate"
     }
     
-//    static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
-//        var query = ""
-//        
-//        if isSessionFilter {
-//            if let id = id {
-//                query = "?isSessionFilter=true&date=\(date)&id=\(id)"
-//            } else {
-//                query = "?isSessionFilter=true&date=\(date)"
-//            }
-//        } else {
-//            query = "?date=\(date)"
-//        }
-//        
-//        return baseURL + "agenda/byDate" + query
-//    }
+    //    static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
+    //        var query = ""
+    //
+    //        if isSessionFilter {
+    //            if let id = id {
+    //                query = "?isSessionFilter=true&date=\(date)&id=\(id)"
+    //            } else {
+    //                query = "?isSessionFilter=true&date=\(date)"
+    //            }
+    //        } else {
+    //            query = "?date=\(date)"
+    //        }
+    //
+    //        return baseURL + "agenda/byDate" + query
+    //    }
     
     static func getAgendaByDateURL(
         date: String,
@@ -113,7 +113,7 @@ struct APIEndpoints {
         let query = "?" + queryItems.joined(separator: "&")
         return baseURL + "agenda/byDate" + query
     }
-
+    
     
     static func getAllSpeakersURL(page: Int, pageSize: Int, searchQuery: String? = nil, agendaPermaLink: String? = nil) -> String {
         var query = """
@@ -208,10 +208,10 @@ struct APIEndpoints {
     static func fetchFeaturedAgendas() -> String {
         return "\(baseURL)agendas/?populate=*&filters[is_deleted][$eq]=false&sort=priority:asc&filters[major_event]=true&filters[published][$eq]=true"
     }
-
     
-   // "https://adfw.multitvsolution.com/api/interests"
-  //  https://adfw.multitvsolution.com/api/interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc
+    
+    // "https://adfw.multitvsolution.com/api/interests"
+    //  https://adfw.multitvsolution.com/api/interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc
     
     static var getAllInterest: String {
         return "\(baseURL)interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc"
@@ -223,21 +223,35 @@ struct APIEndpoints {
     }
     
     static func fetchNotifications(page: Int, pageSize: Int) -> String {
-            return "\(baseURL)notification/all?page=\(page)&pageSize=\(pageSize)"
-        }
-    
-    //1&pagination[pageSize]=10&sort=createdAt:desc
+        return "\(baseURL)notification/all?page=\(page)&pageSize=\(pageSize)"
+    }
     
     
     static func getHomeBanner(page: Int, pageSize: Int) -> String {
         return "\(baseURL)homes?pagination[page]=\(page)&pagination[pageSize]=\(pageSize)&sort=createdAt:desc"
     }
     
-    //"https://adfw.multitvsolution.com/api/about-adgms"
-    
     static var getAboutADGMData: String {
         return "\(baseURL)about-adgms"
     }
+    
+    static var addFavorite: String {
+        return "\(baseURL)favourites/add"
+    }
+    
+    
+    static func getFavouritesByTicketId(_ ticketId: Int) -> String {
+        return "\(baseURL)favourites/findByTicketId/\(ticketId)"
+    }
+    
+    static func getAgendaSessionDetailURL(sessionId: Int, ticketId: Int) -> String {
+        return "\(baseURL)agenda-sessions/findOne/\(sessionId)?ticketId=\(ticketId)"
+    }
+    
+    static func removeFavouriteURL(ticketId: Int, sessionId: Int) -> String {
+        return "\(baseURL)favourites/remove/\(ticketId)/\(sessionId)"
+    }
+    
     
 }
 

@@ -8,6 +8,7 @@ target 'ADFW' do
   # Pods for ADFW
 pod 'SideMenu'
 pod 'CollectionViewPagingLayout'
+ pod 'SendBirdUIKit'
 
 
 

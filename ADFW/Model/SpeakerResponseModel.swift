@@ -279,3 +279,5 @@ struct SpeakerAgandaAttributes : Codable {
     }
 
 }
+
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="MessageHeaderView" customModule="ADFW" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X3o-NA-pxO">
+                    <rect key="frame" x="156" y="412" width="81.333333333333314" height="28.333333333333314"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FE4-jS-kxa">
+                            <rect key="frame" x="20.000000000000004" y="4" width="41.333333333333343" height="20.333333333333332"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.58039215686274503" green="0.58039215686274503" blue="0.58039215686274503" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.87450980392156863" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="FE4-jS-kxa" firstAttribute="top" secondItem="X3o-NA-pxO" secondAttribute="top" constant="4" id="DVa-xY-xdO"/>
+                        <constraint firstAttribute="bottom" secondItem="FE4-jS-kxa" secondAttribute="bottom" constant="4" id="G0p-B4-AkX"/>
+                        <constraint firstAttribute="trailing" secondItem="FE4-jS-kxa" secondAttribute="trailing" constant="20" id="XAy-HS-4RR"/>
+                        <constraint firstItem="FE4-jS-kxa" firstAttribute="leading" secondItem="X3o-NA-pxO" secondAttribute="leading" constant="20" id="dhG-jI-dkC"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="X3o-NA-pxO" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="dwQ-hD-2Nj"/>
+                <constraint firstItem="X3o-NA-pxO" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="nA6-hU-pnY"/>
+            </constraints>
+            <connections>
+                <outlet property="containerView" destination="X3o-NA-pxO" id="F0S-e3-M28"/>
+                <outlet property="dateLabel" destination="FE4-jS-kxa" id="Zsh-KN-2cC"/>
+            </connections>
+            <point key="canvasLocation" x="59" y="20"/>
+        </view>
+    </objects>
+</document>

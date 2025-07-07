@@ -102,6 +102,51 @@ class AgendaTableViewCell: UITableViewCell {
         
     }
     
+    func configure(with item: FavouriteSessions,location: String) {
+        timeLabel.text = "\(item.session_from_time ?? "") - \(item.session_to_time ?? "")"
+        titleLabel.text = item.session_title
+        typeLabel.text = item.session_type?.name
+        locationLabel.text = location
+        
+        if let urlString = item.session_type?.icon, let url = URL(string: urlString) {
+            agandaTypeImageView.kf.setImage(with: url)
+        }
+        
+        if item.session_video == "" {
+            vidoePlayerButton.isHidden = false
+        } else {
+            vidoePlayerButton.isHidden = true
+        }
+
+        
+        // Clear old speaker images
+        speakerStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        if let speakers = item.speakers {
+            if speakers.count > 0 {
+                spakerViewHeightConstraints.constant = 32
+                for speaker in speakers {
+                    let imageView = UIImageView()
+                    imageView.contentMode = .scaleAspectFit
+                    imageView.clipsToBounds = true
+                    // imageView.layer.cornerRadius = 16
+                    imageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+                    imageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+                    // Load image from URL using Kingfisher
+                    if let urlString = speaker.photo_url, let url = URL(string: urlString) {
+                        imageView.kf.setImage(with: url)
+                    }
+
+                    speakerStackView.addArrangedSubview(imageView)
+                }
+            } else {
+                spakerViewHeightConstraints.constant = 0
+            }
+       
+        }
+
+        
+    }
+    
     
     @IBAction func videoButton(_ sender: Any) {
         onPlayVideo?()

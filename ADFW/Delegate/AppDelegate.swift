@@ -9,6 +9,17 @@ import UIKit
 import IQKeyboardManagerSwift
 import FirebaseCore
 import FirebaseMessaging
+import SendbirdChatSDK
+
+
+let APP_ID = "72862838-E945-44E7-8722-6B469BAD650B"
+let params = InitParams(
+    applicationId: APP_ID,
+    isLocalCachingEnabled: true,
+    logLevel: .info,
+    needsSynchronous: false
+)
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -33,6 +44,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+        
+        SendbirdChat.initialize(
+            params: params,
+            migrationStartHandler: {
+                print("Migration started")
+            },
+            completionHandler: { error in
+                if let error = error {
+                    print("Initialization error:", error.localizedDescription)
+                } else {
+                    print("Sendbird SDK initialized")
+                }
+            }
+        )
+        
         return true
     }
 

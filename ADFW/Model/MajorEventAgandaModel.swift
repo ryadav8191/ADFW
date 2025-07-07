@@ -294,6 +294,29 @@ struct SessionType : Codable {
         publishedAt = try values.decodeIfPresent(String.self, forKey: .publishedAt)
         isInvitationType = try values.decodeIfPresent(Bool.self, forKey: .isInvitationType)
     }
+    
+    init(
+        id: Int?,
+        name: String?,
+        is_deleted: Bool?,
+        label: String?,
+        icon: String?,
+        createdAt: String?,
+        updatedAt: String?,
+        publishedAt: String?,
+        isInvitationType: Bool?
+    ) {
+        self.id = id
+        self.name = name
+        self.is_deleted = is_deleted
+        self.label = label
+        self.icon = icon
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.publishedAt = publishedAt
+        self.isInvitationType = isInvitationType
+    }
+
 
 }
 

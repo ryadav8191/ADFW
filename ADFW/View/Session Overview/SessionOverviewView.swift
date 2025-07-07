@@ -10,9 +10,12 @@ import SwiftUI
 
 
 struct SessionOverviewView: View {
-     var session: Session?
-    @State private var isFavorite = false
+    @ObservedObject var viewModel: SessionOverviewViewModel
+    var session: Session?
     let onBack: () -> Void
+    let addFavourite: () -> Void
+    let removeFavourite: () -> Void
+  
 
     var body: some View {
         
@@ -69,14 +72,14 @@ struct SessionOverviewView: View {
                             Spacer() // Pushes button to the right
 
                             Button(action: {
-                                isFavorite.toggle()
+                                viewModel.isFavourite ? self.removeFavourite() : self.addFavourite()
                             }) {
                                 HStack(spacing: 4) {
-                                    Text("Add to favourite")
+                                    Text(viewModel.isFavourite ? "Remove from favourite" : "Add to favourite")
                                         .font(Font(FontManager.font(weight: .medium, size: 13)))
                                         .foregroundColor(Color(UIColor(hex: "#A3A6A7")))
-                                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                        .foregroundColor(isFavorite ? .red : .gray)
+                                    Image(systemName: viewModel.isFavourite ? "heart.fill" : "heart")
+                                        .foregroundColor(viewModel.isFavourite ? .red : .gray)
                                 }
                                 
                             }
@@ -196,5 +199,5 @@ struct SessionOverviewView: View {
 
 
 #Preview {
-    SessionOverviewView(onBack: {})
+   // SessionOverviewView(onBack: {})
 }

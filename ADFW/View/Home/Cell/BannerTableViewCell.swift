@@ -81,7 +81,7 @@ class BannerTableViewCell: UITableViewCell {
              collectionView.collectionViewLayout = layout
              collectionView.isPagingEnabled = true
             collectionView.isScrollEnabled = false
-                collectionView.register(UINib(nibName: "BannerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "BannerCollectionViewCell")
+            collectionView.register(UINib(nibName: "BannerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "BannerCollectionViewCell")
         progressView.progress = 0.0
         startTimers()
        

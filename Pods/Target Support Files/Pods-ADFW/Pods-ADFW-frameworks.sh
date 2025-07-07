@@ -178,10 +178,16 @@ code_sign_if_enabled() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SendBirdUIKit/SendbirdUIKit.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SendbirdChatSDK/SendbirdChatSDK.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SendbirdUIMessageTemplate/SendbirdUIMessageTemplate.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SendBirdUIKit/SendbirdUIKit.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SendbirdChatSDK/SendbirdChatSDK.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/SendbirdUIMessageTemplate/SendbirdUIMessageTemplate.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
