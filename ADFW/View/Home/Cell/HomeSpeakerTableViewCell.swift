@@ -25,6 +25,7 @@ class HomeSpeakerTableViewCell: UITableViewCell {
     
     
     var onClickViewAll: (() -> Void)?
+    var viewSpeaker: ((Int) -> Void)?
     weak var delegate: HomeSessionTableViewCellDelegate?
     
     override func awakeFromNib() {
@@ -125,11 +126,7 @@ extension HomeSpeakerTableViewCell: UICollectionViewDataSource,UICollectionViewD
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let story = UIStoryboard(name: "Main", bundle: nil)
-//        let vc = story.instantiateViewController(identifier: "SpeackerDetailViewController") as! SpeackerDetailViewController
-//        vc.profile = arrayOfSpeaker[indexPath.row].attributes
-//
-//        self.navigationController?.pushViewController(vc, animated: true)
+        self.viewSpeaker?(indexPath.row)
     }
     
     

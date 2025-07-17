@@ -7,16 +7,17 @@
 
 import UIKit
 import SwiftUI
+import EzPopup
 
 
 
 class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilterData]) {
         print(tags)
        self.selectedTags = Set(tags)
         self.currentPage = 1
         self.isLastPage = false
-        getSpeakerData(page: self.currentPage, search: nil,agendaPermaLink: tags.first?.permaLink)
+        getSpeakerData(page: self.currentPage, search: nil,agendaPermaLink: tags.first?.attributes?.permaLink)
     }
     
     private let spinner = UIActivityIndicatorView(style: .medium)
@@ -36,7 +37,7 @@ class SpeakerViewController: UIViewController, UITextFieldDelegate, FilterSelect
     var agandaViewModel = EventAgandaViewModel()
     var filterSelectionData = [AgandaFilterData]()
     private var debounceWorkItem: DispatchWorkItem?
-    var selectedTags = Set<AgandaFilter>()
+    var selectedTags = Set<AgandaFilterData>()
     
     var uniqueAgendaColors: [String: String] = [:]
     
@@ -245,8 +246,9 @@ extension SpeakerViewController: UICollectionViewDataSource,UICollectionViewDele
         let story = UIStoryboard(name: "Main", bundle: nil)
         let vc = story.instantiateViewController(identifier: "SpeackerDetailViewController") as! SpeackerDetailViewController
         vc.profile = filteredItems[indexPath.row].attributes
-        
-        self.navigationController?.pushViewController(vc, animated: true)
+                
+        let popupVC = PopupViewController(contentController: vc, popupWidth: self.view.frame.width - 32, popupHeight: 450)
+        present(popupVC, animated: true)
     }
     
     
@@ -256,7 +258,7 @@ extension SpeakerViewController: UICollectionViewDataSource,UICollectionViewDele
         let frameHeight = scrollView.frame.size.height
 
         if offsetY > contentHeight - frameHeight - 100 {
-            getSpeakerData(page: self.currentPage + 1, search: self.searchTexfield.text,agendaPermaLink: (agendaPermaLink == nil) ? self.selectedTags.first?.permaLink : agendaPermaLink)
+            getSpeakerData(page: self.currentPage + 1, search: self.searchTexfield.text,agendaPermaLink: (agendaPermaLink == nil) ? self.selectedTags.first?.attributes?.permaLink : agendaPermaLink)
         }
     }
     
@@ -309,8 +311,10 @@ extension SpeakerViewController {
                         self.isLastPage = true
                     }
                 }
+                
 
             case .failure(let error):
+                self.collectionView.reloadData()
                 self.showNoDataView(true)
                // MessageHelper.showToast(message: error.localizedDescription, in: self.view)
             }
@@ -341,9 +345,7 @@ extension SpeakerViewController {
     
     func getAgendaColors(for speaker: Speakers?) -> [String] {
         var colors: [String] = []
-
         guard let sessions = speaker?.agenda_sessions?.data else { return [] }
-
         for session in sessions {
             if let color = session.attributes?.agenda?.data?.attributes?.color {
                 if !colors.contains(color) {

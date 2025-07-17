@@ -82,5 +82,53 @@ class Helper {
         outputFormatter.dateFormat = "d MMMM"
         return outputFormatter.string(from: date)
     }
+ 
+    static func extractYearFromISODate(_ dateString: String) -> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        inputFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        guard let date = inputFormatter.date(from: dateString) else {
+            return nil
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy"
+        return outputFormatter.string(from: date)
+    }
+    
+    static func extractDate(from isoString: String) -> String? {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        guard let date = isoFormatter.date(from: isoString) else {
+            return nil
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.timeZone = TimeZone.current // Or use TimeZone(abbreviation: "UTC")
+
+        return dateFormatter.string(from: date)
+    }
+
+   
+    static func formatISODateToDayFullMonth(_ dateString: String) -> String? {
+        let cleaned = dateString.replacingOccurrences(of: " ", with: "")
+
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX")
+        inputFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        guard let date = inputFormatter.date(from: cleaned) else {
+            return nil
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "d MMMM"
+        return outputFormatter.string(from: date)
+    }
 
 }

@@ -27,11 +27,10 @@ class MenuViewController: UIViewController {
     
 
     func setupProfile() {
-          profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
-          profileImageView.clipsToBounds = true
-          profileImageView.image = UIImage.profile
-          nameLabel.text = "Shoaib Muhammed"
-          companyLabel.text = "CPI Business"
+        profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
+        profileImageView.clipsToBounds = true
+        profileImageView.image = UIImage.profile
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         profileImageView.isUserInteractionEnabled = true
         profileImageView.addGestureRecognizer(tapGesture)
@@ -46,14 +45,8 @@ class MenuViewController: UIViewController {
         nameLabel.text = (LocalDataManager.getLoginResponse()?.firstName ?? "") + " "  + (LocalDataManager.getLoginResponse()?.lastName ?? "")
         companyLabel.text = LocalDataManager.getLoginResponse()?.designation
         
-        let photo = LocalDataManager.getLoginResponse()?.photo
         
-        if let urlString = photo , let photoUrl = URL(string: urlString) {
-            profileImageView.kf.setImage(with: photoUrl, placeholder: UIImage(named: "profile"))
-        } else {
-            profileImageView.image = UIImage(named: "profile")
-        }
-      }
+    }
     
     func setupMenuItems() {
            menuItems = [
@@ -68,6 +61,14 @@ class MenuViewController: UIViewController {
            ]
        }
 
+    override func viewWillAppear(_ animated: Bool) {
+        let photo = LocalDataManager.getLoginResponse()?.photo
+        if let urlString = photo , let photoUrl = URL(string: urlString) {
+            profileImageView.kf.setImage(with: photoUrl, placeholder: UIImage(named: "profile"))
+        } else {
+            profileImageView.image = UIImage(named: "profile")
+        }
+    }
     
     @objc func imageTapped() {
         print("Image tapped!")
@@ -127,7 +128,7 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
             if let data = sidebarMenu?.signOut {
                 cell.titleLabel.text = data.label
                 cell.titleLabel.font = FontManager.font(weight: .medium, size: 16)
-                cell.iconImageView.setImage(with: data.icon, placeholder: UIImage())
+                cell.iconImageView.setImage(with: data.icon, placeholder: UIImage(systemName: "globe"))
             }
             
             return cell
@@ -148,7 +149,7 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
             if let item = sidebarMenu?.navigationItems?[indexPath.row] {
                    cell.titleLabel.text = item.label
                    cell.titleLabel.font = FontManager.font(weight: .medium, size: 16)
-                   cell.iconImageView.setImage(with: item.icon, placeholder: UIImage())
+                   cell.iconImageView.setImage(with: item.icon, placeholder: UIImage(systemName: "globe"))
                    // cell.badgeView.isHidden = !item.hasBadge
                } else {
                    cell.titleLabel.text = ""
@@ -237,7 +238,7 @@ extension MenuViewController:UITableViewDelegate, UITableViewDataSource {
         case "agenda": return "AgandaViewController"
         case "social-feed": return "SocialMediaActivityViewController"
         case "map": return "MapViewController"
-     //   case "favourites": return "FavouritesViewController"
+        case "favourites": return "FavouriteViewController"
         case "interests": return "InterestViewController"
         default: return "ProfileViewController" // fallback
         }

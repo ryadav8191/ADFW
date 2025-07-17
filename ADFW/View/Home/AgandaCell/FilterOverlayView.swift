@@ -16,7 +16,7 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
 
      var tags = [AgandaFilterData]()
     
-    var selectedTags = Set<AgandaFilter>()
+    var selectedTags = Set<AgandaFilterData>()
     weak var delegate: FilterSelectionDelegate?
     
     override init(frame: CGRect) {
@@ -88,11 +88,11 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.identifier, for: indexPath) as! TagCell
-        let tag = tags[indexPath.item].attributes
-        if let tag = tag {
+        let tag = tags[indexPath.item]
+//        if let tag = tag {
             let isSelected = selectedTags.contains(tag)
             cell.configure(data: tag, isSelected: isSelected)
-        }
+//        }
         return cell
     }
 
@@ -106,9 +106,9 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let tag = tags[indexPath.item].attributes
+        let tag = tags[indexPath.item]
 
-        if let tag = tag {
+       // if let tag = tag {
             
             if selectedTags.contains(tag) {
                 selectedTags.remove(tag)
@@ -116,7 +116,7 @@ class FilterOverlayView: UIView, UICollectionViewDelegate, UICollectionViewDataS
                 selectedTags = [tag]
             }
 
-        }
+       // }
         UIView.performWithoutAnimation {
             collectionView.reloadItems(at: [indexPath])
         }

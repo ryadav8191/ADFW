@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import EzPopup
 
 class SessionViewController: UIViewController {
     
@@ -43,7 +44,6 @@ class SessionViewController: UIViewController {
         let isFav = aganaSession?.isFavourite ?? false
 
         if let viewModel = sessionOverviewVM {
-            // ✅ Just update the value
             viewModel.isFavourite = isFav
         } else {
             // First time setup
@@ -52,7 +52,19 @@ class SessionViewController: UIViewController {
 
             let swiftUIView = SessionOverviewView(
                 viewModel: viewModel,
-                session: session,
+                session: Session(
+                    id: aganaSession?.id ?? 0,
+                    agandaId: aganaSession?.agenda?.id ?? 0,
+                    date: Helper.formatISODateToDayFullMonth(aganaSession?.agenda?.date ?? "") ?? "",
+                    year: Helper.extractYearFromISODate(aganaSession?.agenda?.date ?? "") ?? "",
+                    title: aganaSession?.title ?? "",
+                    description: aganaSession?.description ?? "",
+                    time: (aganaSession?.fromTime ?? "") + "-" + (aganaSession?.toTime ?? ""),
+                    location: aganaSession?.agenda?.location?.name ?? "",
+                    bannerImage: aganaSession?.agenda?.agendaMobileBanner ?? "",
+                    speakers: (aganaSession?.speakers ?? []).map { Speaker(from: $0) } ,
+                    moderators: aganaSession?.moderator != nil ? Speaker(from: aganaSession?.moderator) : nil
+                ),
                 onBack: { [weak self] in
                     self?.navigationController?.popViewController(animated: true)
                 },
@@ -60,9 +72,9 @@ class SessionViewController: UIViewController {
                     guard let self = self else { return }
                     self.viewModel.addToFavourites(
                         ticketId: LocalDataManager.getUserId(),
-                        sessionId: self.session?.id ?? 0,
-                        agendaId: self.session?.agandaId ?? 0,
-                        agendaDate: self.session?.date ?? "",
+                        sessionId: self.aganaSession?.id ?? 0,
+                        agendaId: self.aganaSession?.agenda?.id ?? 0,
+                        agendaDate: self.aganaSession?.agenda?.date ?? "",
                         in: self.view
                     ) { result in
                         switch result {
@@ -78,7 +90,7 @@ class SessionViewController: UIViewController {
                     guard let self = self else { return }
                     self.favViewModel.removeFromFavourites(
                         ticketId: LocalDataManager.getUserId(),
-                        sessionId: self.session?.id ?? 0,
+                        sessionId: self.aganaSession?.id ?? 0,
                         in: self.view
                     ) { result in
                         switch result {
@@ -89,7 +101,25 @@ class SessionViewController: UIViewController {
                             MessageHelper.showBanner(message: error.localizedDescription, status: .error)
                         }
                     }
+                }, onSpeakerTap: { selectedSpeaker in
+                    let fullName = selectedSpeaker.name
+
+                    // Try to match from speakers
+                    if let matchedSpeaker = self.aganaSession?.speakers?.first(where: {
+                        fullName.contains($0.firstName ?? "")
+                    }) {
+                        self.presentSpeakerDetail(matchedSpeaker)
+                    }
+                    // Else, try to match from moderator
+                    else if let moderator = self.aganaSession?.moderator,
+                            (moderator.firstName ?? "") + " " + (moderator.lastName ?? "") == fullName {
+                        self.presentSpeakerDetail(moderator)
+                    }
+                    else {
+                        print("Speaker not found in session or moderator list")
+                    }
                 }
+
             )
 
             let hostingController = UIHostingController(rootView: swiftUIView)
@@ -108,4 +138,18 @@ class SessionViewController: UIViewController {
             ])
         }
     }
+    
+    func presentSpeakerDetail(_ speaker: EventAgandaSpeakers) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: "SpeackerDetailViewController") as! SpeackerDetailViewController
+        vc.sessionProfile = speaker
+
+        let popupVC = PopupViewController(
+            contentController: vc,
+            popupWidth: self.view.frame.width - 32,
+            popupHeight: 350
+        )
+        self.present(popupVC, animated: true)
+    }
+
 }

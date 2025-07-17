@@ -7,6 +7,7 @@
 
 import UIKit
 import SideMenu
+import EzPopup
 
 class HomeViewController: UIViewController {
     
@@ -115,6 +116,14 @@ class HomeViewController: UIViewController {
         
     }
     
+    @IBAction func searchAction(_ sender: Any) {
+        
+        let vc = storyboard?.instantiateViewController(identifier: "SearchViewController") as! SearchViewController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -191,6 +200,15 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             
+            cell.viewSpeaker = { index in
+                let story = UIStoryboard(name: "Main", bundle: nil)
+                let vc = story.instantiateViewController(identifier: "SpeackerDetailViewController") as! SpeackerDetailViewController
+                vc.profile =  self.arrayOfSpeaker[index].attributes
+                        
+                let popupVC = PopupViewController(contentController: vc, popupWidth: self.view.frame.width - 32, popupHeight: 450)
+                self.present(popupVC, animated: true)
+            }
+            
             cell.delegate = self
             return cell
             
@@ -203,6 +221,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
                 let vc  = story.instantiateViewController(identifier: "OurPartnerViewController") as! OurPartnerViewController
                 self.navigationController?.pushViewController(vc, animated: true)
             }
+            
+            
             
             return cell
             
@@ -274,12 +294,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             return self.view.frame.height / 4
+        case 1:
+            return 375
         case 3:
             return 350
         case 4:
             return 375
-        case 1:
-            return 350
+       
         default: return UITableView.automaticDimension
         }
     }
@@ -291,6 +312,9 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             if let listVC = storyboard.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController {
                 self.navigationController?.pushViewController(listVC, animated: true)
             }
+            
+      
+           
             
         default:
             print("hii")
@@ -423,7 +447,6 @@ extension HomeViewController {
     }
     
     func getPartnerData(page: Int) {
-
         partnerViewModel.fetchPartnerData(page: page,pageSize: 100, in: self.view) { result in
             switch result {
             case .success(let response):

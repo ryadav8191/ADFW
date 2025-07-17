@@ -9,7 +9,6 @@ import UIKit
 import SendbirdChatSDK
 import SendbirdUIKit
 
-
 struct MessageSection {
     let date: String // "MMM dd, yyyy"
     var messages: [BaseMessage]
@@ -22,7 +21,7 @@ class ChatDetailViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var desigLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var profileImageView: UIButton!
+    @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var textfeildView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var messageTextField: UITextField!
@@ -32,14 +31,12 @@ class ChatDetailViewController: UIViewController {
     var channel: GroupChannel?
     var messageSections: [MessageSection] = []
     
-    let currentUserId = "user123"
-    let targetUserId = "user456"
+
     
-//    let currentUserId = "user456"
-//    let targetUserId = "user123"
+    var currentUserId = ""
+    var targetUserId = ""
     
-    let nickname = "John"
-    let profileImageURL = "https://example.com/avatar.jpg"
+    var user:SendbirdChatSDK.User?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -47,6 +44,7 @@ class ChatDetailViewController: UIViewController {
         configureUI()
         setupTableView()
         connectAndStartChat()
+      
         SendbirdChat.addChannelDelegate(self, identifier: "ChatDetailViewController")
 
     }
@@ -73,7 +71,27 @@ class ChatDetailViewController: UIViewController {
 
         nameLabel.font = FontManager.font(weight: .medium, size: 18)
         desigLabel.font = FontManager.font(weight: .semiBold, size: 10)
-
+        
+        nameLabel.text = user?.nickname
+       
+        if let urlString = user?.profileURL, let url = URL(string: urlString) {
+            profileImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "profile"),
+                options: [.transition(.fade(0.2))]     
+            ) { result in
+                switch result {
+                case .success:
+                    break // Image loaded successfully
+                case .failure:
+                    self.profileImageView.image = UIImage(named: "profile") // Fallback on error
+                }
+            }
+        } else {
+            profileImageView.image = UIImage(named: "profile")
+        }
+        
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         textfeildView.layer.cornerRadius = 25
         textfeildView.clipsToBounds = true
     }
@@ -98,17 +116,32 @@ class ChatDetailViewController: UIViewController {
                 print("Connection failed: \(error.localizedDescription)")
                 return
             }
-            print("Connected as \(user?.userId ?? "")")
 
             let params = UserUpdateParams()
-            params.nickname = self.nickname
-            params.profileImageURL = self.profileImageURL
+            params.nickname = (LocalDataManager.getLoginResponse()?.firstName ?? "") + " " +  (LocalDataManager.getLoginResponse()?.lastName ?? "")
+            params.profileImageURL = LocalDataManager.getLoginResponse()?.photo
 
-            SendbirdChat.updateCurrentUserInfo(params: params) { error in
+            SendbirdChat.updateCurrentUserInfo(params: params, completionHandler:  { error in
                 if let error = error {
                     print("User info update error: \(error.localizedDescription)")
+                } else {
+                    // After updating nickname/photo, update metadata
+                    let metadata: [String: String] = [
+                        "role": LocalDataManager.getLoginResponse()?.designation ?? "",
+                        "company": LocalDataManager.getLoginResponse()?.company ?? "",
+                        "country": LocalDataManager.getLoginResponse()?.nationality ?? ""
+                    ]
+                    
+                    SendbirdChat.getCurrentUser()?.updateMetaData(metadata) { updatedMetadata, error in
+                        if let error = error {
+                            print("Metadata update error: \(error.localizedDescription)")
+                        } else {
+                            print("Metadata updated: \(updatedMetadata ?? [:])")
+                        }
+                    }
                 }
-            }
+            })
+
           
             self.loadOrCreateChannel(currentUserId: self.currentUserId, targetUserId: self.targetUserId)
         }
@@ -130,8 +163,19 @@ class ChatDetailViewController: UIViewController {
 
             self.channel = channel
             self.loadMessages()
+
+            if let member = channel?.members.first(where: { $0.userId == self.targetUserId }) {
+                self.user = member
+                self.nameLabel.text = member.nickname
+
+                if let urlString = member.profileURL, let url = URL(string: urlString) {
+                    self.profileImageView.kf.setImage(with: url, placeholder: UIImage(named: "profile"))
+                }
+                self.desigLabel.text = member.metaData["role"]
+            }
         }
     }
+
 
     func loadMessages() {
         guard let channel = self.channel else { return }
@@ -172,6 +216,15 @@ class ChatDetailViewController: UIViewController {
 
 
             self.tableView.reloadData()
+            
+            self.channel?.markAsRead { error in
+                if let error = error {
+                    print("Failed to mark as read: \(error.localizedDescription)")
+                } else {
+                    print("Messages marked as read")
+                }
+            }
+
         }
     }
 
@@ -270,6 +323,9 @@ extension ChatDetailViewController: UITableViewDataSource,UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
+    
+    
+    
 
 
 }
@@ -303,7 +359,6 @@ extension ChatDetailViewController: GroupChannelDelegate {
             }
         }
     }
-    
-    
-
 }
+
+

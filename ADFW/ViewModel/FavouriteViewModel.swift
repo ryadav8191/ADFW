@@ -54,8 +54,13 @@ class FavouriteViewModel {
     }
     
     
-    func fetchFavourites(ticketId: Int, in view: UIView, completion: @escaping (Result<[FavouriteData], Error>) -> Void) {
-        let urlString = APIEndpoints.getFavouritesByTicketId(ticketId)
+    func fetchFavourites( ticketId: Int,
+                          page: Int = 1,
+                          pageSize: Int = 10,
+                          search: String? = nil,
+                          locationId: String? = nil,
+                          agendaId: Int? = nil, in view: UIView, completion: @escaping (Result<[FavouriteData], Error>) -> Void) {
+        let urlString = APIEndpoints.getFavouritesByTicketId(ticketId: ticketId, page: page, search: search, locationId: locationId, agendaId: agendaId)
 
         NetworkManager.shared.fetchData(from: urlString, in: view) { (result: Result<FavouriteModel, Error>) in
             switch result {

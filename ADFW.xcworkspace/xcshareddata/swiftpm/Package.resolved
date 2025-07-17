@@ -1,5 +1,5 @@
 {
-  "originHash" : "d15939a493551a53552ab4fc9c075e46126dbcb05e706ad36189a99ee1ee93e5",
+  "originHash" : "ea2fd3a29ffd7b47ed56434af8e8a0e7749853ca0162367bd8570b5aab441be2",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "6ecf22145d577411fb97c8c964df0fb5886f035f",
         "version" : "3.3.0"
+      }
+    },
+    {
+      "identity" : "ezpopup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/huynguyencong/EzPopup.git",
+      "state" : {
+        "revision" : "a8429ff1372cdaa5ba6f2e9daf756b6b489542d0",
+        "version" : "1.2.4"
       }
     },
     {

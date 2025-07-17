@@ -66,11 +66,13 @@ class MajorEventTableViewCell: UITableViewCell {
  
     func configureUI () {
         selectionStyle = .none
-        containerView.layer.shadowColor = UIColor(red: 0, green: 0.078, blue: 0.203, alpha: 0.1).cgColor
-        containerView.layer.shadowOffset = CGSize(width: 5, height: 5)
-        containerView.layer.shadowRadius = 20
-        containerView.layer.shadowOpacity = 1
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOpacity = 0.4
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerView.layer.shadowRadius = 4
+        containerView.layer.cornerRadius = 3
         containerView.layer.masksToBounds = false
+
         descriptionLabel.font = FontManager.font(weight: .medium, size: 13)
         
         DispatchQueue.main.async {

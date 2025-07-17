@@ -11,7 +11,8 @@ import UIKit
 
 class LocalDataManager {
     private static let userDefaultsKey = "loginResponseData"
-
+    private static let selectedInterestKey = "SelectedInterests"
+    
     /// Save login response data  // change
     static func saveLoginResponse(_ response: User) {
         let encoder = JSONEncoder()
@@ -19,7 +20,7 @@ class LocalDataManager {
             UserDefaults.standard.set(encodedData, forKey: userDefaultsKey)
         }
     }
-  
+    
     /// Retrieve login response data  // change
     static func getLoginResponse() -> User? {
         guard let savedData = UserDefaults.standard.data(forKey: userDefaultsKey) else {
@@ -28,18 +29,18 @@ class LocalDataManager {
         let decoder = JSONDecoder()
         return try? decoder.decode(User.self, from: savedData)
     }
-
     
-//    static func updateUserProfileImage(_ imageUrl: String) {
-//        guard var currentUser = getLoginResponse() else {
-//            print("No saved user to update.")
-//            return
-//        }
-//        
-//        currentUser.upload_image = imageUrl
-//        saveLoginResponse(currentUser)
-//    }
-
+    
+        static func updateUserProfileImage(_ imageUrl: String) {
+            guard var currentUser = getLoginResponse() else {
+                print("No saved user to update.")
+                return
+            }
+    
+            currentUser.photo = imageUrl
+            saveLoginResponse(currentUser)
+        }
+    
     /// Clear saved login response data
     static func clearLoginResponse() {
         UserDefaults.standard.removeObject(forKey: userDefaultsKey)
@@ -54,9 +55,23 @@ class LocalDataManager {
         return UserDefaults.standard.integer(forKey: "userId")
     }
     
-    
-    
+    static func saveSelectedInterests(_ values: [UserInterestData]) {
+        if let encoded = try? JSONEncoder().encode(values) {
+            UserDefaults.standard.set(encoded, forKey: selectedInterestKey)
+        }
+    }
 
+    static func getSelectedInterests() -> [UserInterestData] {
+        if let data = UserDefaults.standard.data(forKey: selectedInterestKey),
+           let decoded = try? JSONDecoder().decode([UserInterestData].self, from: data) {
+            return decoded
+        }
+        return []
+    }
+    
+    
+    
+    
 }
 
 

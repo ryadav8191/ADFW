@@ -17,17 +17,21 @@ class MajorEventViewController: UIViewController {
     @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationView: UIView!
-    
-    weak var delegate: FilterSelectionDelegate?
+    @IBOutlet weak var searchTextField: UITextField!
 
-  
+    
+    private var searchDebounceWorkItem: DispatchWorkItem?
+    weak var delegate: FilterSelectionDelegate?
     var selectedIndex = 0
     var viewModel = MajorEventAgandaViewModel()
-    
     var agendas = [Agendas]()
     var data = [MajorEventAgandaData]()
     var arrDate = [MajorEventAgandaData]()
     var isList = false
+    var isFirst = true
+    
+    
+    //MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,18 +44,28 @@ class MajorEventViewController: UIViewController {
         self.delegate = self
         registerCell()
         configureUI()
+        getMajorEventData(date: "")
         listViewButton.setImage(UIImage.calendarToList, for: .normal)
+        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchTextChanged(_:)), for: .editingChanged)
         
     }
     
+    //MARK: - viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         selectedIndex = 0
-        getMajorEventData(date: "")
-        tableView.setContentOffset(.zero, animated: true)
+//        getMajorEventData(date: "")
+//        tableView.setContentOffset(.zero, animated: true)
        
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+       // searchTextField.text  = ""
+        //searchTextField.endEditing(true)
+    }
+    
 
+    //MARK: - registerCell
     func registerCell() {
         collectionView.register(UINib(nibName: "DateCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DateCollectionViewCell")
         
@@ -67,6 +81,7 @@ class MajorEventViewController: UIViewController {
         
     }
     
+    //MARK: - configureUI
     func configureUI() {
         let fullText = "What’s Happening in ADFW 2024"
         let attributedString = NSMutableAttributedString(string: fullText)
@@ -105,6 +120,8 @@ class MajorEventViewController: UIViewController {
         
     }
     
+    //MARK: - filterAction
+    
     @IBAction func filterAction(_ sender: Any) {
         let overlay = FilterOverlayView(frame: view.bounds)
            overlay.alpha = 0
@@ -139,6 +156,7 @@ class MajorEventViewController: UIViewController {
 }
 
 
+//MARK: -- UICollectionViewDataSource, UICollectionViewDelegate
 extension MajorEventViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -163,7 +181,7 @@ extension MajorEventViewController: UICollectionViewDataSource, UICollectionView
        }
 
        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-           selectedIndex = indexPath.item
+         //  selectedIndex = indexPath.item
            if indexPath.row == 0 {
                getMajorEventData(date: "")
            } else {
@@ -307,7 +325,7 @@ extension MajorEventViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 extension MajorEventViewController: FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilterData]) {
         print("Selected Tags:", tags)
        
     }
@@ -328,25 +346,24 @@ extension MajorEventViewController: HomeSessionTableViewCellDelegate {
 extension MajorEventViewController {
     
     
-    func getMajorEventData(date:String) {
-        viewModel.fetchMajorAgandaData(date: date, page: 1, in: self.view) { result in
+    func getMajorEventData(date:String, search: String? = nil) {
+        viewModel.fetchMajorAgandaData(date: date, search: search, page: 1, in: self.view) { result in
             switch result {
             case .success(let response):
                 print("data:", response)
-    
-                    
-                    if date == "" {
-                        self.data = response
-                        self.arrDate = response
-                    
-                    } else {
-                        self.data = response
-                        
-                    }
-    
+                
+                
+                if self.isFirst {
+                    self.data = response
+                    self.arrDate = response
+                    self.isFirst = false
+                } else {
+                    self.data = response
+                }
+                
                 self.tableView.reloadData()
                 self.collectionView.reloadData()
-               
+                
             case .failure(let error):
                 // self.showNoDataView(true)
                 print(error.localizedDescription)
@@ -359,6 +376,26 @@ extension MajorEventViewController {
 
 
 
+
+extension MajorEventViewController: UITextFieldDelegate {
+    @objc func searchTextChanged(_ textField: UITextField) {
+        let searchText = textField.text ?? ""
+
+        // Cancel previous task
+        searchDebounceWorkItem?.cancel()
+
+        // Create new task
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.getMajorEventData(date: "", search: searchText)
+        }
+
+        // Save reference to cancel if needed
+        searchDebounceWorkItem = workItem
+
+        // Execute after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+    }
+}
 
 
 

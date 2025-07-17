@@ -67,7 +67,7 @@ struct User : Codable {
     let residanceCountry : String?
     let countryCode : String?
     let mobile : String?
-    let photo : String?
+    var photo : String?
     let createdAt : String?
     let updatedAt : String?
     let publishedAt : String?

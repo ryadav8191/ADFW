@@ -12,9 +12,9 @@ import FirebaseMessaging
 import SendbirdChatSDK
 
 
-let APP_ID = "72862838-E945-44E7-8722-6B469BAD650B"
+
 let params = InitParams(
-    applicationId: APP_ID,
+    applicationId: APIEndpoints.APP_ID,
     isLocalCachingEnabled: true,
     logLevel: .info,
     needsSynchronous: false
@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         IQKeyboardManager.shared.isEnabled = true
         IQKeyboardManager.shared.enableAutoToolbar = true
+     
         FirebaseApp.configure()
         
         UNUserNotificationCenter.current().delegate = self

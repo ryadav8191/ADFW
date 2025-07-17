@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PersonCard: View {
     let person: Speaker
-
+    let onTap: ((Speaker) -> Void)?
     var body: some View {
         HStack(spacing: 12) {
 //            Image(person.imageName)
@@ -52,6 +52,9 @@ struct PersonCard: View {
             Spacer()
         }
         .padding()
+        .onTapGesture {
+            onTap?(person)
+        }
         .background(
             Color.white
                 .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)

@@ -126,18 +126,28 @@ class InterestViewController: UIViewController {
     
     
     @IBAction func saveInterestAction(_ sender: Any) {
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let homeVC = storyboard.instantiateViewController(withIdentifier: "CustomTabBarController") as! CustomTabBarController
-            sceneDelegate.window?.rootViewController = homeVC
-            sceneDelegate.window?.makeKeyAndVisible()
+        
+        viewModel.saveInterests(ticketId: LocalDataManager.getUserId(), interests: LocalDataManager.getSelectedInterests(), in: self.view) { result in
+            switch result {
+            case .success(let message):
+                print("✅ Saved:", message)
+                if self.pageType != .HomeInterest {
+                    if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let homeVC = storyboard.instantiateViewController(withIdentifier: "CustomTabBarController") as! CustomTabBarController
+                        sceneDelegate.window?.rootViewController = homeVC
+                        sceneDelegate.window?.makeKeyAndVisible()
+                    }
+                } else {
+                    self.navigationController?.popViewController(animated: true)
+                }
+                MessageHelper.showBanner(message: message, status: .success)
+            case .failure(let error):
+                print("❌ Error:", error.localizedDescription)
+                MessageHelper.showBanner(message: error.localizedDescription, status: .error)
+            }
         }
     }
-    
-    
-    
-    
-    
 }
 
 
@@ -155,12 +165,35 @@ extension InterestViewController: UICollectionViewDelegateFlowLayout, UICollecti
         return cell
     }
 
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//       arrOfInter[indexPath.item].attributes?.is_deleted?.toggle()
+//        UIView.performWithoutAnimation {
+//            collectionView.reloadItems(at: [indexPath])
+//        }
+//    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       arrOfInter[indexPath.item].attributes?.is_deleted?.toggle()
+        guard let selectedInterest = arrOfInter[indexPath.item].attributes else { return }
+
+        var savedValues = LocalDataManager.getSelectedInterests()
+
+        if let index = savedValues.firstIndex(where: { $0.value == selectedInterest.value }) {
+            // Unselect
+            savedValues.remove(at: index)
+        } else {
+            // Select
+            savedValues.append(UserInterestData.init(label: selectedInterest.label ?? "", value: selectedInterest.value ?? ""))
+        }
+
+        // Save updated selection to UserDefaults
+        LocalDataManager.saveSelectedInterests(savedValues)
+
         UIView.performWithoutAnimation {
             collectionView.reloadItems(at: [indexPath])
         }
     }
+
+
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let text = arrOfInter[indexPath.item].attributes?.label ?? ""
@@ -179,7 +212,20 @@ extension InterestViewController {
             case .success(let interests):
                 print("Fetched interests: \(interests)")
                 self.arrOfInter = interests
-                
+                self.getUserInterest()
+            case .failure(let error):
+                MessageHelper.showAlert(message: error.localizedDescription, on: self)
+            }
+        }
+    }
+    
+    func getUserInterest() {
+        viewModel.fetchInterestById(id: LocalDataManager.getUserId(), in: self.view) { result in
+            switch result {
+            case .success(let userInterests):
+               // let selectedValues = userInterests
+                              //  .compactMap { $0.value }
+                LocalDataManager.saveSelectedInterests(userInterests)
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                     self.updateCollectionViewHeight()
@@ -191,3 +237,5 @@ extension InterestViewController {
         }
     }
 }
+
+

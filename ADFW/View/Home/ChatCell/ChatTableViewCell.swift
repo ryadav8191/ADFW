@@ -15,6 +15,10 @@ class ChatTableViewCell: UITableViewCell {
     @IBOutlet weak var lastChatLabel: UILabel!
     @IBOutlet weak var unReadCount: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var unreadView: UIView!
+    @IBOutlet weak var pinButton: UIButton!
+    
+    var onPinToggle: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -40,6 +44,11 @@ class ChatTableViewCell: UITableViewCell {
         
         unReadCount.font = FontManager.font(weight: .medium, size: 14)
         
+    }
+    
+    
+    @IBAction func pinButtonTapped(_ sender: UIButton) {
+        onPinToggle?()
     }
     
 }

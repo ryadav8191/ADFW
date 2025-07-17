@@ -15,6 +15,7 @@ struct SessionOverviewView: View {
     let onBack: () -> Void
     let addFavourite: () -> Void
     let removeFavourite: () -> Void
+    let onSpeakerTap: (Speaker) -> Void
   
 
     var body: some View {
@@ -169,8 +170,10 @@ struct SessionOverviewView: View {
                                 .font(Font(FontManager.font(weight: .semiBold, size: 19)))
                                 .foregroundColor(Color(UIColor.blueColor))
 
-                            ForEach(session.speakers) { person in
-                                PersonCard(person: person)
+                            ForEach(session.speakers,id: \.name) { person in
+                                PersonCard(person: person) { tappedSpeaker in
+                                    onSpeakerTap(tappedSpeaker)
+                                }
                             }
                         }
 
@@ -181,7 +184,9 @@ struct SessionOverviewView: View {
                                 .foregroundColor(Color(UIColor.blueColor))
 
 //                            ForEach(session.moderators) { person in
-                            PersonCard(person: data)
+                            PersonCard(person: data) { tappedSpeaker in
+                                onSpeakerTap(tappedSpeaker)
+                            }
 //                            }
                         }
                     }

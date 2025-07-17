@@ -112,7 +112,7 @@ class EnterntainmentViewController: UIViewController, FilterSelectionDelegate, U
     }
 
     
-    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilterData]) {
         print(tags)
     }
     

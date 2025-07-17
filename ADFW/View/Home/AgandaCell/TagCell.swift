@@ -67,8 +67,8 @@ class TagCell: UICollectionViewCell {
         ])
     }
 
-    func configure(data: AgandaFilter?, isSelected: Bool = false) {
-        titleLabel.text = data?.title
+    func configure(data: AgandaFilterData?, isSelected: Bool = false) {
+        titleLabel.text = data?.attributes?.title
         dotView.backgroundColor = isSelected ? .black : .systemBlue
         containerView.backgroundColor = isSelected
             ? UIColor(red: 0.85, green: 0.92, blue: 1.0, alpha: 1)

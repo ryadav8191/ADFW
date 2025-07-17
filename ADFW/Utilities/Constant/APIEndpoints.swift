@@ -10,6 +10,7 @@ import Foundation
 
 struct APIEndpoints {
     static let baseURL = "https://adminadfw.videostech.cloud/api/"
+    static let APP_ID = "72862838-E945-44E7-8722-6B469BAD650B"
     static private let eventId = "309"
     
     static var token: String {
@@ -64,9 +65,28 @@ struct APIEndpoints {
         return "\(baseURL)agenda/byDate?isSessionFilter=\(isFilter)&date=\(date)"
     }
     
-    static func getMajorEvent() -> String {
-        return "\(baseURL)agenda/byDate"
+    static func getAgendasByDate(
+        date: String?,
+        searchTerm: String?
+    ) -> String {
+        var components = URLComponents(string: "\(baseURL)agenda/byDate")
+        
+        var queryItems: [URLQueryItem] = []
+
+//        // Use `date` only if searchTerm is empty or nil
+//        if let searchTerm = searchTerm, searchTerm.isEmpty, let date = date {
+//            queryItems.append(URLQueryItem(name: "date", value: date))
+//        } else if searchTerm == nil, let date = date {
+//            queryItems.append(URLQueryItem(name: "date", value: date))
+//        }
+
+        // Always include `search`, even if empty
+        queryItems.append(URLQueryItem(name: "search", value: searchTerm ?? ""))
+
+        components?.queryItems = queryItems
+        return components?.url?.absoluteString ?? "\(baseURL)agenda/byDate"
     }
+
     
     //    static func getAgendaByDateURL(date: String, id: Int?,isSessionFilter: Bool) -> String {
     //        var query = ""
@@ -210,8 +230,6 @@ struct APIEndpoints {
     }
     
     
-    // "https://adfw.multitvsolution.com/api/interests"
-    //  https://adfw.multitvsolution.com/api/interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc
     
     static var getAllInterest: String {
         return "\(baseURL)interests?pagination[page]=1&pagination[pageSize]=10&sort=createdAt:desc"
@@ -240,9 +258,35 @@ struct APIEndpoints {
     }
     
     
-    static func getFavouritesByTicketId(_ ticketId: Int) -> String {
-        return "\(baseURL)favourites/findByTicketId/\(ticketId)"
+    static func getFavouritesByTicketId(
+        ticketId: Int,
+        page: Int,
+        pageSize: Int = 100,
+        search: String?,
+        locationId: String?,
+        agendaId: Int?
+    ) -> String {
+        var components = URLComponents(string: "\(baseURL)favourites/findByTicketId/\(ticketId)")
+        
+        var queryItems: [URLQueryItem] = [
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "pageSize", value: "\(pageSize)")
+        ]
+        
+        if let search = search, !search.isEmpty {
+            queryItems.append(URLQueryItem(name: "search", value: search))
+        }
+        if let locationId = locationId, !locationId.isEmpty {
+            queryItems.append(URLQueryItem(name: "locationId", value: locationId))
+        }
+        if let agendaId = agendaId {
+            queryItems.append(URLQueryItem(name: "agendaId", value: String(agendaId)))
+        }
+        
+        components?.queryItems = queryItems
+        return components?.url?.absoluteString ?? "\(baseURL)favourites/findByTicketId/\(ticketId)"
     }
+
     
     static func getAgendaSessionDetailURL(sessionId: Int, ticketId: Int) -> String {
         return "\(baseURL)agenda-sessions/findOne/\(sessionId)?ticketId=\(ticketId)"
@@ -252,6 +296,25 @@ struct APIEndpoints {
         return "\(baseURL)favourites/remove/\(ticketId)/\(sessionId)"
     }
     
+    
+    static func getInterestByIdURL(_ id: Int) -> String {
+        return "\(baseURL)interests/findById/\(id)"
+    }
+
+    static func createInterestURL() -> String {
+        return "\(baseURL)interests/create"
+    }
+
+    //https://adminadfw.videostech.cloud/api/uploadImageorPdf
+    
+    
+    static var uploadFile: String {
+        return "\(baseURL)uploadImageorPdf"
+    }
+    
+    static func GlobalSearch(search: String) -> String {
+        return "\(baseURL)global-search?search=\(search)"
+    }
     
 }
 

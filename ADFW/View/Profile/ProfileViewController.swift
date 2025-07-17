@@ -66,12 +66,9 @@ class ProfileViewController: UIViewController {
     var viewModel = UpdateUserViewModel()
     var countries: [CountryAttributes] = []
     var countryViewModel =  CountryViewModel()
-
+    var uploadfileViewModel = UploadFileViewModel()
     private var blurView: UIVisualEffectView?
-
-    
-    
-    
+    var slectedImage:String?
     
     //MARK: -- viewDidLoad
     override func viewDidLoad() {
@@ -486,8 +483,8 @@ class ProfileViewController: UIViewController {
             //   "phoneNumber": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "mobile": phoneNumberTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines),
             "countryCode": countryCodeLabel.text ?? "",
-            // "photo": LocalDataManager.getLoginResponse()?.photo ?? "",
-            //"image1": LocalDataManager.getLoginResponse()?.photo ?? "",
+            "photo": self.slectedImage == nil ? LocalDataManager.getLoginResponse()?.photo : "" ,
+            // "image1": LocalDataManager.getLoginResponse()?.photo ?? "",
             
         ]
         viewModel.updateUserProfile(userId: userId, parameters: parameters, in: self.view) { result in
@@ -561,6 +558,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             profileImageView.image = image
+            self.uploadFile(image: image)
         }
 
         picker.dismiss(animated: true) { [weak self] in
@@ -603,5 +601,32 @@ class HalfHeightPresentationController: UIPresentationController {
     override func presentationTransitionWillBegin() {
         presentedView?.layer.cornerRadius = 20
         presentedView?.layer.masksToBounds = true
+    }
+}
+
+
+extension ProfileViewController {
+    
+    func uploadFile(image: UIImage) {
+     
+        uploadfileViewModel.uploadImageFile(image: image, in: self.view) { result in
+                switch result {
+                case .success(let response):
+                   
+                    if response.status == true {
+                        self.slectedImage = response.data
+                       // LocalDataManager.updateUserProfileImage(response.data)
+                        //MessageHelper.showBanner(message: response.message, status: .success)
+                    } else {
+                        MessageHelper.showBanner(message: response.message, status: .error)
+                    }
+                   
+                case .failure(let error):
+                    print(" Upload Failed:", error.localizedDescription)
+                    MessageHelper.showBanner(message: "Someting Went Worng", status: .error)
+                    
+                }
+            }
+        
     }
 }

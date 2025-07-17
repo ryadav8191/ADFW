@@ -36,8 +36,8 @@ class FavouriteViewController: UIViewController {
     let favViewModel = FavouriteViewModel()
     var isShowingFavourites = false
     var favouriteDisplayRows: [[AgendaDisplayRow]] = []
-    
-    var selectedTags = Set<AgandaFilter>()
+    var viewModel = EventAgandaViewModel()
+    var selectedTags = Set<AgandaFilterData>()
     weak var delegate: FilterSelectionDelegate?
     private var updateScheduled = false
     var updateWorkItem: DispatchWorkItem?
@@ -45,6 +45,7 @@ class FavouriteViewController: UIViewController {
     var originalData: [FavouriteData] = []
     var data = [FavouriteData]()
     var filterSelectionData = [AgandaFilterData]()
+    private let noDataView = NoDataView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,11 +55,26 @@ class FavouriteViewController: UIViewController {
         self.delegate = self
         registerCell()
         configureUI()
+        getEventFilterData()
+        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchTextChanged(_:)), for: .editingChanged)
+        view.addSubview(noDataView)
+        noDataView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            noDataView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noDataView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noDataView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            noDataView.heightAnchor.constraint(equalTo: view.heightAnchor)
+        ])
+        noDataView.isHidden = false
       
       
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        searchTextField.text = nil
+        searchTextField.endEditing(false)
         getFav()
     }
     func registerCell() {
@@ -74,33 +90,9 @@ class FavouriteViewController: UIViewController {
 
     }
     
-    func filterData(withTags tags: [AgandaFilter]) {
+    func filterData(withTags tags: [AgandaFilterData]) {
         self.selectedTags = Set(tags)
-        
-//        if tags.isEmpty {
-//            data = originalData
-//        } else {
-//            data = originalData.compactMap { section in
-//               guard let agendas = section.agendas else { return }
-//
-//                let filteredAgendas = agendas.filter { agenda in
-//                    guard let title = agenda.title else { return false }
-//                    return tags.contains(where: { tag in
-//                        title.localizedCaseInsensitiveContains(tag.title ?? "")
-//                    })
-//                }
-//
-//                if !filteredAgendas.isEmpty {
-//                    var updatedSection = section
-//                    updatedSection.agendas = filteredAgendas
-//                    return updatedSection
-//                } else {
-//                    return nil
-//                }
-//            }
-//        }
-
-        tableView.reloadData()
+        getFav(agandaId: tags.first?.id)
     }
     
     func configureUI() {
@@ -114,6 +106,18 @@ class FavouriteViewController: UIViewController {
         navigationView.layer.shadowOffset = CGSize(width: 0, height: 3) // bottom only
         navigationView.layer.shadowRadius = 1
         navigationView.layer.masksToBounds = false
+        
+    }
+    
+    private func showNoDataView(_ show: Bool) {
+        DispatchQueue.main.async {
+            self.noDataView.isHidden = !show
+        }
+    }
+    
+    
+    func filterData(withSearchText searchText: String) {
+        getFav(search: searchText)
         
     }
     
@@ -342,27 +346,74 @@ extension FavouriteViewController {
 
 
 extension FavouriteViewController: FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
-        filterData(withTags: tags)
+    func didUpdateSelectedTags(_ tags: [AgandaFilterData]) {
+       
+            filterData(withTags: tags)
+               
     }
 }
 
 
 extension FavouriteViewController {
     
-    func getFav() {
-        favViewModel.fetchFavourites(ticketId: LocalDataManager.getUserId(), in: self.view) { result in
+    func getFav(search: String? = nil,agandaId: Int? = nil) {
+        favViewModel.fetchFavourites(ticketId: LocalDataManager.getUserId(),search: search,agendaId: agandaId, in: self.view) { result in
             switch result {
             case .success(let favourites):
-               // self.favouriteDisplayRows = favourites
+               
+                if favourites.count == 0 {
+                    self.showNoDataView(true)
+                } else {
+                    self.showNoDataView(false)
+                }
                 self.data = favourites
                 self.originalData = favourites
                 self.tableView.reloadData()
             case .failure(let error):
+                self.showNoDataView(true)
                 print("Error fetching favourites: \(error.localizedDescription)")
             }
         }
 
     }
+    
+    func getEventFilterData() {
+        viewModel.agandaFilterData(page: 1, id: 0, in: self.view) { result in
+            switch result {
+            case .success(let response):
+                print("data:", response)
+                self.filterSelectionData = response
+             
+               
+            case .failure(let error):
+                // self.showNoDataView(true)
+                print(error.localizedDescription)
+                MessageHelper.showToast(message: error.localizedDescription, in: self.view)
+            }
+        }
+    }
 
+}
+
+
+extension FavouriteViewController: UITextFieldDelegate {
+    
+    @objc func searchTextChanged(_ textField: UITextField) {
+        selectedTags = []
+        let searchText = textField.text ?? ""
+
+        // Cancel previous task
+        searchDebounceWorkItem?.cancel()
+
+        // Create new task
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.filterData(withSearchText: searchText)
+        }
+
+        // Save reference to cancel if needed
+        searchDebounceWorkItem = workItem
+
+        // Execute after delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+    }
 }

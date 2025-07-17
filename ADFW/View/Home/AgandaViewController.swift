@@ -49,7 +49,7 @@ class AgandaViewController: UIViewController {
     var arrDate = [EventAgandaData]()
     var filterData = [EventAgandaData]()
     var date:String?
-    var selectedTags = Set<AgandaFilter>()
+    var selectedTags = Set<AgandaFilterData>()
     var originalData: [EventAgandaData] = []
     var isDateSet:Bool = false
     var isSingleDataMode: Bool {
@@ -150,19 +150,19 @@ class AgandaViewController: UIViewController {
     }
     
     
-    func filterData(withTags tags: [AgandaFilter]) {
+    func filterData(withTags tags: [AgandaFilterData]) {
         self.selectedTags = Set(tags)
         
         if tags.isEmpty {
             data = originalData
         } else {
-            data = originalData.compactMap { section in
+            data = originalData.compactMap { section -> EventAgandaData? in
                 guard let agendas = section.agendas else { return nil }
 
                 let filteredAgendas = agendas.filter { agenda in
                     guard let title = agenda.title else { return false }
                     return tags.contains(where: { tag in
-                        title.localizedCaseInsensitiveContains(tag.title ?? "")
+                        title.localizedCaseInsensitiveContains(tag.attributes?.title ?? "")
                     })
                 }
 
@@ -490,7 +490,7 @@ extension AgandaViewController: HomeSessionTableViewCellDelegate {
 }
 
 extension AgandaViewController: FilterSelectionDelegate {
-    func didUpdateSelectedTags(_ tags: [AgandaFilter]) {
+    func didUpdateSelectedTags(_ tags: [AgandaFilterData]) {
         filterData(withTags: tags)
     }
 }
@@ -706,7 +706,7 @@ extension AgandaViewController: UITextFieldDelegate {
                         fromTime: $0.session_from_time,
                         toTime: $0.session_to_time,
                         video: $0.session_video,
-                        publishVideo: nil, // Adjust if you add this to FavouriteSessions
+                        publishVideo: nil, location: "", // Adjust if you add this to FavouriteSessions
                         speakers: $0.speakers?.map { speaker in
                             EventAgandaSpeakers(
                                 id: UUID().hashValue,
@@ -714,7 +714,7 @@ extension AgandaViewController: UITextFieldDelegate {
                                 firstName: speaker.first_name,
                                 lastName: speaker.last_name,
                                 photoUrl: speaker.photo_url,
-                                companyName: nil
+                                companyName: nil, bio: nil
                             )
                         },
                         sessionType: $0.session_type != nil ? SessionType(

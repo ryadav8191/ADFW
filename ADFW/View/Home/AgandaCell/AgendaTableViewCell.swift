@@ -18,10 +18,9 @@ class AgendaTableViewCell: UITableViewCell {
     @IBOutlet weak var viewDetailsButton: UIButton!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var viewAllLabel: UILabel!
-    
-    
     @IBOutlet weak var vidoePlayerButton: UIButton!
     
+    @IBOutlet weak var locationView: UIView!
     
     var onPlayVideo: (() -> Void)?
     var viewDetail: (() -> Void)?
@@ -61,7 +60,14 @@ class AgendaTableViewCell: UITableViewCell {
         timeLabel.text = "\(item.fromTime ?? "") - \(item.toTime ?? "")"
         titleLabel.text = item.title
         typeLabel.text = item.sessionType?.name
-        locationLabel.text = location
+        if location == nil || location == "" {
+            locationLabel.text = ""
+            locationView.isHidden = true
+        } else {
+            locationView.isHidden = false
+            locationLabel.text = location
+        }
+
         
         if let urlString = item.sessionType?.icon, let url = URL(string: urlString) {
             agandaTypeImageView.kf.setImage(with: url)

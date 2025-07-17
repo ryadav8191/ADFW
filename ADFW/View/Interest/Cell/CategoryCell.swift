@@ -54,11 +54,20 @@ class CategoryCell: UICollectionViewCell {
     }
 
    
+   
+
     
     func configure(with category: InterestData) {
         titleLabel.text = category.attributes?.label
-        contentView.backgroundColor = category.attributes?.is_deleted ?? false ? UIColor.blueColor : .white
-        titleLabel.textColor = category.attributes?.is_deleted ?? false ? .white : UIColor.blueColor
+
+        let selectedValues = LocalDataManager.getSelectedInterests()
+
+        let isSelected = selectedValues.contains {
+            $0.value == category.attributes?.value
+        }
+
+        contentView.backgroundColor = isSelected ? UIColor.blueColor : .white
+        titleLabel.textColor = isSelected ? .white : UIColor.blueColor
         contentView.layer.borderColor = UIColor.blueColor.cgColor
     }
 

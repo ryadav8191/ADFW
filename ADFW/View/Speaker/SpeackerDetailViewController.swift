@@ -5,12 +5,6 @@
 //  Created by MultiTV on 22/05/25.
 //
 
-
-
-
-
-
-
 import UIKit
 import WebKit
 import Kingfisher
@@ -18,6 +12,7 @@ import Kingfisher
 class SpeackerDetailViewController: UIViewController {
 
     var profile: Speakers?
+    var sessionProfile: EventAgandaSpeakers?
     var onClose: (() -> Void)?
 
     private let scrollView = UIScrollView()
@@ -43,6 +38,8 @@ class SpeackerDetailViewController: UIViewController {
         view.backgroundColor = .white
         setupViews()
         configureData()
+       // view.layer.cornerRadius = 16
+        view.clipsToBounds = true
     }
     
    
@@ -74,7 +71,7 @@ class SpeackerDetailViewController: UIViewController {
         ])
 
         // Close Button
-        closeButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        closeButton.setImage(UIImage(named: "close"), for: .normal)
         closeButton.tintColor = .gray
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
         let closeContainer = UIView()
@@ -83,9 +80,9 @@ class SpeackerDetailViewController: UIViewController {
         NSLayoutConstraint.activate([
             closeButton.trailingAnchor.constraint(equalTo: closeContainer.trailingAnchor),
             closeButton.topAnchor.constraint(equalTo: closeContainer.topAnchor),
-            closeButton.heightAnchor.constraint(equalToConstant: 30),
-            closeButton.widthAnchor.constraint(equalToConstant: 30),
-            closeContainer.heightAnchor.constraint(equalToConstant: 30)
+            closeButton.heightAnchor.constraint(equalToConstant: 36),
+            closeButton.widthAnchor.constraint(equalToConstant: 36),
+            closeContainer.heightAnchor.constraint(equalToConstant: 36)
         ])
         contentView.addArrangedSubview(closeContainer)
 
@@ -102,6 +99,14 @@ class SpeackerDetailViewController: UIViewController {
         NSLayoutConstraint.activate([
             profileImageView.widthAnchor.constraint(equalToConstant: 105),
             profileImageView.heightAnchor.constraint(equalToConstant: 115)
+        ])
+        
+        let verticalLine = UIView()
+        verticalLine.backgroundColor = .blueColor
+        verticalLine.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            verticalLine.widthAnchor.constraint(equalToConstant: 2),
+            verticalLine.heightAnchor.constraint(equalToConstant: 80) // Adjust as needed
         ])
 
         let textStack = UIStackView()
@@ -120,6 +125,7 @@ class SpeackerDetailViewController: UIViewController {
         textStack.addArrangedSubview(designationLabel)
 
         profileStack.addArrangedSubview(profileImageView)
+        profileStack.addArrangedSubview(verticalLine)
         profileStack.addArrangedSubview(textStack)
 
         contentView.addArrangedSubview(profileStack)
@@ -141,10 +147,15 @@ class SpeackerDetailViewController: UIViewController {
     private func configureData() {
         if let urlStr = profile?.photoUrl, let url = URL(string: urlStr) {
             profileImageView.kf.setImage(with: url)
+        } else {
+            
+            if let urlStr = sessionProfile?.photoUrl, let url = URL(string: urlStr) {
+                profileImageView.kf.setImage(with: url)
+            }
         }
 
-        nameLabel.text = "\(profile?.firstName ?? "") \(profile?.lastName ?? "")"
-        designationLabel.text = profile?.designation ?? ""
+        nameLabel.text = "\(profile?.firstName ?? sessionProfile?.firstName ?? "") \(profile?.lastName ?? sessionProfile?.lastName ?? "")"
+        designationLabel.text = profile?.designation ?? sessionProfile?.designation ?? ""
 
         let html = """
         <html>
@@ -157,34 +168,46 @@ class SpeackerDetailViewController: UIViewController {
         }
         body {
             font-family: 'IsidoraSans-Regular', -apple-system, Helvetica, Arial, sans-serif;
-            font-size: 12px;
-            color: #555555;
+            font-size: 14px;
+            color: #000000;
             line-height: 1.5;
         }
         </style>
         </head>
         <body>
-        \(profile?.bio ?? "")
+        \(profile?.bio ?? sessionProfile?.bio ?? "")
         </body>
         </html>
         """
         bioWebView.loadHTMLString(html, baseURL: nil)
 
+        if let profile = self.profile {
+            tags = getAgendaTags(for: profile)
+             tagsCollectionView.reloadData()
 
-        // Tags data
-        tags = getAgendaTags(for: profile)
-        tagsCollectionView.reloadData()
-
-        DispatchQueue.main.async {
-            self.tagsCollectionView.collectionViewLayout.invalidateLayout()
-            self.tagsCollectionView.layoutIfNeeded()
-            self.tagsCollectionView.heightAnchor.constraint(equalToConstant: self.tagsCollectionView.contentSize.height).isActive = true
+             DispatchQueue.main.async {
+                 self.tagsCollectionView.collectionViewLayout.invalidateLayout()
+                 self.tagsCollectionView.layoutIfNeeded()
+                // self.tagsCollectionView.heightAnchor.constraint(equalToConstant: self.tagsCollectionView.contentSize.height).isActive = true
+                 self.tagsCollectionView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+                 
+             }
+        } else {
+            DispatchQueue.main.async {
+                self.tagsCollectionView.collectionViewLayout.invalidateLayout()
+                self.tagsCollectionView.layoutIfNeeded()
+               // self.tagsCollectionView.heightAnchor.constraint(equalToConstant: self.tagsCollectionView.contentSize.height).isActive = true
+                self.tagsCollectionView.heightAnchor.constraint(equalToConstant: 16).isActive = true
+                
+            }
         }
+       
+      
 
     }
 
     @objc private func closeTapped() {
-        self.navigationController?.popViewController(animated: false)
+        self.dismiss(animated: true)
     }
 }
 

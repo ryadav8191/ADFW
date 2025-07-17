@@ -28,7 +28,7 @@ struct AgandaFilterModel : Codable {
 }
 
 
-struct AgandaFilterData : Codable {
+struct AgandaFilterData : Codable, Hashable {
     let id : Int?
     let attributes : AgandaFilter?
 

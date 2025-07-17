@@ -223,6 +223,7 @@ struct Agenda_sessions : Codable {
     let toTime : String?
     let video : String?
     let publishVideo : Bool?
+    let location : String?
     let speakers : [EventAgandaSpeakers]?
     let sessionType : SessionType?
     let moderator : EventAgandaSpeakers?
@@ -239,6 +240,7 @@ struct Agenda_sessions : Codable {
         case speakers = "speakers"
         case sessionType = "sessionType"
         case moderator = "moderator"
+        case location = "location"
     }
 
     init(from decoder: Decoder) throws {
@@ -253,6 +255,7 @@ struct Agenda_sessions : Codable {
         speakers = try values.decodeIfPresent([EventAgandaSpeakers].self, forKey: .speakers)
         sessionType = try values.decodeIfPresent(SessionType.self, forKey: .sessionType)
         moderator = try values.decodeIfPresent(EventAgandaSpeakers.self, forKey: .moderator)
+        location = try values.decodeIfPresent(String.self, forKey: .location)
     }
     
     init(
@@ -263,6 +266,7 @@ struct Agenda_sessions : Codable {
         toTime: String?,
         video: String?,
         publishVideo: Bool?,
+        location:String?,
         speakers: [EventAgandaSpeakers]?,
         sessionType: SessionType?,
         moderator: EventAgandaSpeakers?
@@ -277,6 +281,7 @@ struct Agenda_sessions : Codable {
         self.speakers = speakers
         self.sessionType = sessionType
         self.moderator = moderator
+        self.location = location
     }
 
    
@@ -291,6 +296,7 @@ struct EventAgandaSpeakers : Codable,Identifiable {
     let lastName : String?
     let photoUrl : String?
     let companyName : String?
+    let bio : String?
    
 
     enum CodingKeys: String, CodingKey {
@@ -301,6 +307,8 @@ struct EventAgandaSpeakers : Codable,Identifiable {
         case lastName = "lastName"
         case photoUrl = "photoUrl"
         case companyName = "companyName"
+       
+        case bio = "bio"
     }
 
     init(from decoder: Decoder) throws {
@@ -311,6 +319,7 @@ struct EventAgandaSpeakers : Codable,Identifiable {
         lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
         photoUrl = try values.decodeIfPresent(String.self, forKey: .photoUrl)
         companyName = try values.decodeIfPresent(String.self, forKey: .companyName)
+        bio = try values.decodeIfPresent(String.self, forKey: .bio)
     }
     
     init(
@@ -319,7 +328,7 @@ struct EventAgandaSpeakers : Codable,Identifiable {
         firstName: String?,
         lastName: String?,
         photoUrl: String?,
-        companyName: String?
+        companyName: String?,bio: String?
     ) {
         self.id = id
         self.designation = designation
@@ -327,6 +336,7 @@ struct EventAgandaSpeakers : Codable,Identifiable {
         self.lastName = lastName
         self.photoUrl = photoUrl
         self.companyName = companyName
+        self.bio = bio
     }
 
 

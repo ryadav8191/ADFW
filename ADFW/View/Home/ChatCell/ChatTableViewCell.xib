@@ -101,6 +101,9 @@
                                 <color key="tintColor" red="0.75294117647058822" green="0.75294117647058822" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button" image="pin.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="pinButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="6dl-by-F9c"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MLL-aS-Uhd">
                                 <rect key="frame" x="0.0" y="99" width="374" height="1"/>
@@ -142,9 +145,11 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="lastChatLabel" destination="0xx-dS-Dis" id="hP5-fp-VDS"/>
+                <outlet property="pinButton" destination="zsL-3W-T13" id="I8B-1l-04b"/>
                 <outlet property="profileImageView" destination="J63-rH-ai4" id="sna-lz-qRC"/>
                 <outlet property="timeLabel" destination="FnA-jc-B0d" id="Gwp-FI-Mbr"/>
                 <outlet property="unReadCount" destination="rLw-XT-d6T" id="UBJ-tz-t1E"/>
+                <outlet property="unreadView" destination="jT0-gX-nFb" id="EcN-Ja-Z2S"/>
                 <outlet property="userNameLabel" destination="EGE-I8-z7O" id="jtz-kJ-hNz"/>
             </connections>
             <point key="canvasLocation" x="112.97709923664122" y="38.732394366197184"/>

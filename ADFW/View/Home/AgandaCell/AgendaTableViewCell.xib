@@ -234,6 +234,7 @@
                 <outlet property="agandaTypeImageView" destination="y3g-kX-LJI" id="Wh0-Wd-tdu"/>
                 <outlet property="containerView" destination="JOy-QN-7Um" id="FYn-QX-hyv"/>
                 <outlet property="locationLabel" destination="c9f-wv-my9" id="Oba-cB-HbD"/>
+                <outlet property="locationView" destination="EN8-rQ-xGQ" id="yUr-8w-h0R"/>
                 <outlet property="spakerViewHeightConstraints" destination="HQc-hQ-lem" id="Go5-5Y-vlD"/>
                 <outlet property="speakerStackView" destination="QYO-gW-2c9" id="Les-aT-n4x"/>
                 <outlet property="timeLabel" destination="fKM-6k-xgK" id="iUa-JH-WCi"/>

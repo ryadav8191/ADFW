@@ -51,9 +51,8 @@ class BannerTableViewCell: UITableViewCell {
     var timer: Timer?
     var banner:[Mobile_banner]?{
         didSet {
-            pageControl.numberOfPages = banner?.count ?? 0
-                        pageControl.currentPage = 0
-                        currentIndex = 0
+            let count = banner?.count ?? 1
+            progressView.progress = 1.0 / Float(count)
             collectionView.reloadData()
             
             
@@ -82,7 +81,7 @@ class BannerTableViewCell: UITableViewCell {
              collectionView.isPagingEnabled = true
             collectionView.isScrollEnabled = false
             collectionView.register(UINib(nibName: "BannerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "BannerCollectionViewCell")
-        progressView.progress = 0.0
+       
         startTimers()
        
     }
@@ -117,7 +116,8 @@ class BannerTableViewCell: UITableViewCell {
         
         let progress: Float
            if currentIndex == 0 {
-               progress = 0.0
+               let count = banner.count
+               progress = 1.0 / Float(count)
                progressView.setProgress(1.0, animated: true) // Complete bar before reset
                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                    self.progressView.setProgress(progress, animated: false)
